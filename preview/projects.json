@@ -1,0 +1,62 @@
+{
+  "forest": {
+    "title": "별빛 관측소",
+    "role": "DATA & AI",
+    "year": "2025",
+    "summary": "흩어진 운영 데이터를 하나의 관측 흐름으로 묶어, 팀이 변화 신호를 더 빠르게 발견하도록 만든 분석 프로젝트입니다.",
+    "highlights": [
+      "분산된 지표를 한 화면에서 비교하는 관측 대시보드 설계",
+      "이상 패턴을 발견하는 규칙과 알림 흐름 구축",
+      "반복 리포트 작성 시간을 줄이는 자동 요약 적용"
+    ],
+    "stack": ["Python", "SQL", "Data Visualization", "LLM"]
+  },
+  "city": {
+    "title": "시안 타워",
+    "role": "PRODUCT ENGINEERING",
+    "year": "2025",
+    "summary": "사용자 경험과 안정적인 구조를 함께 설계하고, 빠른 실험과 안전한 배포가 공존하도록 만든 제품 개발 프로젝트입니다.",
+    "highlights": [
+      "핵심 사용자 여정을 기준으로 정보 구조와 화면 흐름 재설계",
+      "공통 컴포넌트와 상태 모델로 기능 확장 비용 절감",
+      "관측 가능한 배포 절차와 회귀 검증 시나리오 구축"
+    ],
+    "stack": ["JavaScript", "Three.js", "Design System", "Testing"]
+  },
+  "desert": {
+    "title": "자동화 공방",
+    "role": "AUTOMATION",
+    "year": "2024",
+    "summary": "팀의 반복 작업을 작은 자동화 도구로 바꾸어, 사람이 판단과 창작에 더 많은 시간을 쓰도록 만든 워크플로 프로젝트입니다.",
+    "highlights": [
+      "수작업 입력과 검수 단계를 재사용 가능한 파이프라인으로 전환",
+      "실패 지점을 추적할 수 있는 단계별 상태와 로그 설계",
+      "운영자가 직접 수정할 수 있는 설정 중심 구조 제공"
+    ],
+    "stack": ["Bun", "Node.js", "Workflow", "Observability"]
+  },
+  "snow": {
+    "title": "릴레이 기지",
+    "role": "INFRASTRUCTURE",
+    "year": "2024",
+    "summary": "예상하지 못한 장애 상황에서도 서비스가 회복 경로를 잃지 않도록 배포와 운영 기반을 정비한 인프라 프로젝트입니다.",
+    "highlights": [
+      "서비스 상태를 빠르게 판단하는 헬스 체크와 경보 기준 정리",
+      "배포 실패 시 안전하게 되돌리는 자동 복구 절차 구축",
+      "운영 문서와 장애 대응 흐름을 하나의 실행 기준으로 통합"
+    ],
+    "stack": ["Cloud", "CI/CD", "Monitoring", "Incident Response"]
+  },
+  "coast": {
+    "title": "연결의 등대",
+    "role": "COLLABORATION",
+    "year": "2023",
+    "summary": "사람과 시스템 사이에서 사라지던 맥락을 연결해, 팀이 같은 상태를 보고 결정하도록 만든 협업 도구 프로젝트입니다.",
+    "highlights": [
+      "업무 상태와 담당자 맥락을 한 흐름에서 확인하는 보드 설계",
+      "알림 과부하를 줄이는 중요도 기반 전달 규칙 적용",
+      "새 구성원이 빠르게 참여할 수 있는 온보딩 동선 구축"
+    ],
+    "stack": ["Product Design", "API Integration", "Accessibility", "Analytics"]
+  }
+}

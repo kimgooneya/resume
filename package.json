@@ -1,0 +1,12 @@
+{
+  "name": "voxel-portfolio-assets",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "assets:build": "bun run scripts/export-assets.mjs",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "three": "^0.185.1"
+  }
+}

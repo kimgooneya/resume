@@ -1,0 +1,44 @@
+{
+  "assets": [
+    {
+      "bytes": 7608,
+      "file": "pine-tree.glb",
+      "name": "pine-tree",
+      "size": [
+        2.95,
+        5.1,
+        2.8
+      ]
+    },
+    {
+      "bytes": 5732,
+      "file": "round-rock.glb",
+      "name": "round-rock",
+      "size": [
+        2.4,
+        1.7,
+        1.8
+      ]
+    },
+    {
+      "bytes": 6516,
+      "file": "soft-cloud.glb",
+      "name": "soft-cloud",
+      "size": [
+        4.9,
+        2.075,
+        1.65
+      ]
+    },
+    {
+      "bytes": 15332,
+      "file": "forest-observatory.glb",
+      "name": "forest-observatory",
+      "size": [
+        5,
+        6.197,
+        5
+      ]
+    }
+  ]
+}
