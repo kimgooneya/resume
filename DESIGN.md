@@ -118,15 +118,15 @@
 - **Structure**: 5개의 마을 선택 버튼
 - **States**: default, hover, active, focus-visible, selected
 - **Accessibility**: 실제 `<button>`, `aria-pressed`, 44px 이상 터치 타깃
-- **Motion**: 선택 시 해당 마을의 방향과 거리를 안내하며 캐릭터가 접근하면 상세를 자동 공개
+- **Motion**: 선택 시 해당 마을의 방향과 거리를 안내하며 상세 카드에 `바로 이동` 행동을 공개한다. 캐릭터가 접근하면 소개 행동으로 교체한다.
 - **Layout**: 데스크톱 세로 cluster, 모바일 가로 scroll cluster
 
 ### Project Detail
 
-- **Structure**: 생태 라벨, 랜드마크명, 프로젝트 역할, 도착 시 `SPACE 소개 보기` 행동
-- **States**: 기본 안내, 목적지 선택, 도착·소개 대기, 소개 열림
+- **Structure**: 생태 라벨, 랜드마크명, 프로젝트 역할, 선택 시 `바로 이동`, 도착 시 `SPACE 소개 보기` 행동
+- **States**: 기본 안내, 목적지 선택·바로 이동 대기, 도착·소개 대기, 소개 열림
 - **Accessibility**: `aria-live="polite"`로 선택 결과 전달
-- **Motion**: 선택 내용은 220ms opacity/transform 전환
+- **Motion**: 선택 내용은 220ms opacity/transform 전환. 바로 이동은 마을 진입로의 안전한 도로 셀에 캐릭터를 배치하고 카메라가 추적한다.
 - **Layout**: compact card
 
 ### Project Introduction Dialog
@@ -165,6 +165,7 @@
 - `WASD`와 방향키는 캐릭터 이동, 휠은 `0.68–3.2×` 범위의 지속 확대·축소, 클릭은 랜드마크 선택이다.
 - 모바일은 엄지로 누르는 4방향 패드가 같은 이동 입력을 제공한다.
 - 랜드마크 2.8타일 안에 들어오면 발견 상태와 소개 열기 행동을 표시하고, `Space` 입력 뒤에만 JSON 소개 dialog를 연다.
+- 마을을 선택하면 상세 카드의 `바로 이동` 버튼으로 랜드마크 진입로에 즉시 도착할 수 있다. 도착 뒤 버튼은 `SPACE 소개 보기`로 교체된다.
 - 지도 자체에 장식용 자동 애니메이션을 넣지 않는다.
 - `prefers-reduced-motion: reduce`에서는 카메라 이동을 즉시 완료한다.
 - CSS 애니메이션은 `transform`, `opacity`만 사용한다.

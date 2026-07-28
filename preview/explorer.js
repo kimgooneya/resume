@@ -111,3 +111,20 @@ export function celebrateArrival(explorer, target, reducedMotion) {
   explorer.rotation.y = Math.atan2(directionX, directionZ);
   explorer.userData.arrivalTime = reducedMotion ? 0 : 1.2;
 }
+
+export function fastTravelExplorer(explorer, village) {
+  const approachZ =
+    village.position.z + (village.position.z > 0 ? -2 : 2);
+  const worldX = village.position.x * WORLD.tileSize;
+  const worldZ = approachZ * WORLD.tileSize;
+  if (!isWalkableAt(worldX, worldZ)) return false;
+
+  explorer.position.set(
+    worldX,
+    heightAt(village.position.x, approachZ) + 0.03,
+    worldZ,
+  );
+  explorer.userData.walkTime = 0;
+  explorer.userData.arrivalTime = 0;
+  return true;
+}

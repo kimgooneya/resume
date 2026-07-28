@@ -93,10 +93,10 @@
   --detail-desktop-bottom: 6.5rem;
   --nav-mobile-top: 7.7rem;
   --nav-hint-mobile-top: 11.9rem;
-  --pad-mobile-bottom: 11.8rem;
+  --pad-mobile-bottom: 13rem;
   --nav-compact-top: 6.7rem;
   --nav-hint-compact-top: 10.9rem;
-  --pad-compact-bottom: 8.8rem;
+  --pad-compact-bottom: 13rem;
   --shadow-text: 0 2px 18px var(--space-deep), 0 1px 3px var(--space-deep);
   --shadow-panel:
     inset 0 1px 0 color-mix(in srgb, var(--text-primary) 12%, transparent),
@@ -423,12 +423,18 @@ h1 span {
   word-break: keep-all;
 }
 
-.intro-trigger {
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.detail-action {
   display: inline-flex;
   min-height: var(--control-min);
   align-items: center;
   gap: var(--space-2);
-  margin-top: var(--space-3);
   padding: var(--space-2) var(--space-3);
   border: var(--stroke) solid var(--accent-cyan);
   border-radius: var(--radius-md);
@@ -441,18 +447,41 @@ h1 span {
     background var(--motion-standard) ease-in-out;
 }
 
-.intro-trigger:hover {
+.detail-action[hidden] {
+  display: none;
+}
+
+.detail-action:hover {
   background: color-mix(in srgb, var(--accent-cyan) 24%, transparent);
 }
 
-.intro-trigger:active {
+.detail-action:active {
   transform: scale(0.98);
 }
 
-.intro-trigger:focus-visible,
+.detail-action:focus-visible,
 .project-intro button:focus-visible {
   outline: var(--focus-ring) solid var(--accent-cyan);
   outline-offset: var(--focus-offset);
+}
+
+.fast-travel-trigger {
+  background: var(--accent-cyan);
+  color: var(--space-deep);
+}
+
+.fast-travel-trigger:hover {
+  background: color-mix(in srgb, var(--accent-cyan) 82%, var(--text-primary));
+}
+
+.fast-travel-trigger svg {
+  width: var(--space-4);
+  height: var(--space-4);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: var(--stroke-strong);
 }
 
 .project-intro {

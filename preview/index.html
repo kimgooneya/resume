@@ -9,8 +9,8 @@
     />
     <title>Voxel Portfolio World</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./styles.css?v=world2-intro17" />
-    <link rel="stylesheet" href="./responsive.css?v=world2-intro17" />
+    <link rel="stylesheet" href="./styles.css?v=fast-travel2" />
+    <link rel="stylesheet" href="./responsive.css?v=fast-travel1" />
     <script type="importmap">
       {
         "imports": {
@@ -47,10 +47,18 @@
         <h2 id="detail-title">중앙 광장</h2>
         <strong id="detail-role">EXPLORE THE WORLD</strong>
         <p id="detail-copy">방향키나 WASD로 이동해 랜드마크&nbsp;가까이 가보세요.</p>
-        <button id="intro-trigger" class="intro-trigger" type="button" hidden>
-          <kbd>SPACE</kbd>
-          소개 보기
-        </button>
+        <div class="detail-actions">
+          <button id="fast-travel-trigger" class="detail-action fast-travel-trigger" type="button" hidden>
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M4 12h13M13 7l5 5-5 5" />
+            </svg>
+            바로 이동
+          </button>
+          <button id="intro-trigger" class="detail-action intro-trigger" type="button" hidden>
+            <kbd>SPACE</kbd>
+            소개 보기
+          </button>
+        </div>
       </aside>
 
       <aside class="world-status" aria-label="월드 상태">
@@ -115,6 +123,6 @@
       </article>
     </dialog>
 
-    <script type="module" src="./main.js?v=world2-intro64"></script>
+    <script type="module" src="./main.js?v=fast-travel2"></script>
   </body>
 </html>

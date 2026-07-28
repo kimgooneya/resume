@@ -1,4 +1,4 @@
-export function createHud(villages, onSelect, onIntro) {
+export function createHud(villages, onSelect, onIntro, onFastTravel) {
   const nav = document.querySelector("#village-nav");
   const projectDetail = document.querySelector("#project-detail");
   const detail = {
@@ -12,8 +12,10 @@ export function createHud(villages, onSelect, onIntro) {
   const detailDiscovered = document.querySelector("#detail-discovered");
   const destinationArrow = document.querySelector("#destination-arrow");
   const introTrigger = document.querySelector("#intro-trigger");
+  const fastTravelTrigger = document.querySelector("#fast-travel-trigger");
   const zoomLevel = document.querySelector("#zoom-level");
   let lastZoomPercent = -1;
+  let selectedVillage = null;
 
   villages.forEach((village, index) => {
     const button = document.createElement("button");
@@ -31,18 +33,37 @@ export function createHud(villages, onSelect, onIntro) {
     });
   }
 
+  function select(village, project) {
+    selectedVillage = village;
+    detail.biome.textContent = `${village.biome.toUpperCase()} VILLAGE`;
+    detail.title.textContent = village.landmark;
+    detail.role.textContent = project.role;
+    detail.copy.textContent =
+      "직접 걸어가거나 바로 이동해 프로젝트 랜드마크를 발견해보세요.";
+    fastTravelTrigger.hidden = false;
+    fastTravelTrigger.setAttribute(
+      "aria-label",
+      `${village.landmark}로 바로 이동`,
+    );
+    introTrigger.hidden = true;
+    projectDetail.classList.add("is-revealed");
+  }
+
   function arrive(village, project) {
+    selectedVillage = village;
     detail.biome.textContent = `${village.biome.toUpperCase()} VILLAGE`;
     detail.title.textContent = village.landmark;
     detail.role.textContent = project.role;
     detail.copy.textContent =
       "도착했습니다. 스페이스바를 눌러 소개\u00a0내용을\u00a0열어보세요.";
+    fastTravelTrigger.hidden = true;
     introTrigger.hidden = false;
     projectDetail.classList.add("is-revealed");
   }
 
   function leaveArrival() {
     introTrigger.hidden = true;
+    fastTravelTrigger.hidden = !selectedVillage;
   }
 
   function setDiscovered(count) {
@@ -81,10 +102,12 @@ export function createHud(villages, onSelect, onIntro) {
   }
 
   introTrigger.addEventListener("click", onIntro);
+  fastTravelTrigger.addEventListener("click", onFastTravel);
 
   return {
     arrive,
     leaveArrival,
+    select,
     setActive,
     setDiscovered,
     updateJourney,

@@ -1,8 +1,12 @@
 import * as THREE from "three";
 import { MapControls } from "three/addons/controls/MapControls.js";
 import { createZoomController } from "./camera-zoom.js?v=world2-intro5";
-import { celebrateArrival, moveExplorer } from "./explorer.js?v=world2-intro5";
-import { createHud } from "./hud.js?v=world2-intro5";
+import {
+  celebrateArrival,
+  fastTravelExplorer,
+  moveExplorer,
+} from "./explorer.js?v=fast-travel1";
+import { createHud } from "./hud.js?v=fast-travel1";
 import { loadProjects } from "./project-content.js?v=world2-intro5";
 import { createProjectDialog } from "./project-dialog.js?v=world2-intro5";
 import { readPalette } from "./theme.js";
@@ -15,6 +19,7 @@ const projects = await loadProjects();
 
 const shell = document.querySelector("#world-canvas");
 const loading = document.querySelector("#loading");
+const introTrigger = document.querySelector("#intro-trigger");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const { camera, renderer, scene } = createStage(palette, shell);
 
@@ -40,11 +45,21 @@ let travelViewEntered = false;
 const zoom = createZoomController(1);
 const discoveredVillages = new Set();
 const projectDialog = createProjectDialog();
-const hud = createHud(VILLAGES, setDestination, openNearbyIntroduction);
+const hud = createHud(
+  VILLAGES,
+  setDestination,
+  openNearbyIntroduction,
+  fastTravelToDestination,
+);
 
 function setDestination(id) {
   activeDestination = VILLAGES.find((village) => village.id === id) ?? null;
   hud.setActive(id);
+  if (activeDestination?.id === nearbyVillage?.id) {
+    hud.arrive(activeDestination, projects[activeDestination.id]);
+  } else if (activeDestination) {
+    hud.select(activeDestination, projects[activeDestination.id]);
+  }
   updateMarkerScales();
   updateJourneyStatus();
 }
@@ -69,9 +84,26 @@ function openNearbyIntroduction() {
   projectDialog.open(nearbyVillage, projects[nearbyVillage.id]);
 }
 
+function fastTravelToDestination() {
+  if (
+    !activeDestination ||
+    projectDialog.isOpen() ||
+    !fastTravelExplorer(world.explorer, activeDestination)
+  ) {
+    return;
+  }
+  pressed.clear();
+  nearbyVillage = null;
+  travelViewEntered = true;
+  zoom.animateTo(2.1);
+  checkLandmarkProximity();
+  updateJourneyStatus();
+  introTrigger.focus({ preventScroll: true });
+}
+
 function arriveAtVillage(village) {
-  hud.arrive(village, projects[village.id]);
   setDestination(village.id);
+  hud.arrive(village, projects[village.id]);
   if (!discoveredVillages.has(village.id)) {
     discoveredVillages.add(village.id);
     hud.setDiscovered(discoveredVillages.size);
@@ -109,7 +141,12 @@ function checkLandmarkProximity() {
   if (nextNearby?.id === nearbyVillage?.id) return;
   nearbyVillage = nextNearby;
   if (nearbyVillage) arriveAtVillage(nearbyVillage);
-  else hud.leaveArrival();
+  else {
+    hud.leaveArrival();
+    if (activeDestination) {
+      hud.select(activeDestination, projects[activeDestination.id]);
+    }
+  }
 }
 
 function movementInput() {
@@ -144,7 +181,7 @@ window.addEventListener("keydown", (event) => {
       !event.repeat &&
       nearbyVillage &&
       !projectDialog.isOpen() &&
-      !(event.target instanceof HTMLButtonElement)
+      (!(event.target instanceof HTMLButtonElement) || event.target === introTrigger)
     ) {
       event.preventDefault();
       openNearbyIntroduction();

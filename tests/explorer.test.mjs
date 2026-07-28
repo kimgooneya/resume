@@ -3,8 +3,10 @@ import { describe, expect, test } from "bun:test";
 import {
   celebrateArrival,
   createExplorer,
+  fastTravelExplorer,
   moveExplorer,
 } from "../preview/explorer.js";
+import { VILLAGES, WORLD, heightAt } from "../preview/world-data.js";
 
 const palette = Object.freeze({
   "accent-cyan": "#67e6f3",
@@ -44,5 +46,25 @@ describe("voxel explorer", () => {
     expect(explorer.rotation.y).toBeCloseTo(Math.PI / 2);
     moveExplorer(explorer, { x: 0, z: 0 }, 2, false);
     expect(explorer.userData.arrivalTime).toBe(0);
+  });
+
+  test("fast travels to a walkable landmark approach cell", () => {
+    VILLAGES.forEach((village) => {
+      // Given: a fresh explorer and a village on either side of the main road
+      const explorer = createExplorer(palette);
+
+      // When: fast travel is requested
+      const moved = fastTravelExplorer(explorer, village);
+      const approachZ =
+        village.position.z + (village.position.z > 0 ? -2 : 2);
+
+      // Then: the explorer lands two cells from the landmark on its road
+      expect(moved).toBe(true);
+      expect(explorer.position.x).toBe(village.position.x * WORLD.tileSize);
+      expect(explorer.position.z).toBe(approachZ * WORLD.tileSize);
+      expect(explorer.position.y).toBe(
+        heightAt(village.position.x, approachZ) + 0.03,
+      );
+    });
   });
 });
