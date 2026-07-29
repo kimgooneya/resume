@@ -2,23 +2,63 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { WORLD, heightAt } from "./world-data.js?v=world9";
 
-const ASSET_ROOT = "/assets/blender/glb";
-
 const ASSETS = Object.freeze({
-  explorer: "01-explorer.glb",
-  city: "02-cyan-tower.glb",
-  desert: "03-automation-workshop.glb",
-  snow: "04-relay-station.glb",
-  coast: "05-lighthouse.glb",
-  forest: "06-starlight-observatory.glb",
-  pines: "07-pine-set.glb",
-  houses: "08-house-set.glb",
-  rocks: "09-rock-set.glb",
-  cacti: "10-cactus-set.glb",
-  reeds: "11-coast-vegetation.glb",
-  buoys: "12-buoy-set.glb",
-  plaza: "13-plaza-beacon-kit.glb",
-  stories: "14-story-props.glb",
+  explorer: new URL(
+    "../assets/blender/glb/01-explorer.glb",
+    import.meta.url,
+  ).href,
+  city: new URL(
+    "../assets/blender/glb/02-cyan-tower.glb",
+    import.meta.url,
+  ).href,
+  desert: new URL(
+    "../assets/blender/glb/03-automation-workshop.glb",
+    import.meta.url,
+  ).href,
+  snow: new URL(
+    "../assets/blender/glb/04-relay-station.glb",
+    import.meta.url,
+  ).href,
+  coast: new URL(
+    "../assets/blender/glb/05-lighthouse.glb",
+    import.meta.url,
+  ).href,
+  forest: new URL(
+    "../assets/blender/glb/06-starlight-observatory.glb",
+    import.meta.url,
+  ).href,
+  pines: new URL(
+    "../assets/blender/glb/07-pine-set.glb",
+    import.meta.url,
+  ).href,
+  houses: new URL(
+    "../assets/blender/glb/08-house-set.glb",
+    import.meta.url,
+  ).href,
+  rocks: new URL(
+    "../assets/blender/glb/09-rock-set.glb",
+    import.meta.url,
+  ).href,
+  cacti: new URL(
+    "../assets/blender/glb/10-cactus-set.glb",
+    import.meta.url,
+  ).href,
+  reeds: new URL(
+    "../assets/blender/glb/11-coast-vegetation.glb",
+    import.meta.url,
+  ).href,
+  buoys: new URL(
+    "../assets/blender/glb/12-buoy-set.glb",
+    import.meta.url,
+  ).href,
+  plaza: new URL(
+    "../assets/blender/glb/13-plaza-beacon-kit.glb",
+    import.meta.url,
+  ).href,
+  stories: new URL(
+    "../assets/blender/glb/14-story-props.glb",
+    import.meta.url,
+  ).href,
 });
 
 const LANDMARK_SCALE = Object.freeze({
@@ -196,9 +236,9 @@ function createDetailedProps(loaded) {
 export async function upgradePortfolioAssets({ explorer, markers }) {
   const loader = new GLTFLoader();
   const entries = await Promise.all(
-    Object.entries(ASSETS).map(async ([key, filename]) => [
+    Object.entries(ASSETS).map(async ([key, url]) => [
       key,
-      await loader.loadAsync(`${ASSET_ROOT}/${filename}`),
+      await loader.loadAsync(url),
     ]),
   );
   const loaded = Object.fromEntries(entries);

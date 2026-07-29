@@ -4,9 +4,15 @@
   "type": "module",
   "scripts": {
     "assets:build": "bun run scripts/export-assets.mjs",
+    "build": "vite build",
+    "dev": "vite --host 127.0.0.1",
+    "preview": "vite preview --host 127.0.0.1",
     "test": "bun test"
   },
   "dependencies": {
     "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "vite": "^8.0.10"
   }
 }
