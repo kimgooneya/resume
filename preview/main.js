@@ -12,7 +12,7 @@ import { createProjectDialog } from "./project-dialog.js?v=world2-intro5";
 import { readPalette } from "./theme.js";
 import { createStage } from "./stage.js?v=world2-intro15";
 import { VILLAGES, WORLD } from "./world-data.js?v=world9";
-import { createPortfolioWorld, createStarField } from "./world.js?v=world2-intro64";
+import { createPortfolioWorld, createStarField } from "./world.js?v=blender-p1-1";
 
 const palette = readPalette();
 const projects = await loadProjects();
@@ -23,7 +23,7 @@ const introTrigger = document.querySelector("#intro-trigger");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const { camera, renderer, scene } = createStage(palette, shell);
 
-const world = createPortfolioWorld(palette);
+const world = await createPortfolioWorld(palette);
 scene.add(world.group, createStarField(palette));
 
 const controls = new MapControls(camera, renderer.domElement);
@@ -274,8 +274,9 @@ renderer.setAnimationLoop((timestamp) => {
   cameraTarget.x += travelDirection.x * WORLD.tileSize * 1.2;
   cameraTarget.z += travelDirection.y * WORLD.tileSize * 1.2;
   if (window.innerWidth < 768) {
-    cameraTarget.x += WORLD.tileSize * 2.1;
-    cameraTarget.z += WORLD.tileSize * 2.1;
+    const safeOffset = nearbyVillage ? -3.6 : 2.1;
+    cameraTarget.x += WORLD.tileSize * safeOffset;
+    cameraTarget.z += WORLD.tileSize * safeOffset;
   }
   controls.target.lerp(cameraTarget, reducedMotion.matches ? 1 : 0.12);
   desiredCameraPosition.copy(cameraTarget).add(cameraOffset);

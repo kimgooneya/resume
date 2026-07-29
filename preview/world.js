@@ -3,14 +3,19 @@ import { createWorldEffects } from "./effects.js?v=world2-intro5";
 import { createExplorer } from "./explorer.js?v=world2-intro5";
 import { createLandmarks } from "./landmarks.js?v=world2-intro5";
 import { createTerrain } from "./terrain.js?v=world2-intro64";
+import { upgradePortfolioAssets } from "./blender-assets.js?v=p1-1";
 
-export function createPortfolioWorld(palette) {
+export async function createPortfolioWorld(palette) {
   const group = new THREE.Group();
   const terrain = createTerrain(palette);
   const landmarks = createLandmarks(palette);
   const explorer = createExplorer(palette);
   const effects = createWorldEffects(palette);
-  group.add(terrain, landmarks.group, effects.group, explorer);
+  const detailedProps = await upgradePortfolioAssets({
+    explorer,
+    markers: landmarks.markers,
+  });
+  group.add(terrain, landmarks.group, detailedProps, effects.group, explorer);
   return {
     group,
     explorer,

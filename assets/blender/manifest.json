@@ -1,0 +1,148 @@
+{
+  "blend": "voxel-portfolio-p0-p1.blend",
+  "asset_count": 14,
+  "total_triangles": 86996,
+  "total_glb_bytes": 6117716,
+  "assets": [
+    {
+      "collection": "P0_01_EXPLORER",
+      "objects": 42,
+      "meshes": 37,
+      "triangles": 4012,
+      "glb": "01-explorer.glb",
+      "render": "01-explorer.png",
+      "glb_bytes": 288728,
+      "render_bytes": 771961
+    },
+    {
+      "collection": "P0_02_CYAN_TOWER",
+      "objects": 71,
+      "meshes": 70,
+      "triangles": 8304,
+      "glb": "02-cyan-tower.glb",
+      "render": "02-cyan-tower.png",
+      "glb_bytes": 583108,
+      "render_bytes": 656798
+    },
+    {
+      "collection": "P0_03_AUTOMATION_WORKSHOP",
+      "objects": 58,
+      "meshes": 57,
+      "triangles": 7544,
+      "glb": "03-automation-workshop.glb",
+      "render": "03-automation-workshop.png",
+      "glb_bytes": 530960,
+      "render_bytes": 672727
+    },
+    {
+      "collection": "P0_04_RELAY_STATION",
+      "objects": 53,
+      "meshes": 52,
+      "triangles": 7188,
+      "glb": "04-relay-station.glb",
+      "render": "04-relay-station.png",
+      "glb_bytes": 503668,
+      "render_bytes": 636006
+    },
+    {
+      "collection": "P0_05_LIGHTHOUSE",
+      "objects": 73,
+      "meshes": 72,
+      "triangles": 9020,
+      "glb": "05-lighthouse.glb",
+      "render": "05-lighthouse.png",
+      "glb_bytes": 632780,
+      "render_bytes": 643198
+    },
+    {
+      "collection": "P0_06_STARLIGHT_OBSERVATORY",
+      "objects": 48,
+      "meshes": 47,
+      "triangles": 7392,
+      "glb": "06-starlight-observatory.glb",
+      "render": "06-starlight-observatory.png",
+      "glb_bytes": 526860,
+      "render_bytes": 632696
+    },
+    {
+      "collection": "P1_01_PINE_SET",
+      "objects": 31,
+      "meshes": 31,
+      "triangles": 5748,
+      "glb": "07-pine-set.glb",
+      "render": "07-pine-set.png",
+      "glb_bytes": 402780,
+      "render_bytes": 744640
+    },
+    {
+      "collection": "P1_02_HOUSE_SET",
+      "objects": 36,
+      "meshes": 36,
+      "triangles": 4112,
+      "glb": "08-house-set.glb",
+      "render": "08-house-set.png",
+      "glb_bytes": 297236,
+      "render_bytes": 682650
+    },
+    {
+      "collection": "P1_03_ROCK_SET",
+      "objects": 9,
+      "meshes": 9,
+      "triangles": 300,
+      "glb": "09-rock-set.glb",
+      "render": "09-rock-set.png",
+      "glb_bytes": 37880,
+      "render_bytes": 736254
+    },
+    {
+      "collection": "P1_04_CACTUS_SET",
+      "objects": 31,
+      "meshes": 31,
+      "triangles": 5588,
+      "glb": "10-cactus-set.glb",
+      "render": "10-cactus-set.png",
+      "glb_bytes": 388540,
+      "render_bytes": 729777
+    },
+    {
+      "collection": "P1_05_COAST_VEGETATION",
+      "objects": 77,
+      "meshes": 77,
+      "triangles": 11788,
+      "glb": "11-coast-vegetation.glb",
+      "render": "11-coast-vegetation.png",
+      "glb_bytes": 813316,
+      "render_bytes": 775328
+    },
+    {
+      "collection": "P1_06_BUOY_SET",
+      "objects": 33,
+      "meshes": 33,
+      "triangles": 6224,
+      "glb": "12-buoy-set.glb",
+      "render": "12-buoy-set.png",
+      "glb_bytes": 422932,
+      "render_bytes": 748519
+    },
+    {
+      "collection": "P1_07_PLAZA_BEACON_KIT",
+      "objects": 34,
+      "meshes": 34,
+      "triangles": 4212,
+      "glb": "13-plaza-beacon-kit.glb",
+      "render": "13-plaza-beacon-kit.png",
+      "glb_bytes": 291696,
+      "render_bytes": 753690
+    },
+    {
+      "collection": "P1_08_STORY_PROPS",
+      "objects": 41,
+      "meshes": 41,
+      "triangles": 5564,
+      "glb": "14-story-props.glb",
+      "render": "14-story-props.png",
+      "glb_bytes": 397232,
+      "render_bytes": 552261
+    }
+  ]
+}
