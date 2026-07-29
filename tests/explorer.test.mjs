@@ -48,6 +48,22 @@ describe("voxel explorer", () => {
     expect(explorer.userData.arrivalTime).toBe(0);
   });
 
+  test("scales walking speed with analog input strength", () => {
+    // Given: two explorers starting on the same walkable road
+    const fullStrength = createExplorer(palette);
+    const halfStrength = createExplorer(palette);
+    const startingZ = fullStrength.position.z;
+
+    // When: both move for the same frame at different stick strengths
+    moveExplorer(fullStrength, { x: 0, z: 1 }, 0.05, false);
+    moveExplorer(halfStrength, { x: 0, z: 0.5 }, 0.05, false);
+
+    // Then: half deflection travels half as far
+    const fullDistance = fullStrength.position.z - startingZ;
+    const halfDistance = halfStrength.position.z - startingZ;
+    expect(halfDistance).toBeCloseTo(fullDistance / 2);
+  });
+
   test("fast travels to a walkable landmark approach cell", () => {
     VILLAGES.forEach((village) => {
       // Given: a fresh explorer and a village on either side of the main road

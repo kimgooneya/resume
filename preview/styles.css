@@ -48,7 +48,6 @@
   --blur-sm: 10px;
   --blur-lg: 14px;
   --control-min: 44px;
-  --control-pad: 46px;
   --key-min: 28px;
   --type-display: clamp(1.75rem, 4vw, 3.5rem);
   --type-display-mobile: clamp(1.75rem, 8.5vw, 2.4rem);
@@ -93,10 +92,8 @@
   --detail-desktop-bottom: 6.5rem;
   --nav-mobile-top: 7.7rem;
   --nav-hint-mobile-top: 11.9rem;
-  --pad-mobile-bottom: 13rem;
   --nav-compact-top: 6.7rem;
   --nav-hint-compact-top: 10.9rem;
-  --pad-compact-bottom: 13rem;
   --shadow-text: 0 2px 18px var(--space-deep), 0 1px 3px var(--space-deep);
   --shadow-panel:
     inset 0 1px 0 color-mix(in srgb, var(--text-primary) 12%, transparent),
@@ -350,8 +347,7 @@ h1 span {
   transform: scale(0.98);
 }
 
-.village-nav button:focus-visible,
-.move-pad button:focus-visible {
+.village-nav button:focus-visible {
   outline: var(--focus-ring) solid var(--accent-cyan);
   outline-offset: var(--focus-offset);
 }
@@ -701,14 +697,6 @@ kbd {
 .world-status div span {
   color: var(--text-secondary);
   font-size: var(--type-micro);
-}
-
-.move-pad {
-  display: none;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
 }
 
 .loading {
