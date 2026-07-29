@@ -77,10 +77,10 @@
 |---|---|---|
 | Stroke | `--stroke`, `--stroke-strong`, `--focus-ring`, `--focus-offset` | 패널 선과 키보드 포커스 |
 | Radius | `--radius-sm`, `--radius-md`, `--radius-lg` | 키, 버튼, 패널 |
-| Control | `--control-min`, `--control-pad`, `--key-min` | 44px 이상 터치와 키캡 |
+| Control | `--control-min`, `--joystick-size`, `--joystick-thumb-size`, `--key-min` | 44px 이상 터치와 게임형 스틱 |
 | Component width | `--hud-width`, `--title-width`, `--lede-width`, `--nav-width`, `--detail-width`, `--intro-width`, `--status-min-width` | 데스크톱 HUD 비율 |
-| Mobile position | `--nav-mobile-top`, `--nav-hint-mobile-top`, `--pad-mobile-bottom` | 375–767px의 겹침 없는 스택 |
-| Compact position | `--nav-compact-top`, `--nav-hint-compact-top`, `--pad-compact-bottom` | 390×700 이하 높이 대응 |
+| Mobile position | `--nav-mobile-top`, `--nav-hint-mobile-top`, `--joystick-mobile-bottom` | 375–767px의 겹침 없는 스택 |
+| Compact position | `--nav-compact-top`, `--nav-hint-compact-top`, `--joystick-compact-bottom` | 390×700 이하 높이 대응 |
 | Surface | `--blur-sm`, `--blur-lg`, `--shadow-text`, `--shadow-panel`, `--shadow-hint`, `--shadow-status-dot` | 지도 위 가독성 |
 | Progress | `--progress-width`, `--compass-size`, `--grain-opacity`, `--vignette-strength` | 발견 진행률과 분위기 |
 
@@ -102,16 +102,27 @@
 - **States**: 로딩, 준비, 이동, 확대, 랜드마크 hover, selected
 - **Accessibility**: 캔버스 한국어 라벨, `WASD`와 방향키로 캐릭터 이동
 - **Motion**: 시작 화면은 다섯 생태를 모두 보여주고 첫 이동 뒤 카메라는 캐릭터를 부드럽게 추적
-- **Layout**: 전체 뷰포트 shell. 768–1024px 태블릿에서도 D-pad를 유지하고, 375–767px에서는 상세 패널이 목적지를 가리지 않도록 카메라 안전 오프셋을 적용한다.
+- **Layout**: 전체 뷰포트 shell. 768–1024px 태블릿에서도 터치 스틱을 유지하고, 375–767px에서는 상세 패널이 목적지를 가리지 않도록 카메라 안전 오프셋을 적용한다.
 - **Performance**: 지형·도로·철도·반복 소품은 `InstancedMesh`를 유지하고, 프레임 루프에서는 새 벡터나 재질을 할당하지 않는다.
 
 ### Voxel Explorer
 
 - **Structure**: 얼굴, 머리, 몸통, 팔, 다리, 산호색 스카프, 갈색 배낭, 청록 지도 단말로 만든 복셀 캐릭터와 바닥 그림자
 - **States**: idle, walking, landmark-near, arrived
-- **Accessibility**: 키보드 `WASD`/방향키, 모바일 4방향 조작 버튼
+- **Accessibility**: 키보드 `WASD`/방향키, 모바일 터치 스틱. 스틱은 텍스트 입력 요소가 아닌 실제 버튼이므로 가상 키보드를 열지 않으며 포커스 중 방향키 입력도 그대로 지원한다.
 - **Motion**: 이동 중 팔다리만 짧게 교차하고 지형색 발자국을 제한적으로 남긴다. 도착 시 랜드마크를 바라보고 한 번 손을 흔든다. 모션 감소에서는 보행·도착 흔들림을 제거한다.
 - **Layout**: 지형 경계와 물을 넘지 않으며 캐릭터 중심 추적 카메라 사용
+
+### Touch Joystick
+
+- **Structure**: 고정 원형 베이스, 엄지 위치를 따라가는 원형 노브, 스크린리더용 조작 라벨
+- **States**: idle, pressed, dragging, released, focus-visible
+- **Input**: `pointerdown`에서 포인터를 캡처하고 중심으로부터의 벡터를 반지름 안으로 제한한다. 반지름의 14%는 데드존이며 바깥 구간은 `0–1` 세기로 다시 정규화한다.
+- **Mapping**: 화면 상하좌우 벡터를 아이소메트릭 월드 축으로 45도 회전해 키보드와 같은 이동 경로에 전달한다. 가상 키보드 이벤트는 만들지 않는다.
+- **Feedback**: 드래그 중 노브는 포인터를 프레임 지연 없이 직접 추종한다. 입력 종료·취소·포인터 캡처 상실 시 입력과 노브가 즉시 중앙으로 복귀하고, 새 입력은 이전 복귀 상태를 즉시 중단한다.
+- **Accessibility**: 최소 `112px` 조작 면적, 명확한 포커스 링, `aria-label="이동 스틱: 드래그하여 탐험가 이동"`. 키보드와 마을 바로 이동은 독립 대체 경로로 유지한다.
+- **Layout**: 1024px 이하 좌하단에 배치하고 375×667px 및 390×700px에서도 프로젝트 상세 패널과 겹치지 않는다.
+- **Reference**: beui.dev 카탈로그에 직접 대응하는 게임 스틱이 없어 프로젝트 고유 직접 조작 패턴으로 기록한다.
 
 ### Village Navigation
 
@@ -163,7 +174,8 @@
 | Camera follow | `220ms` | `ease-out` | 캐릭터 추적 |
 
 - `WASD`와 방향키는 캐릭터 이동, 휠은 `0.68–3.2×` 범위의 지속 확대·축소, 클릭은 랜드마크 선택이다.
-- 모바일은 엄지로 누르는 4방향 패드가 같은 이동 입력을 제공한다.
+- 모바일은 엄지로 드래그하는 터치 스틱이 연속 방향과 이동 세기를 제공한다.
+- 스틱의 직접 추종은 보간하지 않아 입력 지연을 만들지 않는다. 손을 떼거나 포인터가 취소되면 즉시 중앙으로 복귀하며, 모션 감소 설정에서도 동일하게 동작한다.
 - 랜드마크 2.8타일 안에 들어오면 발견 상태와 소개 열기 행동을 표시하고, `Space` 입력 뒤에만 JSON 소개 dialog를 연다.
 - 마을을 선택하면 상세 카드의 `바로 이동` 버튼으로 랜드마크 진입로에 즉시 도착할 수 있다. 도착 뒤 버튼은 `SPACE 소개 보기`로 교체된다.
 - 지도 자체에 장식용 자동 애니메이션을 넣지 않는다.
@@ -204,6 +216,7 @@
 - WCAG 2.2 AA 목표: 본문 4.5:1, 큰 텍스트 3:1 이상
 - 모든 마을은 포인터와 키보드 양쪽에서 선택 가능
 - 44px 이상 터치 타깃과 명확한 `focus-visible`
+- 터치 스틱은 112px 이상이며 포인터 취소·화면 이탈·창 포커스 상실 때 이동 입력이 고정되지 않도록 0으로 복귀
 - 모션 감소에서 카메라 이동 애니메이션 비활성화
 - 발견 진행률은 색만으로 표시하지 않고 `00/05` 텍스트를 병기
 - 200% 확대와 375px에서 한국어 어절 분리, 클리핑, 가로 스크롤 금지

@@ -81,10 +81,11 @@ export function moveExplorer(explorer, input, delta, reducedMotion) {
   }
 
   explorer.userData.arrivalTime = 0;
+  const strength = Math.min(direction.length(), 1);
   direction.normalize();
   const speed = 4.2;
-  const nextX = explorer.position.x + direction.x * speed * delta;
-  const nextZ = explorer.position.z + direction.y * speed * delta;
+  const nextX = explorer.position.x + direction.x * speed * strength * delta;
+  const nextZ = explorer.position.z + direction.y * speed * strength * delta;
   if (isWalkableAt(nextX, explorer.position.z)) explorer.position.x = nextX;
   if (isWalkableAt(explorer.position.x, nextZ)) explorer.position.z = nextZ;
 

@@ -1,12 +1,9 @@
 import * as THREE from "three";
 import { MapControls } from "three/addons/controls/MapControls.js";
 import { createZoomController } from "./camera-zoom.js?v=world2-intro5";
-import {
-  celebrateArrival,
-  fastTravelExplorer,
-  moveExplorer,
-} from "./explorer.js?v=fast-travel1";
+import { celebrateArrival, fastTravelExplorer, moveExplorer } from "./explorer.js?v=fast-travel1";
 import { createHud } from "./hud.js?v=fast-travel1";
+import { createMovementController } from "./movement-controller.js?v=touch-stick1";
 import { loadProjects } from "./project-content.js?v=world2-intro5";
 import { createProjectDialog } from "./project-dialog.js?v=world2-intro5";
 import { readPalette } from "./theme.js";
@@ -35,7 +32,6 @@ controls.minZoom = 0.68;
 controls.maxZoom = 3.2;
 controls.zoomToCursor = true;
 
-const pressed = new Set();
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 let activeDestination = null;
@@ -50,6 +46,14 @@ const hud = createHud(
   setDestination,
   openNearbyIntroduction,
   fastTravelToDestination,
+);
+const movement = createMovementController(
+  document.querySelector("#movement-stick"),
+  {
+    isEnabled: () => !projectDialog.isOpen(),
+    onStart: enterTravelView,
+    onPulse: pulseMovement,
+  },
 );
 
 function setDestination(id) {
@@ -92,7 +96,7 @@ function fastTravelToDestination() {
   ) {
     return;
   }
-  pressed.clear();
+  movement.reset();
   nearbyVillage = null;
   travelViewEntered = true;
   zoom.animateTo(2.1);
@@ -149,15 +153,10 @@ function checkLandmarkProximity() {
   }
 }
 
-function movementInput() {
-  const up = pressed.has("ArrowUp") || pressed.has("KeyW") || pressed.has("up");
-  const down = pressed.has("ArrowDown") || pressed.has("KeyS") || pressed.has("down");
-  const left = pressed.has("ArrowLeft") || pressed.has("KeyA") || pressed.has("left");
-  const right = pressed.has("ArrowRight") || pressed.has("KeyD") || pressed.has("right");
-  return {
-    x: Number(down) - Number(up) + Number(right) - Number(left),
-    z: Number(down) - Number(up) + Number(left) - Number(right),
-  };
+function pulseMovement(input) {
+  moveExplorer(world.explorer, input, 0.05, reducedMotion.matches);
+  checkLandmarkProximity();
+  updateJourneyStatus();
 }
 
 function updateViewport() {
@@ -188,37 +187,8 @@ window.addEventListener("keydown", (event) => {
     }
     return;
   }
-  if (projectDialog.isOpen()) return;
-  const movementKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyA", "KeyS", "KeyD"];
-  if (!movementKeys.includes(event.code)) return;
-  event.preventDefault();
-  pressed.add(event.code);
-  if (!event.repeat) {
-    enterTravelView();
-    moveExplorer(world.explorer, movementInput(), 0.05, reducedMotion.matches);
-    checkLandmarkProximity();
-    updateJourneyStatus();
-  }
 });
-window.addEventListener("keyup", (event) => pressed.delete(event.code));
-window.addEventListener("blur", () => pressed.clear());
 window.addEventListener("resize", updateViewport);
-
-document.querySelectorAll("[data-move]").forEach((button) => {
-  const direction = button.dataset.move;
-  const stop = () => pressed.delete(direction);
-  button.addEventListener("pointerdown", (event) => {
-    event.preventDefault();
-    pressed.add(direction);
-    enterTravelView();
-    moveExplorer(world.explorer, movementInput(), 0.05, reducedMotion.matches);
-    checkLandmarkProximity();
-    updateJourneyStatus();
-  });
-  button.addEventListener("pointerup", stop);
-  button.addEventListener("pointercancel", stop);
-  button.addEventListener("pointerleave", stop);
-});
 
 renderer.domElement.addEventListener("pointerup", (event) => {
   const rect = renderer.domElement.getBoundingClientRect();
@@ -262,7 +232,7 @@ timer.connect(document);
 renderer.setAnimationLoop((timestamp) => {
   timer.update(timestamp);
   const delta = Math.min(timer.getDelta(), 0.05);
-  const input = movementInput();
+  const input = movement.read();
   const moved = moveExplorer(world.explorer, input, delta, reducedMotion.matches);
   if (moved) {
     travelDirection.set(input.x, input.z).normalize();

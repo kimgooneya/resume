@@ -9,8 +9,9 @@
     />
     <title>Voxel Portfolio World</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./styles.css?v=fast-travel2" />
-    <link rel="stylesheet" href="./responsive.css?v=fast-travel1" />
+    <link rel="stylesheet" href="./styles.css?v=touch-stick1" />
+    <link rel="stylesheet" href="./responsive.css?v=touch-stick1" />
+    <link rel="stylesheet" href="./touch-joystick.css?v=touch-stick1" />
   </head>
   <body>
     <a class="skip-link" href="#village-nav">마을 선택으로 건너뛰기</a>
@@ -38,7 +39,10 @@
         </div>
         <h2 id="detail-title">중앙 광장</h2>
         <strong id="detail-role">EXPLORE THE WORLD</strong>
-        <p id="detail-copy">방향키나 WASD로 이동해 랜드마크&nbsp;가까이 가보세요.</p>
+        <p id="detail-copy">
+          <span class="desktop-control-copy">방향키나 WASD로 이동해 랜드마크&nbsp;가까이 가보세요.</span>
+          <span class="touch-control-copy">이동 스틱을 드래그해 랜드마크&nbsp;가까이 가보세요.</span>
+        </p>
         <div class="detail-actions">
           <button id="fast-travel-trigger" class="detail-action fast-travel-trigger" type="button" hidden>
             <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -76,13 +80,16 @@
         <span><kbd>SPACE</kbd> 소개</span>
       </div>
 
-      <fieldset class="move-pad">
-        <legend class="sr-only">캐릭터 이동</legend>
-        <button type="button" data-move="up" aria-label="위로 이동">↑</button>
-        <button type="button" data-move="left" aria-label="왼쪽으로 이동">←</button>
-        <button type="button" data-move="down" aria-label="아래로 이동">↓</button>
-        <button type="button" data-move="right" aria-label="오른쪽으로 이동">→</button>
-      </fieldset>
+      <button
+        id="movement-stick"
+        class="touch-joystick"
+        type="button"
+        aria-label="이동 스틱: 드래그하여 탐험가 이동"
+        aria-pressed="false"
+      >
+        <span class="touch-joystick__guides" aria-hidden="true"></span>
+        <span class="touch-joystick__thumb" aria-hidden="true"></span>
+      </button>
 
       <div id="loading" class="loading" role="status">
         <span></span>
@@ -115,6 +122,6 @@
       </article>
     </dialog>
 
-    <script type="module" src="./main.js?v=blender-p1-2"></script>
+    <script type="module" src="./main.js?v=touch-stick1"></script>
   </body>
 </html>
