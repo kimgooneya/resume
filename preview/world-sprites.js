@@ -174,13 +174,72 @@ export function drawResident(context, region, point) {
 
 export function drawPlayer(context, palette, player, point) {
   const { x, y } = point;
-  fill(context, palette[0], x + 2, y + 7, 12, 2);
-  fill(context, palette[0], x + 4, y + 2, 8, 5);
-  fill(context, palette[3], x + 5, y + 4, 6, 3);
-  fill(context, palette[1], x + 4, y + 8, 8, 6);
-  fill(context, palette[2], x + (player.facing === "left" ? 3 : 10), y + 9, 3, 3);
-  fill(context, palette[0], x + 4, y + 14, 3, 2);
-  fill(context, palette[0], x + 9, y + 14, 3, 2);
+  const [darkest, dark, mid, light] = palette;
+  const alternateStep = (player.x + player.y) % 2 === 1;
+  const leftBootY = y + (alternateStep ? 14 : 15);
+  const rightBootY = y + (alternateStep ? 15 : 14);
+
+  fill(context, darkest, x - 4, y + 14, 24, 3);
+  fill(context, darkest, x - 1, y + 8, 8, 8);
+  fill(context, darkest, x + 9, y + 8, 8, 8);
+  fill(context, mid, x + 1, y + 8, 5, 5);
+  fill(context, mid, x + 11, y + 8, 5, 5);
+  fill(context, darkest, x - 1, leftBootY, 8, 2);
+  fill(context, darkest, x + 9, rightBootY, 8, 2);
+  fill(context, darkest, x - 3, y - 2, 22, 12);
+  fill(context, dark, x - 1, y, 18, 10);
+  fill(context, mid, x + 2, y + 1, 12, 7);
+  fill(context, darkest, x - 4, y, 4, 10);
+  fill(context, darkest, x + 17, y, 4, 10);
+  fill(context, light, x - 4, y + 8, 3, 3);
+  fill(context, light, x + 18, y + 8, 3, 3);
+  fill(context, darkest, x - 2, y - 13, 20, 13);
+
+  if (player.facing === "down") {
+    fill(context, light, x, y - 10, 16, 8);
+    fill(context, dark, x, y - 12, 16, 4);
+    fill(context, dark, x, y - 9, 4, 3);
+    fill(context, darkest, x + 3, y - 7, 2, 2);
+    fill(context, darkest, x + 11, y - 7, 2, 2);
+    fill(context, mid, x + 7, y - 5, 2, 2);
+    fill(context, light, x + 2, y - 2, 12, 3);
+    fill(context, darkest, x + 12, y - 1, 3, 4);
+    fill(context, darkest, x + 2, y + 1, 3, 8);
+    fill(context, dark, x + 10, y + 4, 7, 6);
+    fill(context, light, x + 11, y + 5, 4, 3);
+    return;
+  }
+
+  if (player.facing === "up") {
+    fill(context, dark, x, y - 11, 16, 9);
+    fill(context, mid, x + 2, y - 12, 12, 4);
+    fill(context, darkest, x, y - 5, 16, 3);
+    fill(context, light, x + 2, y - 2, 12, 3);
+    fill(context, darkest, x + 1, y, 14, 10);
+    fill(context, dark, x + 3, y + 1, 10, 8);
+    fill(context, mid, x + 5, y + 3, 6, 4);
+    fill(context, light, x + 6, y + 4, 4, 2);
+    fill(context, darkest, x + 1, y - 1, 3, 6);
+    fill(context, darkest, x + 12, y - 1, 3, 6);
+    return;
+  }
+
+  const facesLeft = player.facing === "left";
+  const faceX = facesLeft ? x - 1 : x + 5;
+  const eyeX = facesLeft ? x + 1 : x + 13;
+  const packX = facesLeft ? x + 11 : x - 2;
+  const deviceX = facesLeft ? x - 3 : x + 17;
+  fill(context, light, faceX, y - 10, 12, 8);
+  fill(context, dark, x, y - 12, 16, 4);
+  fill(context, dark, facesLeft ? x + 10 : x, y - 9, 6, 7);
+  fill(context, darkest, eyeX, y - 7, 2, 2);
+  fill(context, mid, facesLeft ? x - 2 : x + 16, y - 6, 3, 3);
+  fill(context, light, x + 2, y - 2, 12, 3);
+  fill(context, darkest, packX, y + 1, 7, 9);
+  fill(context, dark, packX + 1, y + 3, 5, 6);
+  fill(context, darkest, deviceX, y + 3, 5, 6);
+  fill(context, light, deviceX + 1, y + 4, 3, 3);
+  fill(context, mid, facesLeft ? x - 3 : x + 18, y + 7, 3, 2);
 }
 
 export function drawMarker(context, palette, point) {

@@ -57,6 +57,41 @@ function groundCommands(commands) {
 }
 
 describe("four-tone tile renderer", () => {
+  test("renders an identifiable original adventurer in every facing and step state", () => {
+    // Given: one player anchored away from every canvas edge
+    const forest = REGIONS_BY_ID.forest;
+    const draw = (facing, x, y) => {
+      const context = recordingContext();
+      drawPlayer(context, forest.palette, { x, y, facing }, { x: 96, y: 96 });
+      return context.commands.filter(([name]) => name === "fillRect");
+    };
+    const recordings = ["up", "right", "down", "left"].map((facing) =>
+      draw(facing, 20, 20));
+    const bounds = (commands) => {
+      const left = Math.min(...commands.map(([, , x]) => x));
+      const top = Math.min(...commands.map(([, , , y]) => y));
+      const right = Math.max(...commands.map(([, , x, , width]) => x + width));
+      const bottom = Math.max(...commands.map(([, , , y, , height]) => y + height));
+      return { width: right - left, height: bottom - top };
+    };
+
+    // When: each facing and alternating walk step is painted
+    const facingSignatures = recordings.map((commands) => JSON.stringify(commands));
+    const stepA = draw("down", 20, 20);
+    const stepB = draw("down", 21, 20);
+
+    // Then: silhouette, face, outfit, pack, and stance remain readable in four tones
+    expect(recordings.every((commands) => commands.length >= 20)).toBe(true);
+    expect(recordings.every((commands) => {
+      const size = bounds(commands);
+      return size.width >= 22 && size.height >= 28;
+    })).toBe(true);
+    expect(recordings.every((commands) =>
+      new Set(commands.map(([, color]) => color)).size === 4)).toBe(true);
+    expect(new Set(facingSignatures).size).toBe(4);
+    expect(stepA).not.toEqual(stepB);
+  });
+
   test("iterates exactly the current 24 by 18 camera slice in row-major order", () => {
     // Given: the forest viewed from a non-zero camera origin
     const context = recordingContext();
