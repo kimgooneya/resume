@@ -1,62 +1,80 @@
-# Voxel Village Portfolio Design System
+# Pocket Field Guide Portfolio Design System
+
+## 0. Direction Log
+
+- Brief: 기존 3D 복셀 포트폴리오를 1980년대 말–1990년대 초 단색 휴대용 2D RPG의 맵 이동과 대화형 소개 경험으로 전면 개편한다.
+- Reference grammar: 초기 4단계 LCD 팔레트, 낮은 논리 해상도, 정방형 타일, 사각 대화창, 큰 십자 방향 패드 문법을 참고하되 특정 게임이나 기기의 로고, 캐릭터, 몬스터, 지도, 명칭, 사운드, 외형, 에셋은 복제하지 않는다.
+- Generated studies:
+  - `assets/concepts/classic-portfolio-ui-reference.png` (1586×992): 타일·대화창·D-pad 문법 참고.
+  - `assets/concepts/classic-portfolio-wide-regions-reference.png` (1672×941): 넓은 맵 비중과 마을별 색상 참고. 여러 지역이 한 지도에 이어진 구조는 이후 사용자 피드백으로 폐기했으므로 지리 구조의 기준으로 사용하지 않는다.
+- Final layout contract: 상단 플레이 영역에서 현재 지역의 로컬 맵 74%, 지역 목록 22%, 외곽 여백 4%. 전체 화면 하단 18–22%는 상시 보이는 조작 덱으로 사용한다. 4px 잉크 테두리, 밝은 내부 하이라이트, 오른쪽/아래 단차 그림자를 구현 기준으로 삼는다.
+- Signature moment: 방문자가 작은 개발자 캐릭터를 직접 움직여 다섯 작업소 앞 표지판을 읽고, 하단 대화창에서 실제 프로젝트 소개를 발견한다.
+- Interaction reference: beui.dev `center-morph-modal`의 포커스 복귀와 reduced-motion 계약만 가져오고, 시각 전환은 고전 게임의 즉시 나타나는 대화창 문법으로 재해석한다.
 
 ## 1. Atmosphere & Identity
 
-어두운 우주 위에 놓인 밝고 정교한 장난감 마을 지도다. 방문자는 작은 복셀 탐험가를 직접 움직여 서로 다른 생태 마을과 랜드마크를 발견한다. 시그니처는 숲·도시·사막·설원·항구가 도로, 철도, 강으로 연결되고 각 마을 중앙에 하나의 강한 프로젝트 랜드마크가 서 있는 구성이다. 기준 이미지는 `assets/concepts/voxel-flat-portfolio-world-concept.png`이며, 특정 게임의 캐릭터·에셋·UI는 복제하지 않는다.
+초기 단색 휴대용 게임 카트리지에서 막 꺼낸 듯한 작은 포트폴리오 지역이다. 화면은 정확히 네 단계로 나뉜 LCD 팔레트와 짙은 1픽셀 윤곽, 큰 픽셀 덩어리로 구성한다. 컬러 일러스트처럼 세밀한 명암, 안티앨리어싱, 현대적인 유리 패널, 그라데이션, 둥근 카드, 3D 원근은 사용하지 않는다.
+
+핵심 경험은 `지역 목록에서 선택 → 해당 지역 안에서 탐험 → 랜드마크 옆 주민과 대화 → 작업 소개 읽기`다. 지역 사이는 걸어서 이동할 수 없으며 지역 목록만이 유일한 지역 전환 수단이다. 소개 내용은 장식보다 우선하고, 모든 기능은 키보드와 터치 양쪽에서 완주할 수 있어야 한다.
 
 ## 2. Color
 
+LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid`, `light` 네 단계의 지역 팔레트를 사용한다. 외곽 셸과 하단 조작 덱은 지역 테마와 완전히 분리된 고정 중립 팔레트를 사용한다.
+
 | Role | Token | Value | Usage |
 |---|---|---|---|
-| Space/deep | `--space-deep` | `#030819` | 월드 밖 배경 |
-| Space/core | `--space-core` | `#071a3b` | 지도 주변 광원 |
-| Surface/glass | `--surface-glass` | `rgba(4, 17, 39, 0.82)` | HUD와 상세 패널 |
-| Text/primary | `--text-primary` | `#f4fbff` | 제목과 주요 정보 |
-| Text/secondary | `--text-secondary` | `#9fd3df` | 설명과 메타데이터 |
-| Border/glow | `--border-glow` | `rgba(103, 230, 243, 0.42)` | 선택과 포커스 |
-| Accent/cyan | `--accent-cyan` | `#67e6f3` | 랜드마크 비콘 |
-| Water/deep | `--water-deep` | `#087f9c` | 깊은 물 |
-| Water/light | `--water-light` | `#22c6cf` | 강과 해안 |
-| Forest/deep | `--forest-deep` | `#347f36` | 숲 바닥과 수목 |
-| Meadow | `--meadow` | `#7fbd48` | 초원 |
-| City | `--city` | `#91b9b4` | 도시 지면 |
-| Coast | `--coast` | `#68bd86` | 항구 초지 |
-| Sand | `--sand` | `#e8b84f` | 사막과 해변 |
-| Snow | `--snow` | `#e8f4f4` | 설원 |
-| Ice | `--ice` | `#9fd9df` | 얼음 지형 |
-| Road | `--road` | `#3e454d` | 도로 |
-| Rail | `--rail` | `#76553d` | 철도 침목 |
-| Building/light | `--building-light` | `#e8e2ce` | 건물 벽 |
-| Building/dark | `--building-dark` | `#485565` | 도시 구조 |
-| Roof | `--roof` | `#2e5b83` | 마을 지붕 |
-| Beacon | `--beacon` | `#4ce6ff` | 선택 가능한 노드 |
-| Warning | `--warning` | `#ff9d4d` | 사막 작업장 포인트 |
-| Soil/deep | `--soil-deep` | `#273f43` | 절벽과 지도 하부 |
-| Soil/mid | `--soil-mid` | `#48645c` | 두 번째 지층 |
-| Cliff/light | `--cliff-light` | `#6f8c72` | 지형 수직면 하이라이트 |
-| Road/marking | `--road-marking` | `#f6d46b` | 도로 중앙선 |
-| Rail/metal | `--rail-metal` | `#a9bbc0` | 두 줄 레일 |
-| Shore/foam | `--shore-foam` | `#b8f4e8` | 물과 육지의 경계 |
-| Explorer/skin | `--explorer-skin` | `#f2c7a5` | 캐릭터 얼굴과 손 |
-| Explorer/scarf | `--explorer-scarf` | `#ff6f61` | 캐릭터 정체성 포인트 |
-| Explorer/pack | `--explorer-pack` | `#5c3f35` | 배낭 |
-| Shadow/contact | `--shadow-contact` | `#030819` | 랜드마크·캐릭터 접촉 그림자. 투명도는 재질에서 적용 |
+| Page ink | `--ink-0` | `#17291f` | 본문, 외곽선, 가장 어두운 타일 |
+| Deep ink | `--ink-1` | `#31553f` | 그림자, 나무, 물결 |
+| Mid LCD | `--lcd-2` | `#7a9b58` | 중간 지형, 비활성 상태 |
+| Light LCD | `--lcd-3` | `#c8d98b` | 기본 화면, 패널 배경 |
+| Paper | `--paper` | `#eef2c2` | 셸과 화면 바깥 여백만 |
+| Shell | `--shell` | `#d7d0b5` | 바깥 프레임 |
+| Shell shadow | `--shell-shadow` | `#8b866f` | 프레임 단차 |
+| Focus | `--focus` | `#fffbd1` | 포커스와 선택 커서 |
+| Danger | `--danger` | `#8a302d` | 오류/차단 상태만 |
 
-모든 UI와 3D 재질은 위 역할에서만 가져온다. 생태색은 월드 안에서, 청록색은 선택과 상호작용 상태에서만 사용한다.
+색만으로 상태를 구분하지 않는다. 선택 상태에는 `▶`, 테두리, 텍스트를 함께 사용한다.
+
+### Fixed Shell & Control Palette
+
+아래 색상은 모든 마을에서 절대 바뀌지 않는다. `data-theme`은 이 토큰을 덮어쓸 수 없다.
+
+| Role | Token | Value | Usage |
+|---|---|---|---|
+| Chrome light | `--chrome-light` | `#ded7bd` | 외곽 셸, 조작 덱 바탕 |
+| Chrome mid | `--chrome-mid` | `#a7a18d` | 내부 단차, 버튼 하이라이트 |
+| Chrome dark | `--chrome-dark` | `#555950` | D-pad와 A/B 버튼 |
+| Chrome ink | `--chrome-ink` | `#252b27` | 조작부 외곽선과 라벨 |
+
+조작 덱에는 숲 녹색, 도시 청색, 사막 황토, 설원 남색, 해안 청록을 사용하지 않는다. A/B 버튼도 지역별 강조색 없이 `--chrome-dark`로 통일한다.
+
+### Village Palette Variants
+
+마을 선택 또는 진입 시 `data-theme`은 LCD 플레이 영역의 네 단계 램프만 바꾼다. 조작 덱과 외곽 셸은 영향을 받지 않으며, 구조와 명암 역할은 그대로 유지한다.
+
+| Village | Dark | Deep | Mid | Light | Character |
+|---|---|---|---|---|---|
+| Forest | `#0f1f14` | `#315b35` | `#78a34e` | `#d5e596` | 짙은 소나무와 이끼 |
+| City | `#152530` | `#31536b` | `#7595a1` | `#d2e1d0` | 청회색 금속과 콘크리트 |
+| Desert | `#2b1a10` | `#7a4b28` | `#c2944f` | `#f0dda2` | 황토와 마른 모래 |
+| Snow | `#25283d` | `#4c5478` | `#909ab5` | `#e6ebd1` | 푸른 그림자와 서리 |
+| Coast | `#102c2b` | `#1f6260` | `#63a08a` | `#d4e5ad` | 바닷물과 해안 풀 |
 
 ## 3. Typography
 
-| Level | Size | Weight | Line Height | Tracking | Usage |
-|---|---|---|---|---|---|
-| Display | `clamp(1.75rem, 4vw, 3.5rem)` | 800 | 1.0 | `-0.04em` | 월드 제목 |
-| H2 | `1.25rem` | 800 | 1.2 | `-0.02em` | 선택 마을 |
-| Body | `1rem` | 500 | 1.5 | `-0.01em` | 설명 |
-| Caption | `0.75rem` | 700 | 1.4 | `0.12em` | 상태와 생태 라벨 |
+- Display/UI: `"DungGeunMo", "Galmuri11", "Apple SD Gothic Neo", "Courier New", monospace`
+- 모든 텍스트는 정수 픽셀 크기와 굵기 700을 사용한다.
+- 한국어는 `word-break: keep-all`, `overflow-wrap: break-word`를 사용한다.
+- 제목과 버튼은 과도한 영문 대문자를 피하고, 시스템 라벨에만 짧은 영문을 허용한다.
 
-- Primary: `"Trebuchet MS", "Avenir Next", system-ui, sans-serif`
-- Mono: `"SFMono-Regular", Consolas, monospace`
-- 한국어는 `word-break: keep-all`을 사용하고 제목은 최대 두 줄로 유지한다.
-- HUD의 한국어 본문은 `Pretendard Variable`, `SUIT Variable`, `"Apple SD Gothic Neo"` 순서의 지역 폰트 스택을 사용한다. 별도 네트워크 폰트 요청은 만들지 않는다.
+| Token | Value | Usage |
+|---|---|---|
+| `--type-title` | `clamp(1.25rem, 3vw, 1.75rem)` | 페이지 제목 |
+| `--type-dialog` | `clamp(0.875rem, 2vw, 1rem)` | 대화/소개 본문 |
+| `--type-ui` | `0.8125rem` | 버튼과 메뉴 |
+| `--type-micro` | `0.6875rem` | 상태 표시 |
+| `--leading-tight` | `1.25` | 제목 |
+| `--leading-copy` | `1.65` | 한국어 본문 |
 
 ## 4. Spacing & Layout
 
@@ -64,166 +82,160 @@
 
 | Token | Value | Usage |
 |---|---|---|
-| `--space-1` | `4px` | 아이콘 내부 |
-| `--space-2` | `8px` | 조밀한 인라인 간격 |
+| `--space-1` | `4px` | 픽셀 단차 |
+| `--space-2` | `8px` | 조밀한 간격 |
 | `--space-3` | `12px` | 버튼 내부 |
-| `--space-4` | `16px` | HUD 내부 |
-| `--space-6` | `24px` | 모바일 여백 |
-| `--space-8` | `32px` | 데스크톱 여백 |
+| `--space-4` | `16px` | 패널 내부 |
+| `--space-6` | `24px` | 큰 구획 |
+| `--space-8` | `32px` | 데스크톱 바깥 여백 |
+| `--pixel-border` | `4px` | 모든 주요 패널 테두리 |
+| `--control-min` | `56px` | 최소 터치 타깃 |
+| `--dpad-size` | `128px` | 데스크톱 십자 방향 패드 |
+| `--action-size` | `64px` | 데스크톱 A/B 버튼 |
+| `--game-max` | `70rem` | 전체 게임 셸 최대폭 |
+| `--map-ratio` | `4 / 3` | 24×18 타일 맵 비율 |
 
-### UI Geometry & Responsive Tokens
-
-| Group | Tokens | Purpose |
-|---|---|---|
-| Stroke | `--stroke`, `--stroke-strong`, `--focus-ring`, `--focus-offset` | 패널 선과 키보드 포커스 |
-| Radius | `--radius-sm`, `--radius-md`, `--radius-lg` | 키, 버튼, 패널 |
-| Control | `--control-min`, `--joystick-size`, `--joystick-thumb-size`, `--key-min` | 44px 이상 터치와 게임형 스틱 |
-| Component width | `--hud-width`, `--title-width`, `--lede-width`, `--nav-width`, `--detail-width`, `--intro-width`, `--status-min-width` | 데스크톱 HUD 비율 |
-| Mobile position | `--nav-mobile-top`, `--nav-hint-mobile-top`, `--joystick-mobile-bottom` | 375–767px의 겹침 없는 스택 |
-| Compact position | `--nav-compact-top`, `--nav-hint-compact-top`, `--joystick-compact-bottom` | 390×700 이하 높이 대응 |
-| Surface | `--blur-sm`, `--blur-lg`, `--shadow-text`, `--shadow-panel`, `--shadow-hint`, `--shadow-status-dot` | 지도 위 가독성 |
-| Progress | `--progress-width`, `--compass-size`, `--grain-opacity`, `--vignette-strength` | 발견 진행률과 분위기 |
-
-- 활자 구현은 `--font-sans`, `--font-mono`, `--weight-*`, `--leading-*`, `--type-display`, `--type-display-mobile`, `--type-h2`, `--type-body`, `--type-ui`, `--type-caption`, `--type-micro`, `--type-xs`를 사용한다.
-- 자간은 `--track-*`, 모션은 `--motion-fast`, `--motion-standard`, `--motion-reduced`만 사용한다.
-- 반응형 미디어 쿼리 자체의 경계값만 CSS 상수로 남기고, 내부 배치값은 위 토큰을 사용한다.
-
-- 캔버스는 `100dvh`를 채우며 스크롤은 지도가 소유한다.
-- 데스크톱은 좌상단 제목, 우측 마을 내비게이션, 좌하단 조작 안내, 우하단 선택 상세를 사용한다.
-- 767px 이하에서는 제목과 내비게이션을 상단에 압축하고 상세 패널은 하단 한 열로 둔다.
-- 375px에서 월드의 핵심 랜드마크와 선택 패널이 겹치지 않아야 한다.
+- 전체 셸은 `min-height: 100dvh`이며 문서가 세로 스크롤을 소유한다.
+- 데스크톱: 상단 플레이 영역에서 왼쪽 지도는 74%, 오른쪽 지역 메뉴는 22%를 사용한다. 하단 조작 덱은 전체 셸 높이의 18–22%를 차지한다.
+- 900px 이하: 지도 위, 메뉴 아래 한 열로 전환한다.
+- 600px 이하: 바깥 프레임을 화면 가장자리까지 확장하고 112px D-pad와 56px A/B를 지도 아래 고정 배치한다.
+- 지도 캔버스는 논리 해상도 `384×288`, 24×18 타일, 16px 셀을 사용하고 CSS에서 정수 배율로 확대한다.
 
 ## 5. Components
 
-### Flat World Canvas
+### Game Shell
 
-- **Structure**: 96×60 셀 직교 카메라 WebGL 캔버스, 4단 층고 타일, 절벽 캡, 해안선, 도로·철도·다리, 마을과 랜드마크
-- **Variants**: 데스크톱 시작 화면 전체 지도, 이동 후 캐릭터 추적 지도, 모바일 근접 지도
-- **States**: 로딩, 준비, 이동, 확대, 랜드마크 hover, selected
-- **Accessibility**: 캔버스 한국어 라벨, `WASD`와 방향키로 캐릭터 이동
-- **Motion**: 시작 화면은 다섯 생태를 모두 보여주고 첫 이동 뒤 카메라는 캐릭터를 부드럽게 추적
-- **Layout**: 전체 뷰포트 shell. 768–1024px 태블릿에서도 터치 스틱을 유지하고, 375–767px에서는 상세 패널이 목적지를 가리지 않도록 카메라 안전 오프셋을 적용한다.
-- **Performance**: 지형·도로·철도·반복 소품은 `InstancedMesh`를 유지하고, 프레임 루프에서는 새 벡터나 재질을 할당하지 않는다.
+- **Structure**: masthead, LCD map frame, side menu, large control deck, footer status
+- **States**: loading, ready, dialog-open
+- **Surface**: 둥근 카드 대신 4px 사각 픽셀 테두리와 오른쪽/아래 단차 그림자
+- **Responsive**: 900px 이하 한 열, 600px 이하 프레임 단차 축소
 
-### Voxel Explorer
+### Local Tile Map
 
-- **Structure**: 얼굴, 머리, 몸통, 팔, 다리, 산호색 스카프, 갈색 배낭, 청록 지도 단말로 만든 복셀 캐릭터와 바닥 그림자
-- **States**: idle, walking, landmark-near, arrived
-- **Accessibility**: 키보드 `WASD`/방향키, 모바일 터치 스틱. 스틱은 텍스트 입력 요소가 아닌 실제 버튼이므로 가상 키보드를 열지 않으며 포커스 중 방향키 입력도 그대로 지원한다.
-- **Motion**: 이동 중 팔다리만 짧게 교차하고 지형색 발자국을 제한적으로 남긴다. 도착 시 랜드마크를 바라보고 한 번 손을 흔든다. 모션 감소에서는 보행·도착 흔들림을 제거한다.
-- **Layout**: 지형 경계와 물을 넘지 않으며 캐릭터 중심 추적 카메라 사용
+- **Structure**: 지역마다 독립된 40×64 타일 세로형 맵, 길·환경물·랜드마크·주민·캐릭터. 화면에는 한 번에 24×18 타일만 보인다.
+- **States**: free, destination-selected, landmark-near, discovered
+- **Rendering**: `imageSmoothingEnabled = false`, `image-rendering: pixelated`
+- **Accessibility**: 캔버스 주변에 현재 위치, 목적지, 상호작용 가능 상태를 텍스트로 제공
+- **Motion**: 한 칸 이동은 즉시 갱신한다. 자동 장식 애니메이션은 없다.
+- **Boundary**: 캐릭터는 현재 지역 경계를 넘을 수 없고 다른 지역으로 이어지는 출구·도로를 두지 않는다.
 
-### Touch Joystick
+### Scrolling Camera
 
-- **Structure**: 고정 원형 베이스, 엄지 위치를 따라가는 원형 노브, 스크린리더용 조작 라벨
-- **States**: idle, pressed, dragging, released, focus-visible
-- **Input**: `pointerdown`에서 포인터를 캡처하고 중심으로부터의 벡터를 반지름 안으로 제한한다. 반지름의 14%는 데드존이며 바깥 구간은 `0–1` 세기로 다시 정규화한다.
-- **Mapping**: 화면 상하좌우 벡터를 아이소메트릭 월드 축으로 45도 회전해 키보드와 같은 이동 경로에 전달한다. 가상 키보드 이벤트는 만들지 않는다.
-- **Feedback**: 드래그 중 노브는 포인터를 프레임 지연 없이 직접 추종한다. 입력 종료·취소·포인터 캡처 상실 시 입력과 노브가 즉시 중앙으로 복귀하고, 새 입력은 이전 복귀 상태를 즉시 중단한다.
-- **Accessibility**: 최소 `112px` 조작 면적, 명확한 포커스 링, `aria-label="이동 스틱: 드래그하여 탐험가 이동"`. 키보드와 마을 바로 이동은 독립 대체 경로로 유지한다.
-- **Layout**: 1024px 이하 좌하단에 배치하고 375×667px 및 390×700px에서도 프로젝트 상세 패널과 겹치지 않는다.
-- **Reference**: beui.dev 카탈로그에 직접 대응하는 게임 스틱이 없어 프로젝트 고유 직접 조작 패턴으로 기록한다.
+- **Viewport**: 논리 화면 `384×288`, 24×18 타일. 지역 전체 40×64 타일 중 현재 위치 주변만 보여준다.
+- **Primary axis**: 시작점은 남쪽, 랜드마크는 북쪽에 둔다. 주 동선은 최소 2.5개 뷰포트 높이이며 카메라는 상하 이동을 중심으로 따라간다.
+- **Follow**: 캐릭터가 화면 중앙의 8×6 타일 안전 영역을 벗어날 때 카메라가 한 타일 단위로 따라간다.
+- **Edge clamp**: 지역 가장자리에서는 카메라를 맵 경계에 고정해 빈 바깥 영역이 보이지 않게 한다.
+- **Region entry**: 지역 목록에서 선택하면 지역 시작점에 캐릭터를 배치하고 카메라를 해당 시작점에 즉시 맞춘다.
+- **Landmark reveal**: 시작점에서 랜드마크까지 길·표지판·환경 실루엣으로 방향을 안내한다. 현대적인 미니맵이나 화면 위 화살표는 사용하지 않는다.
+- **Reduced motion**: 카메라 보간 없이 즉시 다음 타일 위치로 갱신한다. 기본 모드에서도 고전 게임처럼 짧고 단단한 타일 스크롤만 사용한다.
 
-### Village Navigation
+### Player Sprite
 
-- **Structure**: 5개의 마을 선택 버튼
-- **States**: default, hover, active, focus-visible, selected
-- **Accessibility**: 실제 `<button>`, `aria-pressed`, 44px 이상 터치 타깃
-- **Motion**: 선택 시 해당 마을의 방향과 거리를 안내하며 상세 카드에 `바로 이동` 행동을 공개한다. 캐릭터가 접근하면 소개 행동으로 교체한다.
-- **Layout**: 데스크톱 세로 cluster, 모바일 가로 scroll cluster
+- **Structure**: 16×20px 고유 개발자 캐릭터. 캡, 가방, 얼굴, 다리의 단순 픽셀 블록
+- **States**: idle, step-a, step-b, near
+- **Input**: WASD/방향키 또는 터치 방향 패드
+- **Collision**: 물, 나무, 건물 본체, 지도 경계를 통과하지 않는다.
 
-### Project Detail
+### Region Menu
 
-- **Structure**: 생태 라벨, 랜드마크명, 프로젝트 역할, 선택 시 `바로 이동`, 도착 시 `SPACE 소개 보기` 행동
-- **States**: 기본 안내, 목적지 선택·바로 이동 대기, 도착·소개 대기, 소개 열림
-- **Accessibility**: `aria-live="polite"`로 선택 결과 전달
-- **Motion**: 선택 내용은 220ms opacity/transform 전환. 바로 이동은 마을 진입로의 안전한 도로 셀에 캐릭터를 배치하고 카메라가 추적한다.
-- **Layout**: compact card
+- **Structure**: 다섯 프로젝트 작업소의 실제 `<button>` 목록
+- **States**: default, hover, focus-visible, selected, discovered
+- **Feedback**: 선택 행 앞에 `▶`, 발견 행 뒤에 `완료`
+- **Action**: 선택 즉시 해당 지역의 독립 로컬 맵을 불러오고 캐릭터를 지역 시작점에 배치한다. 걸어서 지역을 바꾸는 대체 경로는 제공하지 않는다.
+- **Persistence**: 지역 목록은 플레이 중에도 항상 접근 가능하다.
+- **Theme**: 선택한 지역의 팔레트로 메뉴 커서·버튼·맵 전체를 함께 전환한다.
 
-### Project Introduction Dialog
+### Landmark Resident
 
-- **Structure**: 마을·역할·프로젝트명, 요약, 세 가지 핵심 성과, 기술 스택, 닫기 버튼
-- **Data**: `preview/projects.json`이 소개 문구의 단일 원본이며 3D 좌표 데이터와 분리한다.
+각 지역은 하나의 랜드마크와 그 앞을 지키는 한 명의 주민을 가진다. 주민에게 A/Enter로 말을 걸면 작업 소개가 열린다.
+
+| Region | Landmark | Resident role | Explains |
+|---|---|---|---|
+| Forest | 별빛 관측소 | 데이터 연구원 | 데이터·AI 작업의 문제와 관측 방식 |
+| City | 시안 타워 | 제품 기술자 | 제품 설계와 엔지니어링 판단 |
+| Desert | 자동화 공방 | 자동화 장인 | 반복 업무를 도구로 바꾼 과정 |
+| Snow | 릴레이 기지 | 운영 관제사 | 안정성·배포·복구 체계 |
+| Coast | 연결의 등대 | 협업 안내원 | 사람과 시스템의 맥락 연결 |
+
+- **States**: idle, player-near, talking, explained
+- **Interaction**: 캐릭터가 주민을 향한 상태에서 A/Enter를 누르면 대화 시작
+- **Content**: 첫 대화는 주민의 한 문장 소개, 다음 입력은 구조화된 프로젝트 소개
+- **Discovery**: 프로젝트 소개를 끝까지 열었을 때 해당 지역을 `완료`로 기록
+
+### Dialogue Box
+
+- **Structure**: speaker label, 2–4줄 본문, 다음 행동 힌트
+- **States**: welcome, navigation, nearby, selected, error
+- **Motion**: 내용 교체는 즉시 수행한다. 캐럿 점멸 같은 무한 장식은 사용하지 않는다.
+- **Accessibility**: `aria-live="polite"`, 자연스러운 한국어 줄바꿈
+
+### Project Introduction
+
+- **Structure**: 상단 프로젝트명/역할/연도, 요약, 세 가지 결과, 기술 목록, 닫기 버튼
+- **Data**: `preview/projects.json`을 단일 원본으로 유지한다.
 - **States**: closed, open
-- **Accessibility**: 랜드마크 2.8타일 이내에서 `Space`로 열고 `Escape` 또는 닫기 버튼으로 닫는다. 모바일은 동일한 소개 열기 버튼을 제공한다.
-- **Motion**: dialog backdrop과 panel은 220ms opacity/transform으로만 전환하며 모션 감소에서는 즉시 표시한다.
-- **Layout**: 데스크톱 중앙 modal, 모바일 하단 inset sheet
+- **Input**: 건물 앞 `Space`/`Enter`/A 버튼으로 열고 `Escape`/B/닫기로 닫는다.
+- **Focus**: 열 때 닫기 버튼에 포커스, 닫을 때 직전 트리거로 복귀
+- **Motion**: 기본은 120ms opacity/scale. reduced-motion에서는 즉시 표시
 
-### Discovery Progress & Compass
+### Touch Controls
 
-- **Structure**: `DISCOVERED 00/05` 진행률, `ZOOM 100%` 배율, 현재 목적지 이름·거리, 목적지 방향을 가리키는 사용자 제작 SVG 화살표
-- **States**: free, tracking, near, discovered
-- **Accessibility**: 텍스트 거리와 상태를 항상 함께 제공하고 방향 아이콘에 의존하지 않는다.
-- **Motion**: 방향 화살표는 목적지가 바뀌거나 캐릭터가 이동할 때만 회전하며 모션 감소에서는 즉시 갱신한다.
-- **Layout**: 데스크톱 우하단 상태 패널, 모바일 상세 카드 상단의 작은 진행 상태
-
-### Landmark Beacon
-
-- **Structure**: 마을별 광장·계단·환경 소품, 3단 이상 랜드마크 본체, 청록 큐브, 선택 링, 접촉 그림자, raycast hit area
-- **States**: default, hover, selected, discovered
-- **Accessibility**: 키보드 접근은 Village Navigation이 동일 기능 제공
-- **Motion**: hover와 selected에만 scale/opacity 변화
-- **Layout**: 월드 좌표
+- **Structure**: 하단 조작 덱의 왼쪽에 128px 십자형 4방향 패드, 오른쪽에 64px A/B 버튼을 엇갈려 배치한다. 키보드 환경에서도 시각적으로 항상 표시한다.
+- **Color boundary**: 덱 바탕은 `--chrome-light`, D-pad와 A/B는 `--chrome-dark`, 외곽선과 라벨은 `--chrome-ink`를 사용한다. 지역 선택으로 변하지 않는다.
+- **States**: idle, pressed, focus-visible
+- **Accessibility**: 각 방향과 기능에 명확한 `aria-label`, 56px 이상 타깃
+- **Visibility**: 모든 화면에서 표시하며 600px 이하에서 D-pad 112px, A/B 56px까지만 축소한다.
+- **Hierarchy**: `이동` 텍스트는 패드 아래 보조 라벨로 두고, 작은 키 아이콘만 있는 기존 푸터 표현은 사용하지 않는다.
 
 ## 6. Motion & Interaction
 
-| Type | Duration | Easing | Usage |
-|---|---|---|---|
-| Micro | `120ms` | `ease-out` | 버튼 press와 hover |
-| Standard | `220ms` | `ease-in-out` | 상세 패널 상태 |
-| Camera follow | `220ms` | `ease-out` | 캐릭터 추적 |
+| Token | Value | Usage |
+|---|---|---|
+| `--motion-fast` | `90ms` | 버튼 누름 |
+| `--motion-dialog` | `120ms` | 소개창 열기/닫기 |
+| `--motion-reduced` | `0.01ms` | 모션 감소 |
 
-- `WASD`와 방향키는 캐릭터 이동, 휠은 `0.68–3.2×` 범위의 지속 확대·축소, 클릭은 랜드마크 선택이다.
-- 모바일은 엄지로 드래그하는 터치 스틱이 연속 방향과 이동 세기를 제공한다.
-- 스틱의 직접 추종은 보간하지 않아 입력 지연을 만들지 않는다. 손을 떼거나 포인터가 취소되면 즉시 중앙으로 복귀하며, 모션 감소 설정에서도 동일하게 동작한다.
-- 랜드마크 2.8타일 안에 들어오면 발견 상태와 소개 열기 행동을 표시하고, `Space` 입력 뒤에만 JSON 소개 dialog를 연다.
-- 마을을 선택하면 상세 카드의 `바로 이동` 버튼으로 랜드마크 진입로에 즉시 도착할 수 있다. 도착 뒤 버튼은 `SPACE 소개 보기`로 교체된다.
-- 지도 자체에 장식용 자동 애니메이션을 넣지 않는다.
-- `prefers-reduced-motion: reduce`에서는 카메라 이동을 즉시 완료한다.
-- CSS 애니메이션은 `transform`, `opacity`만 사용한다.
-- 첫 이동의 확대는 즉시 점프하지 않고 220ms 목표 줌으로 보간한다.
-- 카메라는 이동 방향으로 최대 1.2타일 앞을 본다. 정지하면 탐험가 중심으로 돌아온다.
-- 발자국·도착 링은 이동과 발견을 설명하는 의미 기반 모션이며 무한 반복하지 않는다.
+- 공간 이동은 현재 지역 안에서만 격자 한 칸 단위이며 큐를 만들지 않는다.
+- 지역 목록 선택은 로컬 맵을 즉시 교체한다. 지역 사이를 잇는 보행 경로, 출구, 월드맵은 만들지 않는다.
+- 카메라는 캐릭터를 따라 지역 내부를 스크롤하며, 이동하지 않는 동안 자동으로 움직이지 않는다.
+- 키 반복은 브라우저 기본 repeat를 허용하되 대화창이 열린 동안 맵 입력을 차단한다.
+- 목적지는 점선이나 화살표보다 길 위의 작은 `X` 타일과 텍스트 거리를 함께 보여준다.
+- 버튼은 hover/focus에서 전경·배경 반전, press에서 `translate(2px, 2px)`만 사용한다.
+- 모든 전환은 `transform`, `opacity`만 사용한다.
+- `prefers-reduced-motion: reduce`에서는 소개창 전환을 제거한다.
 
 ## 7. Depth & Surface
 
-전략은 **mixed**다. 지도는 좌상단 방향광을 기준으로 밝은 상단 캡, 어두운 수직 지층, 접촉 그림자, 4단 복셀 층고로 미니어처 깊이를 만든다. 물은 두 명도 띠와 해안 거품을 사용한다. 청록 비콘의 글로우는 작은 additive halo로만 표현하고 전체 화면 bloom은 사용하지 않는다. UI는 반투명 남색, 얇은 청록 테두리, 내부 하이라이트, 약한 컬러 그림자로 지도와 분리한다. 화면 가장자리 비네트와 2% 이하의 grain은 HUD보다 뒤에 놓인다.
+전략은 `pixel-step`이다. 모든 표면은 다음 세 층으로 읽힌다.
 
-### Landmark Scene Grammar
+1. 짙은 4px 외곽선
+2. 밝은 내부 2px 하이라이트
+3. 오른쪽/아래 4px 단차 그림자
 
-모든 마을은 `광장 → 프로젝트 건물 → 꼭대기 비콘`의 세 계층을 공유한다. 건물은 역할별로 다음 소품을 가진다.
-
-| Village | Architecture | Story props |
-|---|---|---|
-| Forest | 계단식 관측소, 반구형 돔, 기울어진 망원경 | 데이터 큐브, 별 표식, 작은 소나무 |
-| City | 세 층 시안 타워, 창 패턴, 안테나 | 서버 큐브, 신호 기둥, 벤치 |
-| Desert | 톱니 공방, 물탱크, 크레인 | 공구 상자, 태양 패널, 사암 바위 |
-| Snow | 기지 박스, 줄무늬 마스트, 접시 안테나 | 케이블 박스, 얼음 기둥, 경고 표식 |
-| Coast | 줄무늬 등대, 발코니, 발광 램프 | 부두, 작은 배, 부표 |
-
-### Terrain Grammar
-
-- 육지는 `0.54 / 0.78 / 1.02 / 1.26`의 네 층고만 사용하며 마을 광장과 주요 도로는 접근 가능한 낮은 층고로 평탄화한다.
-- 인접 타일과의 높이 차는 상단 캡과 어두운 지층으로 읽히게 한다.
-- 도로는 끊김 없는 어두운 데크와 노란 점선, 철도는 갈색 침목과 은색 두 줄 레일을 사용한다.
-- 강을 지나는 주도로와 철도에는 지지대가 있는 다리를 둔다.
-- 숲·설원에는 수목과 바위, 사막에는 선인장·사암, 항구에는 갈대·부표를 제한적으로 배치한다.
+그라데이션, blur, glassmorphism, 둥근 pill, 발광 효과는 금지한다. 지도 깊이는 색면이 아니라 1–2px 픽셀 디더링, 나무의 겹침, 건물의 지붕/벽 명도 차로 만든다.
 
 ## 8. Accessibility Constraints & Accepted Debt
 
 ### Constraints
 
-- WCAG 2.2 AA 목표: 본문 4.5:1, 큰 텍스트 3:1 이상
-- 모든 마을은 포인터와 키보드 양쪽에서 선택 가능
-- 44px 이상 터치 타깃과 명확한 `focus-visible`
-- 터치 스틱은 112px 이상이며 포인터 취소·화면 이탈·창 포커스 상실 때 이동 입력이 고정되지 않도록 0으로 복귀
-- 모션 감소에서 카메라 이동 애니메이션 비활성화
-- 발견 진행률은 색만으로 표시하지 않고 `00/05` 텍스트를 병기
-- 200% 확대와 375px에서 한국어 어절 분리, 클리핑, 가로 스크롤 금지
+- 모든 핵심 흐름을 키보드만으로 완료 가능
+- 44px 이상 터치 타깃
+- `focus-visible`은 3px 밝은 외곽선과 2px 간격
+- 프로젝트 소개는 native `<dialog>`와 포커스 복귀 사용
+- 현재 위치/목적지/상호작용 상태를 캔버스 밖 텍스트로 중복 제공
+- 375px, 768px, 1280px에서 가로 스크롤·CJK 고아 줄·버튼 겹침 금지
+- 색 대비는 본문 4.5:1 이상
+
+### Personas
+
+- 키보드 사용자: Tab, 방향키, Enter/Space, Escape만으로 탐험과 소개 열기/닫기 가능
+- 터치 사용자: 방향 패드, A/B, 지역 메뉴로 동일 흐름 가능
+- 모션 민감 사용자: 맵 자동 이동과 장식 애니메이션 없이 즉시 상태 전환
+- 저시력 사용자: 확대 시 픽셀 캔버스는 유지되고 텍스트 UI는 브라우저 확대에 맞춰 커짐
 
 ### Accepted Debt
 
-| Item | Location | Why accepted | Owner / Exit |
+| Item | Location | Why accepted | Exit |
 |---|---|---|---|
-| 현재 마을은 실제 포트폴리오 데이터 대신 역할별 예시 설명을 사용 | `preview/projects.json` | 프로젝트 원문이 아직 제공되지 않음 | 실제 포트폴리오 콘텐츠 연결 시 JSON만 교체 |
-| 모바일에서 전체 화면 bloom·SSAO를 사용하지 않음 | `preview/main.js` | 정적 호스팅과 저전력 기기의 60fps 우선 | 기기별 성능 예산과 실제 모델 데이터가 확보되면 선택적 후처리 검토 |
+| 실제 경력/프로젝트 원문 대신 역할별 예시 데이터 사용 | `preview/projects.json` | 사용자 원문이 아직 없음 | 원문 제공 시 JSON만 교체 |
+| 외부 픽셀 폰트를 내려받지 않음 | typography tokens | 오프라인·정적 배포와 성능 우선 | 로컬 라이선스 폰트가 제공되면 WOFF2 서브셋 추가 |
