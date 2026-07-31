@@ -154,6 +154,30 @@ function declarations(block) {
   );
 }
 
+function parseHexColor(value, tokenName) {
+  const match = value.match(/^#([\da-f]{6})$/i);
+  if (!match) throw new Error(`${tokenName} must be a six-digit hex color`);
+  return [0, 2, 4].map((offset) => Number.parseInt(match[1].slice(offset, offset + 2), 16));
+}
+
+function relativeLuminance([red, green, blue]) {
+  const linearize = (channel) => {
+    const normalized = channel / 255;
+    return normalized <= 0.03928
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * linearize(red) + 0.7152 * linearize(green) + 0.0722 * linearize(blue);
+}
+
+function contrastRatio(foreground, background) {
+  const foregroundLuminance = relativeLuminance(foreground);
+  const backgroundLuminance = relativeLuminance(background);
+  const lighter = Math.max(foregroundLuminance, backgroundLuminance);
+  const darker = Math.min(foregroundLuminance, backgroundLuminance);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
 function assertAcyclicTokens(tokenEntries) {
   const graph = new Map(
     tokenEntries.map(([name, value]) => [
@@ -384,6 +408,15 @@ function assertContract(candidateHtml, candidateStyles, candidateResponsive) {
 }
 
 describe("classic RPG shell contract", () => {
+  test("Given the semantic load error colors, When contrast is computed, Then normal alert text meets WCAG AA", () => {
+    const rootBlock = styles.match(/:root\s*\{([^}]*)\}/)?.[1] ?? "";
+    const rootValues = Object.fromEntries(declarations(rootBlock));
+    const danger = parseHexColor(rootValues["--danger"], "--danger");
+    const chromeMid = parseHexColor(rootValues["--chrome-mid"], "--chrome-mid");
+
+    expect(contrastRatio(danger, chromeMid)).toBeGreaterThanOrEqual(4.5);
+  });
+
   test("Given the checked-in shell, When its static contract is inspected, Then every required surface is present", () => {
     assertContract(html, styles, responsive);
   });

@@ -31,7 +31,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 | Shell | `--shell` | `#d7d0b5` | 바깥 프레임 |
 | Shell shadow | `--shell-shadow` | `#8b866f` | 프레임 단차 |
 | Focus | `--focus` | `#fffbd1` | 포커스와 선택 커서 |
-| Danger | `--danger` | `#8a302d` | 오류/차단 상태만 |
+| Danger | `--danger` | `#65221f` | 오류/차단 상태만; `--chrome-mid` 배경 대비 4.5:1 이상 |
 
 색만으로 상태를 구분하지 않는다. 선택 상태에는 `▶`, 테두리, 텍스트를 함께 사용한다.
 
