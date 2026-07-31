@@ -71,16 +71,20 @@ const canonicalTokens = {
   "--shadow-dialog": "8px",
   "--control-inset": "3px",
   "--control-min": "56px",
+  "--control-min-mobile": "44px",
   "--map-share": "74fr",
   "--guide-share": "22fr",
   "--deck-share": "18vh",
   "--dpad-size": "168px",
+  "--dpad-size-mobile": "132px",
   "--action-size": "64px",
+  "--action-size-mobile": "56px",
   "--shell-max": "1260px",
   "--masthead-min-height": "60px",
   "--guide-min-width": "224px",
   "--map-canvas-width": "384px",
   "--map-canvas-height": "288px",
+  "--map-ratio": "4 / 3",
   "--map-authored-width": "600px",
   "--map-rail-inset": "12px",
   "--dialog-max-width": "640px",
@@ -326,8 +330,8 @@ function assertContract(candidateHtml, candidateStyles, candidateResponsive) {
     expect(themeBlock.match(/--lcd-[0-3]\s*:/g)?.length).toBe(4);
   }
 
-  expect(candidateResponsive).toMatch(/--dpad-size\s*:\s*112px/);
-  expect(candidateResponsive).toMatch(/--action-size\s*:\s*56px/);
+  expect(candidateResponsive).toMatch(/--dpad-size\s*:\s*var\(--dpad-size-mobile\)/);
+  expect(candidateResponsive).toMatch(/--action-size\s*:\s*var\(--action-size-mobile\)/);
   const mediaQueries = [...candidateResponsive.matchAll(/@media\s*\(([^)]+)\)/g)]
     .map((match) => match[1].replace(/\s+/g, ""));
   expect(mediaQueries).toEqual([
@@ -366,8 +370,8 @@ function assertContract(candidateHtml, candidateStyles, candidateResponsive) {
   expect(combinedCss).toMatch(
     /\.action-buttons button\s*\{[\s\S]*?width:\s*var\(--action-size\)[\s\S]*?height:\s*var\(--action-size\)/,
   );
-  expect(mobileDeck).toMatch(/--dpad-size\s*:\s*112px/);
-  expect(mobileDeck).toMatch(/--action-size\s*:\s*56px/);
+  expect(mobileDeck).toMatch(/--dpad-size\s*:\s*var\(--dpad-size-mobile\)/);
+  expect(mobileDeck).toMatch(/--action-size\s*:\s*var\(--action-size-mobile\)/);
   expect(mobileDeck).toMatch(
     /#load-error\s*\{[^}]*flex-direction:\s*column[^}]*align-items:\s*stretch/s,
   );
@@ -408,6 +412,33 @@ function assertContract(candidateHtml, candidateStyles, candidateResponsive) {
 }
 
 describe("classic RPG shell contract", () => {
+  test("Given a phone viewport, When the shell reflows, Then selection overlays and controls keep the map compact", () => {
+    // Given: the checked-in narrow layout rules
+    const mobileDeck = responsive.match(
+      /@media\s*\(max-width:\s*600px\)[\s\S]*?(?=@media|$)/,
+    )?.[0] ?? "";
+
+    // When / Then: the initial chooser leaves document flow and the map keeps its authored ratio
+    expect(mobileDeck).toMatch(
+      /\.mobile-region-panel:not\(\[hidden\]\)\s*\{[^}]*position:\s*fixed[^}]*max-block-size:[^}]*overflow-y:\s*auto/s,
+    );
+    expect(mobileDeck).toMatch(
+      /\.map-screen\s*\{[^}]*min-height:\s*0[^}]*aspect-ratio:\s*var\(--map-ratio\)/s,
+    );
+
+    // Then: touch controls retain the familiar cross silhouette with 44px targets
+    expect(mobileDeck).toMatch(
+      /\.dpad\s*\{[^}]*grid-template:\s*repeat\(3,\s*var\(--control-min-mobile\)\)\s*\/\s*repeat\(3,\s*var\(--control-min-mobile\)\)/s,
+    );
+    expect(mobileDeck).toMatch(
+      /\.dpad button\s*\{[^}]*min-width:\s*var\(--control-min-mobile\)[^}]*min-height:\s*var\(--control-min-mobile\)/s,
+    );
+    expect(mobileDeck).toMatch(/\.dpad-up\s*\{\s*grid-area:\s*1\s*\/\s*2/);
+    expect(mobileDeck).toMatch(/\.dpad-left\s*\{\s*grid-area:\s*2\s*\/\s*1/);
+    expect(mobileDeck).toMatch(/\.dpad-right\s*\{\s*grid-area:\s*2\s*\/\s*3/);
+    expect(mobileDeck).toMatch(/\.dpad-down\s*\{\s*grid-area:\s*3\s*\/\s*2/);
+  });
+
   test("Given the semantic load error colors, When contrast is computed, Then normal alert text meets WCAG AA", () => {
     const rootBlock = styles.match(/:root\s*\{([^}]*)\}/)?.[1] ?? "";
     const rootValues = Object.fromEntries(declarations(rootBlock));
@@ -446,7 +477,11 @@ describe("classic RPG shell contract", () => {
       styles.replace("--map-authored-width: 600px;", "--map-authored-width: 601px;"),
       styles.replace("--dpad-size: 168px;", "--dpad-size: 128px;"),
       styles.replace("--control-min: 56px;", "--control-min: 44px;"),
+      styles.replace("--control-min-mobile: 44px;", "--control-min-mobile: 42px;"),
       styles.replace("--action-size: 64px;", "--action-size: 60px;"),
+      styles.replace("--dpad-size-mobile: 132px;", "--dpad-size-mobile: 128px;"),
+      styles.replace("--action-size-mobile: 56px;", "--action-size-mobile: 52px;"),
+      styles.replace("--map-ratio: 4 / 3;", "--map-ratio: 1 / 1;"),
     ];
     for (const mutation of mutations) {
       expect(() => assertContract(html, mutation, responsive)).toThrow();
@@ -506,8 +541,8 @@ describe("classic RPG shell contract", () => {
     const mutations = [
       responsive.replace("max-width: 900px", "max-width: 899px"),
       responsive.replace("max-width: 600px", "max-width: 599px"),
-      responsive.replace("--dpad-size: 112px", "--dpad-size: 114px"),
-      responsive.replace("--action-size: 56px", "--action-size: 55px"),
+      responsive.replace("--dpad-size: var(--dpad-size-mobile)", "--dpad-size: 128px"),
+      responsive.replace("--action-size: var(--action-size-mobile)", "--action-size: 55px"),
       responsive.replace(
         "padding: var(--space-2) var(--space-3);",
         "padding: 8px 12px;",

@@ -34,8 +34,8 @@
 
 @media (max-width: 600px) {
   :root {
-    --dpad-size: 112px;
-    --action-size: 56px;
+    --dpad-size: var(--dpad-size-mobile);
+    --action-size: var(--action-size-mobile);
   }
 
   .game-shell {
@@ -73,7 +73,8 @@
   }
 
   .map-screen {
-    min-height: var(--map-canvas-height);
+    min-height: 0;
+    aspect-ratio: var(--map-ratio);
   }
 
   .map-screen::before,
@@ -113,8 +114,14 @@
 
   .mobile-region-panel:not([hidden]) {
     display: block;
-    margin: var(--space-1);
+    position: fixed;
+    inset-block-start: calc(var(--masthead-min-height) + var(--space-8));
+    inset-inline: var(--space-2);
+    z-index: 10;
+    max-block-size: calc(100dvh - var(--masthead-min-height) - var(--space-8) - var(--space-4));
+    margin: 0;
     padding: var(--space-3);
+    overflow-y: auto;
     border: var(--pixel-border) solid var(--lcd-0);
     background: var(--lcd-3);
     box-shadow: var(--shadow-step) var(--shadow-step) 0 var(--lcd-0);
@@ -141,14 +148,18 @@
   }
 
   .dpad {
-    grid-template: repeat(2, var(--control-min)) / repeat(2, var(--control-min));
+    grid-template: repeat(3, var(--control-min-mobile)) / repeat(3, var(--control-min-mobile));
   }
 
-  .dpad-up { grid-area: 1 / 1; }
-  .dpad-right { grid-area: 1 / 2; }
+  .dpad button {
+    min-width: var(--control-min-mobile);
+    min-height: var(--control-min-mobile);
+  }
+
+  .dpad-up { grid-area: 1 / 2; }
+  .dpad-right { grid-area: 2 / 3; }
   .dpad-left { grid-area: 2 / 1; }
-  .dpad-down { grid-area: 2 / 2; }
-  .dpad-center { display: none; }
+  .dpad-down { grid-area: 3 / 2; }
 
   .keyboard-help {
     display: none;
@@ -160,15 +171,8 @@
     gap: var(--space-3);
   }
 
-  .action-buttons strong,
-  .dpad-group > strong {
+  .action-buttons strong {
     font-size: var(--font-size-small);
-  }
-
-  .dpad-group > strong {
-    position: static;
-    color: var(--chrome-ink);
-    transform: none;
   }
 
   #load-error {
