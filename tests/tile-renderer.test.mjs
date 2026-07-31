@@ -1,0 +1,394 @@
+import { describe, expect, test } from "bun:test";
+
+import {
+  MAP_HEIGHT,
+  MAP_WIDTH,
+  REGIONS_BY_ID,
+  TILE_SIZE,
+  VIEWPORT_HEIGHT,
+  VIEWPORT_WIDTH,
+} from "../preview/region-data.js";
+import { renderRegionScenery } from "../preview/scenery-renderer.js";
+import { renderTileWorld } from "../preview/tile-renderer.js";
+import {
+  drawLandmark,
+  drawMarker,
+  drawPlayer,
+  drawResident,
+} from "../preview/world-sprites.js";
+
+function recordingContext() {
+  const commands = [];
+  let fillStyle = "";
+  let smoothing = true;
+  return {
+    commands,
+    get fillStyle() {
+      return fillStyle;
+    },
+    set fillStyle(value) {
+      fillStyle = value;
+    },
+    get imageSmoothingEnabled() {
+      return smoothing;
+    },
+    set imageSmoothingEnabled(value) {
+      smoothing = value;
+      commands.push(["smoothing", value]);
+    },
+    fillRect(x, y, width, height) {
+      commands.push(["fillRect", fillStyle, x, y, width, height]);
+    },
+    createLinearGradient() {
+      throw new Error("gradients are forbidden");
+    },
+    drawImage() {
+      throw new Error("images are forbidden");
+    },
+  };
+}
+
+function state(camera = { x: 0, y: 0 }, player = { x: 5, y: 11, facing: "right" }) {
+  return { regionId: "forest", camera, player };
+}
+
+function groundCommands(commands) {
+  return commands.filter(([name]) => name === "fillRect").slice(0, VIEWPORT_WIDTH * VIEWPORT_HEIGHT);
+}
+
+describe("four-tone tile renderer", () => {
+  test("iterates exactly the current 24 by 18 camera slice in row-major order", () => {
+    // Given: the forest viewed from a non-zero camera origin
+    const context = recordingContext();
+    const forest = REGIONS_BY_ID.forest;
+    const camera = { x: 16, y: 46 };
+
+    // When: one state change is rendered
+    renderTileWorld(context, forest, state(camera, { x: 20, y: 58, facing: "up" }));
+
+    // Then: the first layer contains exactly one full logical tile per viewport cell
+    const ground = groundCommands(context.commands);
+    expect(ground).toHaveLength(24 * 18);
+    expect(ground.map(([, , x, y, width, height]) => [x, y, width, height])).toEqual(
+      Array.from({ length: 18 }, (_, y) =>
+        Array.from({ length: 24 }, (_, x) => [x * 16, y * 16, 16, 16])).flat(),
+    );
+    expect(ground[0][1]).toBe(
+      forest.tiles[camera.y][camera.x] === "terrain" ? forest.palette[1] : forest.palette[2],
+    );
+  });
+
+  test("uses deterministic integer rectangle commands and only the active four-tone ramp", () => {
+    // Given: two independent recording contexts and the same visible landmark state
+    const first = recordingContext();
+    const second = recordingContext();
+    const forest = REGIONS_BY_ID.forest;
+    const visibleState = state({ x: 0, y: 0 }, { x: 5, y: 11, facing: "right" });
+
+    // When: the same state is rendered twice with its interaction marker
+    renderTileWorld(first, forest, visibleState, { interactionAvailable: true });
+    renderTileWorld(second, forest, visibleState, { interactionAvailable: true });
+
+    // Then: every recorded draw is repeatable, pixel-snapped, bounded, and four-tone
+    expect(first.commands).toEqual(second.commands);
+    expect(first.commands[0]).toEqual(["smoothing", false]);
+    const draws = first.commands.filter(([name]) => name === "fillRect");
+    expect(draws.every(([, color]) => forest.palette.includes(color))).toBe(true);
+    expect(draws.every(([, , ...values]) => values.every(Number.isInteger))).toBe(true);
+    expect(draws.every(([, , x, y, width, height]) =>
+      x >= 0 && y >= 0 && width > 0 && height > 0 &&
+      x + width <= 384 && y + height <= 288)).toBe(true);
+  });
+
+  test("gives every region a dense, recording-distinct terrain grammar beyond palette changes", () => {
+    // Given: the same northern viewport position in all five authored regions
+    const recordings = Object.values(REGIONS_BY_ID).map((region) => {
+      const context = recordingContext();
+      renderTileWorld(context, region, {
+        regionId: region.id,
+        camera: { x: 0, y: 0 },
+        player: { ...region.start, facing: "up" },
+      });
+      const decor = context.commands.slice(1 + VIEWPORT_WIDTH * VIEWPORT_HEIGHT);
+      return {
+        count: decor.length,
+        signature: JSON.stringify(decor.map(([, color, , , width, height]) => [
+          region.palette.indexOf(color),
+          width,
+          height,
+        ])),
+      };
+    });
+
+    // Then: each terrain paints a visible primitive grammar and no two are palette-only twins
+    expect(recordings.every(({ count }) => count >= 500)).toBe(true);
+    expect(new Set(recordings.map(({ signature }) => signature)).size).toBe(5);
+  });
+
+  test("renders deterministic, bounded scenery masses in every traversal band", () => {
+    // Given: north, middle, and south camera slices for every authored region
+    const cameras = [{ x: 0, y: 0 }, { x: 8, y: 23 }, { x: 16, y: 46 }];
+
+    // When: the scenery layer is painted twice for each region and band
+    const recordings = Object.values(REGIONS_BY_ID).flatMap((region) =>
+      cameras.map((camera) => {
+        const first = recordingContext();
+        const second = recordingContext();
+        renderRegionScenery(first, region, camera);
+        renderRegionScenery(second, region, camera);
+        return { region, first: first.commands, second: second.commands };
+      }));
+
+    // Then: every band has a substantial static composition within the four-tone canvas
+    expect(recordings.every(({ first, second }) => JSON.stringify(first) === JSON.stringify(second))).toBe(true);
+    expect(recordings.every(({ first }) => first.length >= 24)).toBe(true);
+    expect(recordings.every(({ region, first }) => first.every(([, color]) =>
+      region.palette.includes(color)))).toBe(true);
+    expect(recordings.every(({ first }) => first.every(([, , x, y, width, height]) =>
+      [x, y, width, height].every(Number.isInteger) &&
+      x >= 0 && y >= 0 && width > 0 && height > 0 &&
+      x + width <= 384 && y + height <= 288))).toBe(true);
+  });
+
+  test("honors authored mask cutouts instead of painting rectangular feature bounds", () => {
+    // Given: one isolated three-by-three clearing whose missing cells form visible corner cuts
+    const forest = REGIONS_BY_ID.forest;
+    const region = {
+      ...forest,
+      tiles: Array.from({ length: MAP_HEIGHT }, () => Array(MAP_WIDTH).fill("terrain")),
+      scenery: [{
+        kind: "clearing",
+        role: "mass",
+        band: "north",
+        x: 4,
+        y: 4,
+        width: 3,
+        height: 3,
+        mask: [".#.", "###", ".#."],
+      }],
+    };
+    const context = recordingContext();
+
+    // When: the isolated scenery layer is rendered
+    renderRegionScenery(context, region, { x: 0, y: 0 });
+    const paintedCells = new Set(context.commands.map(([, , x, y]) =>
+      `${Math.floor(x / TILE_SIZE)},${Math.floor(y / TILE_SIZE)}`));
+
+    // Then: only the five explicit mask cells receive any scenery primitives
+    expect(paintedCells).toEqual(new Set(["5,4", "4,5", "5,5", "6,5", "5,6"]));
+  });
+
+  test("uses genuinely distinct palette-free scenery geometry in matching bands", () => {
+    // Given: one middle camera slice shared across all region renderers
+    const camera = { x: 8, y: 23 };
+
+    // When: draw geometry is normalized away from each region's palette values
+    const signatures = Object.values(REGIONS_BY_ID).map((region) => {
+      const context = recordingContext();
+      renderRegionScenery(context, region, camera);
+      return JSON.stringify(context.commands.map(([, color, x, y, width, height]) =>
+        [region.palette.indexOf(color), x, y, width, height]));
+    });
+
+    // Then: color substitution alone cannot make one biome look like another
+    expect(new Set(signatures).size).toBe(5);
+  });
+
+  test("renders five distinct landmark and resident silhouettes from regional descriptors", () => {
+    // Given: every descriptor is painted at the same coordinates over the same empty path field
+    const signatures = Object.values(REGIONS_BY_ID).map((region) => {
+      const context = recordingContext();
+      const presentationRegion = {
+        ...region,
+        tiles: Array.from({ length: MAP_HEIGHT }, () => Array(MAP_WIDTH).fill("path")),
+        landmark: { ...region.landmark, x: 6, y: 9 },
+        resident: { ...region.resident, x: 6, y: 11 },
+      };
+
+      // When: the renderer paints that region's landmark and resident
+      renderTileWorld(context, presentationRegion, {
+        regionId: region.id,
+        camera: { x: 0, y: 0 },
+        player: { ...region.start, facing: "up" },
+      });
+
+      // Then: object-layer geometry is independent of palette identity
+      return JSON.stringify(context.commands
+        .slice(1 + VIEWPORT_WIDTH * VIEWPORT_HEIGHT)
+        .map(([name, color, x, y, width, height]) =>
+          [name, region.palette.indexOf(color), x, y, width, height]));
+    });
+
+    expect(new Set(signatures).size).toBe(5);
+  });
+
+  test("makes northern landmarks and residents dominant, detailed, and safely framed", () => {
+    // Given: each northern destination at its real minimum-safe camera position
+    const measurements = Object.values(REGIONS_BY_ID).map((region) => {
+      const cameraY = Math.max(0, region.interaction.y - 6);
+      const landmarkPoint = { x: 128, y: (region.landmark.y - cameraY) * TILE_SIZE };
+      const residentPoint = { x: 128, y: (region.resident.y - cameraY) * TILE_SIZE };
+      const landmarkContext = recordingContext();
+      const residentContext = recordingContext();
+
+      // When: the destination silhouettes render at the north camera clamp
+      drawLandmark(landmarkContext, region, landmarkPoint);
+      drawResident(residentContext, region, residentPoint);
+      const landmarkDraws = landmarkContext.commands.filter(([name]) => name === "fillRect");
+      const residentDraws = residentContext.commands.filter(([name]) => name === "fillRect");
+      const bounds = (draws) => {
+        const left = Math.min(...draws.map(([, , x]) => x));
+        const top = Math.min(...draws.map(([, , , y]) => y));
+        const right = Math.max(...draws.map(([, , x, , width]) => x + width));
+        const bottom = Math.max(...draws.map(([, , , y, , height]) => y + height));
+        return { left, top, width: right - left, height: bottom - top };
+      };
+      return {
+        landmark: bounds(landmarkDraws),
+        landmarkParts: landmarkDraws.length,
+        resident: bounds(residentDraws),
+        residentParts: residentDraws.length,
+        residentAnchor: residentPoint.x,
+      };
+    });
+
+    // Then: destination silhouettes dominate the precinct while preserving safe margins
+    expect(measurements.every(({ landmark }) =>
+      landmark.top >= 2 && landmark.width >= 80 && landmark.height >= 58)).toBe(true);
+    expect(measurements.every(({ landmarkParts }) => landmarkParts >= 15)).toBe(true);
+    expect(measurements.every(({ resident, residentAnchor }) =>
+      resident.left >= residentAnchor && resident.width >= 24 && resident.height >= 34)).toBe(true);
+    expect(measurements.every(({ residentParts }) => residentParts >= 11)).toBe(true);
+  });
+
+  test("draws global layers in ground, decor, landmark, resident, player, marker order", () => {
+    // Given: a camera containing every special forest object
+    const context = recordingContext();
+    const forest = REGIONS_BY_ID.forest;
+
+    // When: the marked interaction state is rendered
+    renderTileWorld(context, forest, state(), { interactionAvailable: true });
+
+    // Then: complete sprite command groups occur after all ground in the required layer order
+    const commands = context.commands;
+    const standalone = (draw) => {
+      const standaloneContext = recordingContext();
+      draw(standaloneContext);
+      return standaloneContext.commands;
+    };
+    const groups = [
+      standalone((target) => drawLandmark(target, forest, { x: 96, y: 144 })),
+      standalone((target) => drawResident(target, forest, { x: 96, y: 176 })),
+      standalone((target) => drawPlayer(target, forest.palette, state().player, { x: 80, y: 176 })),
+      standalone((target) => drawMarker(target, forest.palette, { x: 80, y: 176 })),
+    ];
+    const findGroup = (group, from) => {
+      for (let index = from; index <= commands.length - group.length; index += 1) {
+        if (group.every((command, offset) =>
+          JSON.stringify(commands[index + offset]) === JSON.stringify(command))) return index;
+      }
+      return -1;
+    };
+    const [landmark, resident, player, marker] = groups.reduce((indices, group) => {
+      const previous = indices.at(-1) ?? VIEWPORT_WIDTH * VIEWPORT_HEIGHT;
+      indices.push(findGroup(group, previous + 1));
+      return indices;
+    }, []);
+
+    expect(landmark).toBeGreaterThan(24 * 18);
+    expect(resident).toBeGreaterThan(landmark);
+    expect(player).toBeGreaterThan(resident);
+    expect(marker).toBeGreaterThan(player);
+  });
+
+  test("uses camera offsets at all clamp edges without drawing beyond the viewport", () => {
+    // Given: the four camera clamp corners
+    const forest = REGIONS_BY_ID.forest;
+    const cameras = [
+      { x: 0, y: 0 },
+      { x: MAP_WIDTH - VIEWPORT_WIDTH, y: 0 },
+      { x: 0, y: MAP_HEIGHT - VIEWPORT_HEIGHT },
+      { x: MAP_WIDTH - VIEWPORT_WIDTH, y: MAP_HEIGHT - VIEWPORT_HEIGHT },
+    ];
+
+    // When: each edge slice is rendered
+    const recordings = cameras.map((camera) => {
+      const context = recordingContext();
+      renderTileWorld(context, forest, state(camera, { x: camera.x, y: camera.y, facing: "down" }));
+      return context.commands.filter(([name]) => name === "fillRect");
+    });
+
+    // Then: every slice remains an exact bounded logical viewport
+    expect(recordings.every((draws) =>
+      draws.every(([, , x, y, width, height]) =>
+        x >= 0 && y >= 0 && x + width <= 384 && y + height <= 288))).toBe(true);
+    expect(recordings.map((draws) => draws.slice(0, 432).length)).toEqual([432, 432, 432, 432]);
+  });
+
+  test("rejects an invalid palette or visible tile before mutating the canvas", () => {
+    // Given: invalid palette and tile region boundaries
+    const forest = REGIONS_BY_ID.forest;
+    const invalidPalette = { ...forest, palette: [...forest.palette, "#ffffff"] };
+    const tiles = forest.tiles.map((row) => [...row]);
+    tiles[0][0] = "unknown";
+    const invalidTile = { ...forest, tiles };
+
+    // When: each invalid region is passed to the renderer
+    const paletteContext = recordingContext();
+    const tileContext = recordingContext();
+    const renderPalette = () => renderTileWorld(paletteContext, invalidPalette, state());
+    const renderTile = () => renderTileWorld(tileContext, invalidTile, state());
+
+    // Then: neither invalid boundary silently paints a fifth/unknown tone
+    expect(renderPalette).toThrow(TypeError);
+    expect(renderTile).toThrow(TypeError);
+    expect(paletteContext.commands).toEqual([]);
+    expect(tileContext.commands).toEqual([]);
+  });
+
+  test("rejects malformed regional sprite descriptors before mutating the canvas", () => {
+    // Given: a region whose renderer descriptor is absent
+    const forest = REGIONS_BY_ID.forest;
+    const invalidLandmark = { ...forest, landmark: { ...forest.landmark, sprite: "unknown" } };
+    const invalidResident = { ...forest, resident: { ...forest.resident, sprite: null } };
+    const landmarkContext = recordingContext();
+    const residentContext = recordingContext();
+
+    // When / Then: neither malformed sprite boundary reaches the canvas
+    expect(() => renderTileWorld(landmarkContext, invalidLandmark, state())).toThrow(TypeError);
+    expect(() => renderTileWorld(residentContext, invalidResident, state())).toThrow(TypeError);
+    expect(landmarkContext.commands).toEqual([]);
+    expect(residentContext.commands).toEqual([]);
+  });
+
+  test("rejects malformed or inherited player facing before mutating the canvas", () => {
+    // Given: player states whose facing value is not an own cardinal direction
+    const forest = REGIONS_BY_ID.forest;
+    const inheritedPlayer = Object.create({ facing: "up" });
+    inheritedPlayer.x = 5;
+    inheritedPlayer.y = 11;
+    const malformedPlayers = [
+      { x: 5, y: 11, facing: "__proto__" },
+      { x: 5, y: 11, facing: "constructor" },
+      { x: 5, y: 11, facing: { direction: "left" } },
+      { x: 5, y: 11, facing: null },
+      { x: 5, y: 11, facing: "north" },
+      inheritedPlayer,
+    ];
+
+    // When: each malformed player state is passed to the renderer
+    const results = malformedPlayers.map((player) => {
+      const context = recordingContext();
+      let error;
+      try {
+        renderTileWorld(context, forest, state({ x: 0, y: 0 }, player));
+      } catch (caught) {
+        error = caught;
+      }
+      return { error, commands: context.commands };
+    });
+
+    // Then: every malformed boundary rejects with no Canvas mutation
+    expect(results.every(({ error, commands }) => error instanceof TypeError && commands.length === 0)).toBe(true);
+  });
+});

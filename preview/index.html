@@ -5,123 +5,201 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="작은 복셀 탐험가로 다섯 마을의 프로젝트를 여행하는 인터랙티브 포트폴리오"
+      content="다섯 작업 지역을 골라 주민의 이야기를 발견하는 클래식 휴대용 RPG 포트폴리오"
     />
-    <title>Voxel Portfolio World</title>
+    <title>작은 작업의 마을</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./styles.css?v=touch-stick1" />
-    <link rel="stylesheet" href="./responsive.css?v=touch-stick1" />
-    <link rel="stylesheet" href="./touch-joystick.css?v=touch-stick1" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./responsive.css" />
   </head>
   <body>
-    <a class="skip-link" href="#village-nav">마을 선택으로 건너뛰기</a>
-    <main class="world-shell" aria-labelledby="world-title">
-      <div id="world-canvas" class="world-canvas"></div>
+    <a class="skip-link" href="#field-guide">탐험 수첩으로 건너뛰기</a>
 
-      <header class="world-hud">
-        <p class="eyebrow">VOXEL PORTFOLIO / WORLD 01</p>
-        <h1 id="world-title">
-          작은 마을마다,<br />
-          <span>하나의 작업.</span>
-        </h1>
-        <p class="lede">
-          탐험가를 움직여 다섯 마을의 랜드마크를 만나보세요.
-        </p>
+    <main class="game-shell" aria-labelledby="site-title">
+      <header id="site-masthead" class="masthead">
+        <div>
+          <p class="masthead-kicker">POCKET FIELD GUIDE / 01</p>
+          <h1 id="site-title">작은 작업의 마을</h1>
+        </div>
+        <div class="masthead-status">
+          <p>현재 지역 <strong id="current-region">선택 전</strong></p>
+          <p>발견 <strong id="completion-count">00/05</strong></p>
+        </div>
       </header>
 
-      <nav id="village-nav" class="village-nav" aria-label="마을 목적지"></nav>
-      <p class="nav-scroll-hint" aria-hidden="true">옆으로 밀기 →</p>
+      <section class="play-grid" aria-label="탐험 화면과 탐험 수첩">
+        <section class="map-panel" aria-labelledby="map-title">
+          <h2 id="map-title" class="sr-only">현재 지역 지도</h2>
+          <div class="map-screen">
+            <canvas
+              id="map-canvas"
+              width="384"
+              height="288"
+              aria-label="선택한 지역의 24 곱하기 18 타일 지도"
+            ></canvas>
+            <section
+              id="initial-region-selection"
+              class="initial-selection"
+              aria-labelledby="selection-title"
+            >
+              <ul class="region-stamps" aria-label="선택 가능한 다섯 작업 지역">
+                <li data-region-preview="forest" aria-label="숲 마을 실루엣"><span aria-hidden="true"></span></li>
+                <li data-region-preview="city" aria-label="도시 마을 실루엣"><span aria-hidden="true"></span></li>
+                <li data-region-preview="desert" aria-label="사막 마을 실루엣"><span aria-hidden="true"></span></li>
+                <li data-region-preview="snow" aria-label="설원 마을 실루엣"><span aria-hidden="true"></span></li>
+                <li data-region-preview="coast" aria-label="항구 마을 실루엣"><span aria-hidden="true"></span></li>
+              </ul>
+              <h2 id="selection-title">탐험할 지역을 선택하세요</h2>
+              <p>탐험 수첩에서 관심 있는 작업 지역을 고르면 남쪽 시작점에서 출발합니다.</p>
+              <p class="selection-key">TAB 이동 · ENTER 선택</p>
+            </section>
+            <section id="dialogue-box" class="dialogue-box" aria-live="polite" hidden>
+              <header>
+                <strong id="dialogue-speaker">주민</strong>
+                <span id="dialogue-progress">01/03</span>
+              </header>
+              <ol class="dialogue-stages" aria-label="대화 진행">
+                <li data-dialogue-stage="problem" aria-current="step">문제</li>
+                <li data-dialogue-stage="approach">과정</li>
+                <li data-dialogue-stage="result">결과</li>
+              </ol>
+              <p id="dialogue-copy">주민의 이야기가 여기에 표시됩니다.</p>
+              <p class="dialogue-actions">A 다음 · B 닫기</p>
+            </section>
+          </div>
 
-      <aside id="project-detail" class="project-detail" aria-live="polite">
-        <div class="detail-meta">
-          <p id="detail-biome" class="detail-biome">STARTING POINT</p>
-          <span><b id="detail-discovered">00</b>/05 DISCOVERED</span>
-        </div>
-        <h2 id="detail-title">중앙 광장</h2>
-        <strong id="detail-role">EXPLORE THE WORLD</strong>
-        <p id="detail-copy">
-          <span class="desktop-control-copy">방향키나 WASD로 이동해 랜드마크&nbsp;가까이 가보세요.</span>
-          <span class="touch-control-copy">이동 스틱을 드래그해 랜드마크&nbsp;가까이 가보세요.</span>
-        </p>
-        <div class="detail-actions">
-          <button id="fast-travel-trigger" class="detail-action fast-travel-trigger" type="button" hidden>
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M4 12h13M13 7l5 5-5 5" />
-            </svg>
-            바로 이동
-          </button>
-          <button id="intro-trigger" class="detail-action intro-trigger" type="button" hidden>
-            <kbd>SPACE</kbd>
-            소개 보기
-          </button>
-        </div>
-      </aside>
+          <section class="map-status" aria-labelledby="map-status-title">
+            <h2 id="map-status-title" class="sr-only">현재 탐험 상태</h2>
+            <p>
+              <span class="status-label">위치</span>
+              <strong id="position-status" aria-live="polite">지역을 선택하지 않았습니다</strong>
+            </p>
+            <p>
+              <span class="status-label">행동</span>
+              <strong id="interaction-status" aria-live="polite">탐험 수첩을 확인하세요</strong>
+            </p>
+          </section>
+        </section>
 
-      <aside class="world-status" aria-label="월드 상태">
-        <span class="compass" aria-hidden="true">
-          <svg id="destination-arrow" viewBox="0 0 24 24">
-            <title>목적지 방향</title>
-            <path d="M12 2 17 18 12 15 7 18 12 2Z" />
-          </svg>
-        </span>
-        <div>
-          <strong id="journey-status">WORLD ONLINE</strong>
-          <span>
-            DISCOVERED <b id="discovered-count">00</b>/05 ·
-            ZOOM <b id="zoom-level">100</b>%
-          </span>
-        </div>
-      </aside>
-
-      <div class="control-hint" aria-hidden="true">
-        <span><kbd>WASD</kbd> 이동</span>
-        <span><kbd>SCROLL</kbd> 확대</span>
-        <span><kbd>CLICK</kbd> 목적지</span>
-        <span><kbd>SPACE</kbd> 소개</span>
-      </div>
+        <aside id="field-guide" class="field-guide" aria-labelledby="guide-title">
+          <header class="guide-header">
+            <p>FIELD GUIDE</p>
+            <h2 id="guide-title">탐험 수첩</h2>
+          </header>
+          <nav class="region-list" aria-label="작업 지역">
+            <button type="button" data-region-id="forest" aria-pressed="false">
+              <span class="region-cursor" aria-hidden="true">▶</span>
+              <span><strong>숲 연구소</strong><small>데이터와 AI</small></span>
+              <span class="completion-box" aria-hidden="true"></span><span class="sr-only">미완료</span>
+            </button>
+            <button type="button" data-region-id="city" aria-pressed="false">
+              <span class="region-cursor" aria-hidden="true">▶</span>
+              <span><strong>도시 공방</strong><small>제품 엔지니어링</small></span>
+              <span class="completion-box" aria-hidden="true"></span><span class="sr-only">미완료</span>
+            </button>
+            <button type="button" data-region-id="desert" aria-pressed="false">
+              <span class="region-cursor" aria-hidden="true">▶</span>
+              <span><strong>사막 자동화실</strong><small>자동화</small></span>
+              <span class="completion-box" aria-hidden="true"></span><span class="sr-only">미완료</span>
+            </button>
+            <button type="button" data-region-id="snow" aria-pressed="false">
+              <span class="region-cursor" aria-hidden="true">▶</span>
+              <span><strong>설원 기지</strong><small>인프라</small></span>
+              <span class="completion-box" aria-hidden="true"></span><span class="sr-only">미완료</span>
+            </button>
+            <button type="button" data-region-id="coast" aria-pressed="false">
+              <span class="region-cursor" aria-hidden="true">▶</span>
+              <span><strong>해안 등대</strong><small>협업</small></span>
+              <span class="completion-box" aria-hidden="true"></span><span class="sr-only">미완료</span>
+            </button>
+          </nav>
+          <footer class="guide-footer">
+            <p>완료 <strong id="guide-completion">00/05</strong></p>
+            <button id="reset-trigger" class="text-button" type="button">진행 초기화</button>
+            <fieldset id="reset-confirmation" class="reset-confirmation" hidden>
+              <legend>완료 기록을 지울까요?</legend>
+              <button type="button" data-reset-confirm>예, 초기화</button>
+              <button type="button" data-reset-cancel>아니요</button>
+            </fieldset>
+          </footer>
+        </aside>
+      </section>
 
       <button
-        id="movement-stick"
-        class="touch-joystick"
+        id="mobile-regions-trigger"
+        class="mobile-regions-trigger"
         type="button"
-        aria-label="이동 스틱: 드래그하여 탐험가 이동"
-        aria-pressed="false"
+        aria-controls="mobile-region-panel"
+        aria-expanded="false"
       >
-        <span class="touch-joystick__guides" aria-hidden="true"></span>
-        <span class="touch-joystick__thumb" aria-hidden="true"></span>
+        지역 메뉴 열기
       </button>
+      <section id="mobile-region-panel" class="mobile-region-panel" aria-labelledby="mobile-region-title" hidden>
+        <header>
+          <h2 id="mobile-region-title">지역 선택</h2>
+          <button type="button" data-mobile-menu-close>닫기</button>
+        </header>
+        <div class="region-list" data-mobile-region-list></div>
+      </section>
 
-      <div id="loading" class="loading" role="status">
-        <span></span>
-        월드를 조립하는 중
-      </div>
+      <section class="control-deck" aria-label="탐험 조작">
+        <div class="dpad-group">
+          <fieldset class="dpad">
+            <legend class="sr-only">이동 방향</legend>
+            <button id="move-up" class="dpad-up" type="button" data-action="move-up" aria-label="위로 이동">▲</button>
+            <button id="move-left" class="dpad-left" type="button" data-action="move-left" aria-label="왼쪽으로 이동">◀</button>
+            <span class="dpad-center" aria-hidden="true"></span>
+            <button id="move-right" class="dpad-right" type="button" data-action="move-right" aria-label="오른쪽으로 이동">▶</button>
+            <button id="move-down" class="dpad-down" type="button" data-action="move-down" aria-label="아래로 이동">▼</button>
+          </fieldset>
+          <strong>이동</strong>
+        </div>
+        <p class="keyboard-help">
+          <span>방향키 · WASD</span>
+          <span>ENTER · SPACE 확인</span>
+          <span>ESC 닫기</span>
+        </p>
+        <fieldset class="action-buttons">
+          <legend class="sr-only">행동 버튼</legend>
+          <div>
+            <button id="action-b" type="button" data-action="b" aria-label="B 닫기 또는 뒤로">B</button>
+            <strong>B 닫기</strong>
+          </div>
+          <div>
+            <button id="action-a" type="button" data-action="a" aria-label="A 대화 또는 확인">A</button>
+            <strong>A 대화</strong>
+          </div>
+        </fieldset>
+      </section>
+
+      <section class="system-messages" aria-label="데이터 상태">
+        <p id="app-status" role="status" aria-live="polite">지역 데이터를 불러오는 중입니다.</p>
+        <div id="load-error" role="alert" hidden>
+          <p>지역 기록을 불러오지 못했습니다. 다시 시도해 주세요.</p>
+          <button id="reload-data" type="button">다시 불러오기</button>
+        </div>
+      </section>
     </main>
 
-    <dialog id="project-intro" class="project-intro" aria-labelledby="intro-title">
+    <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-title">
       <article>
-        <header class="intro-header">
-          <div>
-            <p id="intro-biome" class="detail-biome">FOREST VILLAGE</p>
-            <span id="intro-year">2025</span>
-          </div>
-          <button type="button" data-dialog-close aria-label="프로젝트 소개 닫기">
-            닫기
-          </button>
+        <header>
+          <p id="project-meta">ROLE · YEAR</p>
+          <button type="button" data-dialog-close>기록 닫기</button>
         </header>
-        <h2 id="intro-title">프로젝트</h2>
-        <strong id="intro-role">ROLE</strong>
-        <p id="intro-summary" class="intro-summary"></p>
-        <section aria-labelledby="intro-highlights-title">
-          <h3 id="intro-highlights-title">핵심 결과</h3>
-          <ul id="intro-highlights" class="intro-highlights"></ul>
+        <h2 id="project-title">작업 기록</h2>
+        <p id="project-summary"></p>
+        <section aria-labelledby="project-highlights-title">
+          <h3 id="project-highlights-title">핵심 결과</h3>
+          <ul id="project-highlights"></ul>
         </section>
-        <section aria-labelledby="intro-stack-title">
-          <h3 id="intro-stack-title">사용 기술</h3>
-          <ul id="intro-stack" class="intro-stack"></ul>
+        <section aria-labelledby="project-stack-title">
+          <h3 id="project-stack-title">사용 기술</h3>
+          <ul id="project-stack"></ul>
         </section>
       </article>
     </dialog>
 
-    <script type="module" src="./main.js?v=touch-stick1"></script>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>
