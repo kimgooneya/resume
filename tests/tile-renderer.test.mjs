@@ -15,6 +15,7 @@ import {
   drawMarker,
   drawPlayer,
   drawResident,
+  drawSign,
 } from "../preview/world-sprites.js";
 
 function recordingContext() {
@@ -116,6 +117,34 @@ describe("four-tone tile renderer", () => {
     expect(guide.right).toBeGreaterThanOrEqual(anchor.x + 49);
     expect([...maker.colors].every((color) => REGIONS_BY_ID.desert.palette.includes(color))).toBe(true);
     expect([...guide.colors].every((color) => REGIONS_BY_ID.coast.palette.includes(color))).toBe(true);
+  });
+
+  test("renders field signposts as bold four-tone directional objects", () => {
+    // Given: one signpost at a fully visible interior anchor
+    const anchor = { x: 96, y: 96 };
+    const context = recordingContext();
+
+    // When: the shared wayfinding object is painted
+    drawSign(context, REGIONS_BY_ID.forest.palette, anchor);
+    const draws = context.commands.filter(([name]) => name === "fillRect");
+    const left = Math.min(...draws.map(([, , x]) => x));
+    const top = Math.min(...draws.map(([, , , y]) => y));
+    const right = Math.max(...draws.map(([, , x, , width]) => x + width));
+    const bottom = Math.max(...draws.map(([, , , y, , height]) => y + height));
+
+    const rightArrowTip = anchor.x + 43;
+    const hasArrowTip = draws.some(([, , x, y, width, height]) =>
+      x + width === rightArrowTip && y === anchor.y + 8 && height === 4);
+    const hasUpperHeadStep = draws.some(([, , x, y, width, height]) =>
+      x === anchor.x + 30 && y === anchor.y + 4 && width >= 8 && height >= 4);
+    const hasLowerHeadStep = draws.some(([, , x, y, width, height]) =>
+      x === anchor.x + 30 && y + height === anchor.y + 16 && width >= 8 && height >= 4);
+
+    // Then: a wide shaft, stepped arrowhead, post, and footing read as a four-tone wayfinding object
+    expect(draws.length).toBeGreaterThanOrEqual(14);
+    expect({ width: right - left, height: bottom - top }).toEqual({ width: 43, height: 37 });
+    expect(hasArrowTip && hasUpperHeadStep && hasLowerHeadStep).toBe(true);
+    expect(new Set(draws.map(([, color]) => color))).toEqual(new Set(REGIONS_BY_ID.forest.palette));
   });
 
   test("iterates exactly the current 24 by 18 camera slice in row-major order", () => {
@@ -316,7 +345,7 @@ describe("four-tone tile renderer", () => {
     // Then: destination silhouettes dominate the precinct while preserving safe margins
     expect(measurements.every(({ landmark }) =>
       landmark.top >= 2 && landmark.width >= 80 && landmark.height >= 58)).toBe(true);
-    expect(measurements.every(({ landmarkParts }) => landmarkParts >= 15)).toBe(true);
+    expect(measurements.every(({ landmarkParts }) => landmarkParts >= 24)).toBe(true);
     expect(measurements.every(({ resident, residentAnchor }) =>
       resident.left >= residentAnchor && resident.width >= 30 && resident.height >= 40)).toBe(true);
     expect(measurements.every(({ residentParts }) => residentParts >= 20)).toBe(true);

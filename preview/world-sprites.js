@@ -14,10 +14,23 @@ function fill(context, color, x, y, width, height) {
 
 export function drawSign(context, palette, point) {
   const { x, y } = point;
-  fill(context, palette[0], x + 7, y + 6, 3, 14);
-  fill(context, palette[0], x, y, 18, 9);
-  fill(context, palette[2], x + 3, y + 2, 12, 5);
-  fill(context, palette[3], x + 11, y + 2, 3, 3);
+  const [darkest, dark, mid, light] = palette;
+  fill(context, darkest, x, y + 2, 28, 16);
+  fill(context, darkest, x + 22, y, 8, 20);
+  fill(context, darkest, x + 30, y + 4, 8, 12);
+  fill(context, darkest, x + 38, y + 8, 5, 4);
+  fill(context, dark, x + 3, y + 5, 22, 10);
+  fill(context, dark, x + 25, y + 3, 5, 14);
+  fill(context, dark, x + 31, y + 7, 6, 6);
+  fill(context, mid, x + 6, y + 8, 14, 4);
+  fill(context, light, x + 19, y + 8, 8, 4);
+  fill(context, light, x + 27, y + 6, 4, 8);
+  fill(context, darkest, x + 14, y + 18, 7, 15);
+  fill(context, dark, x + 17, y + 19, 2, 14);
+  fill(context, light, x + 12, y + 20, 3, 3);
+  fill(context, darkest, x + 4, y + 33, 25, 4);
+  fill(context, mid, x + 9, y + 34, 15, 2);
+  fill(context, darkest, x + 4, y + 24, 4, 5);
 }
 
 export function drawLandmark(context, region, point) {
@@ -43,6 +56,11 @@ export function drawLandmark(context, region, point) {
       fill(context, light, x + 33, y - 42, 7, 29);
       fill(context, darkest, x + 37, y - 51, 31, 8);
       fill(context, dark, x + 55, y - 47, 9, 15);
+      fill(context, darkest, x + 27, y - 44, 9, 5);
+      fill(context, mid, x + 32, y - 46, 12, 4);
+      fill(context, light, x + 40, y - 45, 6, 3);
+      fill(context, darkest, x + 35, y - 37, 4, 14);
+      fill(context, dark, x + 28, y - 29, 16, 3);
       fill(context, darkest, x - 40, y + 16, 96, 6);
       break;
     case "tower":
@@ -62,6 +80,11 @@ export function drawLandmark(context, region, point) {
       fill(context, darkest, x + 37, y - 24, 10, 35);
       fill(context, light, x + 40, y - 18, 4, 16);
       fill(context, darkest, x - 16, y - 46, 48, 6);
+      fill(context, darkest, x + 4, y - 61, 8, 15);
+      fill(context, mid, x + 6, y - 60, 4, 6);
+      fill(context, light, x + 5, y - 54, 6, 3);
+      fill(context, darkest, x - 21, y - 54, 58, 5);
+      fill(context, light, x - 15, y - 34, 7, 4);
       break;
     case "workshop":
       fill(context, darkest, x - 42, y - 12, 104, 38);
@@ -81,6 +104,12 @@ export function drawLandmark(context, region, point) {
       fill(context, light, x - 29, y, 5, 6);
       fill(context, darkest, x + 24, y - 4, 12, 13);
       fill(context, light, x + 28, y, 5, 6);
+      fill(context, darkest, x + 51, y - 4, 14, 16);
+      fill(context, mid, x + 54, y - 1, 8, 10);
+      fill(context, light, x + 56, y + 3, 4, 3);
+      fill(context, darkest, x + 47, y + 1, 4, 5);
+      fill(context, darkest, x + 61, y + 1, 4, 5);
+      fill(context, darkest, x + 55, y - 8, 5, 4);
       fill(context, darkest, x - 37, y + 21, 94, 5);
       break;
     case "relay":
@@ -101,6 +130,12 @@ export function drawLandmark(context, region, point) {
       fill(context, light, x - 25, y + 8, 5, 5);
       fill(context, darkest, x + 30, y + 5, 12, 11);
       fill(context, light, x + 34, y + 8, 5, 5);
+      fill(context, darkest, x - 2, y - 57, 16, 5);
+      fill(context, mid, x + 3, y - 62, 6, 9);
+      fill(context, light, x + 4, y - 61, 4, 4);
+      fill(context, darkest, x - 17, y - 51, 12, 4);
+      fill(context, darkest, x + 20, y - 51, 12, 4);
+      fill(context, light, x - 14, y - 50, 6, 2);
       fill(context, darkest, x - 35, y + 20, 82, 6);
       break;
     case "lighthouse":
@@ -123,6 +158,11 @@ export function drawLandmark(context, region, point) {
       fill(context, mid, x - 35, y + 5, 7, 5);
       fill(context, darkest, x + 24, y + 2, 14, 10);
       fill(context, mid, x + 28, y + 5, 6, 5);
+      fill(context, darkest, x - 21, y - 30, 44, 5);
+      fill(context, mid, x - 14, y - 29, 30, 3);
+      fill(context, light, x - 4, y - 34, 10, 4);
+      fill(context, darkest, x - 12, y - 7, 26, 4);
+      fill(context, light, x - 43, y + 9, 10, 3);
       break;
   }
 }

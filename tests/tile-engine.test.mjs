@@ -177,6 +177,23 @@ describe("pure tile engine", () => {
     expect(reduceTileState(facing, "A", forest)).toBe(facing);
   });
 
+  test("keeps every central landmark fully below the top canvas edge during an approach", () => {
+    // Given: each region's walkable route from the southern start to its central interaction point
+    const observations = Object.values(REGIONS_BY_ID).map((region) => {
+      let state = createTileState(region);
+      for (const action of shortestRoute(region)) state = reduceTileState(state, action, region);
+      return { region, state };
+    });
+
+    // When: the explorer enters the close-range landmark precinct
+    const landmarkRows = observations.map(({ region, state }) => region.landmark.y - state.camera.y);
+    const playerRows = observations.map(({ state }) => state.player.y - state.camera.y);
+
+    // Then: all tall landmark tops have five tile rows of headroom without losing the player safe zone
+    expect(landmarkRows.every((row) => row >= 5)).toBe(true);
+    expect(playerRows.every((row) => row >= 6 && row <= 11)).toBe(true);
+  });
+
   test("finds any resident in the open map, not only the landmark resident", () => {
     // Given: a player at the interaction point of a secondary resident
     const region = REGIONS_BY_ID.forest;

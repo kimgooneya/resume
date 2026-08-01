@@ -20,6 +20,8 @@ export const CAMERA_ORIGIN_BOUNDS = Object.freeze({
   maxY: MAP_HEIGHT - VIEWPORT_HEIGHT,
 });
 
+const LANDMARK_TOP_MARGIN = 5;
+
 const DIRECTION_STEPS = Object.freeze({
   up: Object.freeze({ x: 0, y: -1 }),
   right: Object.freeze({ x: 1, y: 0 }),
@@ -65,6 +67,17 @@ function trackAxis(position, origin, safeMinimum, safeMaximum, originMaximum) {
     return clamp(position - safeMaximum, 0, originMaximum);
   }
   return origin;
+}
+
+function frameLandmarkCamera(camera, player, landmark) {
+  if (!isMapPoint(landmark) || landmark.y - camera.y >= LANDMARK_TOP_MARGIN) return camera;
+  const framedOrigin = clamp(
+    landmark.y - LANDMARK_TOP_MARGIN,
+    CAMERA_ORIGIN_BOUNDS.minY,
+    CAMERA_ORIGIN_BOUNDS.maxY,
+  );
+  if (player.y - framedOrigin > SAFE_SCREEN_BOUNDS.maxY) return camera;
+  return { ...camera, y: Math.min(camera.y, framedOrigin) };
 }
 
 function isUsableState(state) {
@@ -131,10 +144,11 @@ export function reduceTileState(state, action, region) {
       CAMERA_ORIGIN_BOUNDS.maxY,
     ),
   };
+  const framedCamera = frameLandmarkCamera(camera, { x: nextX, y: nextY }, region.landmark);
   return freezeState(
     state.regionId,
     { x: nextX, y: nextY, facing: action },
-    camera,
+    framedCamera,
   );
 }
 
