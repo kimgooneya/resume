@@ -96,10 +96,10 @@ describe("four-tone tile renderer", () => {
     // Given: the forest viewed from a non-zero camera origin
     const context = recordingContext();
     const forest = REGIONS_BY_ID.forest;
-    const camera = { x: 16, y: 46 };
+    const camera = { x: 16, y: 20 };
 
     // When: one state change is rendered
-    renderTileWorld(context, forest, state(camera, { x: 20, y: 58, facing: "up" }));
+    renderTileWorld(context, forest, state(camera, { x: 20, y: 30, facing: "up" }));
 
     // Then: the first layer contains exactly one full logical tile per viewport cell
     const ground = groundCommands(context.commands);
@@ -162,7 +162,7 @@ describe("four-tone tile renderer", () => {
 
   test("renders deterministic, bounded scenery masses in every traversal band", () => {
     // Given: north, middle, and south camera slices for every authored region
-    const cameras = [{ x: 0, y: 0 }, { x: 8, y: 23 }, { x: 16, y: 46 }];
+    const cameras = [{ x: 0, y: 0 }, { x: 8, y: 11 }, { x: 24, y: 22 }];
 
     // When: the scenery layer is painted twice for each region and band
     const recordings = Object.values(REGIONS_BY_ID).flatMap((region) =>
@@ -257,16 +257,16 @@ describe("four-tone tile renderer", () => {
     expect(new Set(signatures).size).toBe(5);
   });
 
-  test("makes northern landmarks and residents dominant, detailed, and safely framed", () => {
-    // Given: each northern destination at its real minimum-safe camera position
+  test("makes central landmarks and residents dominant, detailed, and safely framed", () => {
+    // Given: each central destination at its real minimum-safe camera position
     const measurements = Object.values(REGIONS_BY_ID).map((region) => {
-      const cameraY = Math.max(0, region.interaction.y - 6);
+      const cameraY = Math.max(0, region.landmark.y - 4);
       const landmarkPoint = { x: 128, y: (region.landmark.y - cameraY) * TILE_SIZE };
       const residentPoint = { x: 128, y: (region.resident.y - cameraY) * TILE_SIZE };
       const landmarkContext = recordingContext();
       const residentContext = recordingContext();
 
-      // When: the destination silhouettes render at the north camera clamp
+    // When: the destination silhouettes render at the central camera position
       drawLandmark(landmarkContext, region, landmarkPoint);
       drawResident(residentContext, region, residentPoint);
       const landmarkDraws = landmarkContext.commands.filter(([name]) => name === "fillRect");
@@ -300,9 +300,11 @@ describe("four-tone tile renderer", () => {
     // Given: a camera containing every special forest object
     const context = recordingContext();
     const forest = REGIONS_BY_ID.forest;
+    const camera = { x: 12, y: 14 };
+    const player = { x: 23, y: 22, facing: "right" };
 
     // When: the marked interaction state is rendered
-    renderTileWorld(context, forest, state(), { interactionAvailable: true });
+    renderTileWorld(context, forest, state(camera, player), { interactionAvailable: true });
 
     // Then: complete sprite command groups occur after all ground in the required layer order
     const commands = context.commands;
@@ -312,10 +314,10 @@ describe("four-tone tile renderer", () => {
       return standaloneContext.commands;
     };
     const groups = [
-      standalone((target) => drawLandmark(target, forest, { x: 96, y: 144 })),
-      standalone((target) => drawResident(target, forest, { x: 96, y: 176 })),
-      standalone((target) => drawPlayer(target, forest.palette, state().player, { x: 80, y: 176 })),
-      standalone((target) => drawMarker(target, forest.palette, { x: 80, y: 176 })),
+      standalone((target) => drawLandmark(target, forest, { x: 192, y: 80 })),
+      standalone((target) => drawResident(target, forest, { x: 192, y: 128 })),
+      standalone((target) => drawPlayer(target, forest.palette, player, { x: 176, y: 128 })),
+      standalone((target) => drawMarker(target, forest.palette, { x: 176, y: 128 })),
     ];
     const findGroup = (group, from) => {
       for (let index = from; index <= commands.length - group.length; index += 1) {
@@ -324,7 +326,7 @@ describe("four-tone tile renderer", () => {
       }
       return -1;
     };
-    const [landmark, resident, player, marker] = groups.reduce((indices, group) => {
+    const [landmark, resident, playerIndex, marker] = groups.reduce((indices, group) => {
       const previous = indices.at(-1) ?? VIEWPORT_WIDTH * VIEWPORT_HEIGHT;
       indices.push(findGroup(group, previous + 1));
       return indices;
@@ -332,8 +334,8 @@ describe("four-tone tile renderer", () => {
 
     expect(landmark).toBeGreaterThan(24 * 18);
     expect(resident).toBeGreaterThan(landmark);
-    expect(player).toBeGreaterThan(resident);
-    expect(marker).toBeGreaterThan(player);
+    expect(playerIndex).toBeGreaterThan(resident);
+    expect(marker).toBeGreaterThan(playerIndex);
   });
 
   test("uses camera offsets at all clamp edges without drawing beyond the viewport", () => {

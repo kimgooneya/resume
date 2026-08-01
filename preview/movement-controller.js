@@ -1,49 +1,29 @@
-import {
-  createTouchJoystick,
-  mapJoystickToWorld,
-} from "./touch-joystick.js?v=touch-stick1";
-
 const MOVEMENT_CODES = new Set([
   "ArrowUp",
   "ArrowDown",
   "ArrowLeft",
   "ArrowRight",
-  "KeyW",
-  "KeyA",
-  "KeyS",
-  "KeyD",
 ]);
 
-export function createMovementController(joystickElement, hooks) {
+export function createMovementController(_joystickElement, hooks) {
   const pressed = new Set();
-  let joystickInput = { x: 0, y: 0 };
 
   function read() {
-    const up = pressed.has("ArrowUp") || pressed.has("KeyW");
-    const down = pressed.has("ArrowDown") || pressed.has("KeyS");
-    const left = pressed.has("ArrowLeft") || pressed.has("KeyA");
-    const right = pressed.has("ArrowRight") || pressed.has("KeyD");
+    const up = pressed.has("ArrowUp");
+    const down = pressed.has("ArrowDown");
+    const left = pressed.has("ArrowLeft");
+    const right = pressed.has("ArrowRight");
     if (up || down || left || right) {
       return {
         x: Number(down) - Number(up) + Number(right) - Number(left),
         z: Number(down) - Number(up) + Number(left) - Number(right),
       };
     }
-    return mapJoystickToWorld(joystickInput);
+    return { x: 0, z: 0 };
   }
-
-  const joystick = createTouchJoystick(joystickElement, (input) => {
-    const started = joystickInput.x === 0 && joystickInput.y === 0;
-    joystickInput = input;
-    if (input.x === 0 && input.y === 0) return;
-    if (started) hooks.onStart();
-    hooks.onPulse(read());
-  });
 
   function reset() {
     pressed.clear();
-    joystickInput = { x: 0, y: 0 };
-    joystick.reset();
   }
 
   window.addEventListener("keydown", (event) => {

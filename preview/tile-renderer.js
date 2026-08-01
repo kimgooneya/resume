@@ -49,10 +49,13 @@ function assertRenderInput(context, region, state) {
     state.player !== null &&
     Object.hasOwn(state.player, "facing") &&
     FACING_VALUES.has(state.player.facing);
+  const residents = Array.isArray(region?.residents) && region.resident === region.residents[0]
+    ? region.residents
+    : [region?.resident].filter(Boolean);
   const validSprites = LANDMARK_SPRITES.has(region?.landmark?.sprite) &&
     typeof region.landmark.prop === "string" &&
-    RESIDENT_SPRITES.has(region?.resident?.sprite) &&
-    typeof region.resident.prop === "string";
+    residents.length > 0 &&
+    residents.every((resident) => RESIDENT_SPRITES.has(resident.sprite) && typeof resident.prop === "string");
   const validScenery = Array.isArray(region?.scenery);
 
   if (
@@ -85,7 +88,7 @@ function screenPoint(point, camera) {
   return { x: tileX * TILE_SIZE, y: tileY * TILE_SIZE };
 }
 
-export function renderTileWorld(context, region, state, { interactionAvailable = false } = {}) {
+export function renderTileWorld(context, region, state, { interactionAvailable = false, interactionResident = null } = {}) {
   assertRenderInput(context, region, state);
   context.imageSmoothingEnabled = false;
   const { camera } = state;
@@ -95,7 +98,8 @@ export function renderTileWorld(context, region, state, { interactionAvailable =
       const tile = region.tiles[camera.y + screenY][camera.x + screenX];
       const path = tile === TILE_KINDS.PATH ||
         tile === TILE_KINDS.START ||
-        tile === TILE_KINDS.INTERACTION;
+        tile === TILE_KINDS.INTERACTION ||
+        tile === TILE_KINDS.SIGN;
       fill(
         context,
         region.palette[path ? 2 : 1],
@@ -122,10 +126,17 @@ export function renderTileWorld(context, region, state, { interactionAvailable =
 
   const landmark = screenPoint(region.landmark, camera);
   if (landmark) drawLandmark(context, region, landmark);
-  const resident = screenPoint(region.resident, camera);
-  if (resident) drawResident(context, region, resident);
+  const residents = Array.isArray(region.residents) && region.resident === region.residents[0]
+    ? region.residents
+    : [region.resident].filter(Boolean);
+  for (const residentData of residents) {
+    const resident = screenPoint(residentData, camera);
+    if (resident) drawResident(context, region, resident, residentData);
+  }
   const player = screenPoint(state.player, camera);
   if (player) drawPlayer(context, region.palette, state.player, player);
-  const marker = interactionAvailable ? screenPoint(region.interaction, camera) : null;
+  const markerData = interactionResident?.interaction
+    ?? (interactionAvailable ? region.interaction : null);
+  const marker = markerData ? screenPoint(markerData, camera) : null;
   if (marker) drawMarker(context, region.palette, marker);
 }

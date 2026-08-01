@@ -35,6 +35,7 @@
               id="map-canvas"
               width="384"
               height="288"
+              tabindex="-1"
               aria-label="선택한 지역의 24 곱하기 18 타일 지도"
             ></canvas>
             <section
@@ -64,7 +65,7 @@
                 <li data-dialogue-stage="result">결과</li>
               </ol>
               <p id="dialogue-copy">주민의 이야기가 여기에 표시됩니다.</p>
-              <p class="dialogue-actions">A 다음 · B 닫기</p>
+              <p class="dialogue-actions">Space 다음 · Esc 닫기</p>
             </section>
           </div>
 
@@ -144,18 +145,17 @@
 
       <section class="control-deck" aria-label="탐험 조작">
         <div class="dpad-group">
-          <fieldset class="dpad">
-            <legend class="sr-only">이동 방향</legend>
-            <button id="move-up" class="dpad-up" type="button" data-action="move-up" aria-label="위로 이동">▲</button>
-            <button id="move-left" class="dpad-left" type="button" data-action="move-left" aria-label="왼쪽으로 이동">◀</button>
+          <div class="dpad" role="img" aria-label="방향키로 이동">
+            <kbd class="dpad-key dpad-up" aria-hidden="true">▲</kbd>
+            <kbd class="dpad-key dpad-left" aria-hidden="true">◀</kbd>
             <span class="dpad-center" aria-hidden="true"></span>
-            <button id="move-right" class="dpad-right" type="button" data-action="move-right" aria-label="오른쪽으로 이동">▶</button>
-            <button id="move-down" class="dpad-down" type="button" data-action="move-down" aria-label="아래로 이동">▼</button>
-          </fieldset>
-          <strong>이동</strong>
+            <kbd class="dpad-key dpad-right" aria-hidden="true">▶</kbd>
+            <kbd class="dpad-key dpad-down" aria-hidden="true">▼</kbd>
+          </div>
+          <strong>방향키 이동</strong>
         </div>
         <p class="keyboard-help">
-          <span>방향키 · WASD</span>
+          <span>↑ ↓ ← → 이동</span>
           <span>ENTER · SPACE 확인</span>
           <span>ESC 닫기</span>
         </p>

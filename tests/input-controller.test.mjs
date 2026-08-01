@@ -117,13 +117,34 @@ function keyEvent(code, target) {
 }
 
 describe("action-normalized input controller", () => {
-  test("normalizes exact keyboard mappings and ignores unknown keys", () => {
+  test("rejects WASD and pointer movement while keeping arrow-key movement", () => {
+    // Given: a map controller with the keyboard-only movement contract
+    const fixture = createFixture();
+
+    // When: legacy movement keys and visible directional controls are pressed
+    for (const code of ["KeyW", "KeyA", "KeyS", "KeyD"]) {
+      fixture.windowTarget.emit("keydown", keyEvent(code));
+      fixture.windowTarget.emit("keyup", { code });
+    }
+    for (const [action, pointerId] of [["up", 1], ["down", 2], ["left", 3], ["right", 4]]) {
+      fixture.buttons[action].emit("pointerdown", { pointerId });
+      fixture.buttons[action].emit("pointerup", { pointerId });
+    }
+
+    // Then: only physical arrow keys can emit movement actions
+    expect(["KeyW", "KeyA", "KeyS", "KeyD"].map(normalizeKey)).toEqual([null, null, null, null]);
+    expect(fixture.actions).toEqual([]);
+    fixture.windowTarget.emit("keydown", keyEvent("ArrowUp"));
+    expect(fixture.actions).toEqual(["up"]);
+    fixture.controller.destroy();
+  });
+
+  test("normalizes arrow-key mappings and ignores legacy movement keys", () => {
     // Given: the supported keyboard codes
     const mysteryButton = new FakeTarget();
     const fixture = createFixture({ extraButtons: { mystery: mysteryButton } });
     const expected = {
-      ArrowUp: "up", KeyW: "up", ArrowDown: "down", KeyS: "down",
-      ArrowLeft: "left", KeyA: "left", ArrowRight: "right", KeyD: "right",
+      ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right",
       Enter: "A", Space: "A", Escape: "B",
     };
 
@@ -141,10 +162,10 @@ describe("action-normalized input controller", () => {
     fixture.controller.destroy();
   });
 
-  test("makes D-pad and A/B buttons produce the keyboard action sequence", () => {
-    // Given: an enabled map controller with visible controls
+  test("keeps A/B buttons available without turning the keyboard movement guide into a pointer control", () => {
+    // Given: an enabled map controller with the keyboard-only movement contract
     const fixture = createFixture();
-    const keyboard = ["KeyW", "KeyS", "KeyA", "KeyD", "Enter", "Escape"];
+    const keyboard = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Escape"];
 
     // When: keyboard keys and their equivalent buttons are pressed
     for (const code of keyboard) {
@@ -156,8 +177,8 @@ describe("action-normalized input controller", () => {
       fixture.buttons[action].emit("pointerup", { pointerId });
     }
 
-    // Then: both surfaces publish the same normalized actions
-    expect(fixture.actions).toEqual(["up", "down", "left", "right", "A", "B", "up", "down", "left", "right", "A", "B"]);
+    // Then: arrows and A/B work, while the directional pointer cells stay inert
+    expect(fixture.actions).toEqual(["up", "down", "left", "right", "A", "B", "A", "B"]);
   });
 
   test("fires a direction immediately then repeats at 240ms and every 120ms", () => {
@@ -176,17 +197,14 @@ describe("action-normalized input controller", () => {
   });
 
   for (const [name, start, stop] of [
-    ["keyboard release", (fixture) => fixture.windowTarget.emit("keydown", keyEvent("KeyW")), (fixture) => fixture.windowTarget.emit("keyup", { code: "KeyW" })],
-    ["pointer release", (fixture) => fixture.buttons.up.emit("pointerdown", { pointerId: 1 }), (fixture) => fixture.buttons.up.emit("pointerup", { pointerId: 1 })],
-    ["pointer cancel", (fixture) => fixture.buttons.up.emit("pointerdown", { pointerId: 1 }), (fixture) => fixture.buttons.up.emit("pointercancel", { pointerId: 1 })],
-    ["lost pointer capture", (fixture) => fixture.buttons.up.emit("pointerdown", { pointerId: 1 }), (fixture) => fixture.buttons.up.emit("lostpointercapture", { pointerId: 1 })],
-    ["window blur", (fixture) => fixture.buttons.up.emit("pointerdown", { pointerId: 1 }), (fixture) => fixture.windowTarget.emit("blur")],
-    ["document visibility loss", (fixture) => fixture.buttons.up.emit("pointerdown", { pointerId: 1 }), (fixture) => {
+    ["keyboard release", (fixture) => fixture.windowTarget.emit("keydown", keyEvent("ArrowUp")), (fixture) => fixture.windowTarget.emit("keyup", { code: "ArrowUp" })],
+    ["window blur", (fixture) => fixture.windowTarget.emit("keydown", keyEvent("ArrowUp")), (fixture) => fixture.windowTarget.emit("blur")],
+    ["document visibility loss", (fixture) => fixture.windowTarget.emit("keydown", keyEvent("ArrowUp")), (fixture) => {
       fixture.documentTarget.visibilityState = "hidden";
       fixture.documentTarget.emit("visibilitychange");
     }],
-    ["mode change", (fixture) => fixture.buttons.up.emit("pointerdown", { pointerId: 1 }), (fixture) => fixture.controller.setMode("dialogue")],
-    ["explicit reset", (fixture) => fixture.buttons.up.emit("pointerdown", { pointerId: 1 }), (fixture) => fixture.controller.reset()],
+    ["mode change", (fixture) => fixture.windowTarget.emit("keydown", keyEvent("ArrowUp")), (fixture) => fixture.controller.setMode("dialogue")],
+    ["explicit reset", (fixture) => fixture.windowTarget.emit("keydown", keyEvent("ArrowUp")), (fixture) => fixture.controller.reset()],
   ]) {
     test(`stops held direction on ${name}`, () => {
       // Given: a repeating directional hold
@@ -355,9 +373,9 @@ describe("action-normalized input controller", () => {
   });
 
   test("destroy removes listeners and cancels outstanding repeat work", () => {
-    // Given: a controller with an active pointer hold
+    // Given: a controller with an active keyboard hold
     const fixture = createFixture();
-    fixture.buttons.up.emit("pointerdown", { pointerId: 1 });
+    fixture.windowTarget.emit("keydown", keyEvent("ArrowUp"));
 
     // When: the controller is destroyed
     fixture.controller.destroy();

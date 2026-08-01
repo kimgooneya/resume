@@ -5,7 +5,7 @@ import { loadProjects as fetchProjects } from "./project-content.js";
 import { createProgressStore } from "./progress-store.js";
 import { createProjectDialog } from "./project-dialog.js";
 import { REGION_IDS, REGIONS, getRegion } from "./region-data.js";
-import { canInteract, createTileState, reduceTileState } from "./tile-engine.js";
+import { createTileState, getInteractableResident, reduceTileState } from "./tile-engine.js";
 import { renderTileWorld } from "./tile-renderer.js";
 
 const DIRECTIONS = new Set(["up", "down", "left", "right"]);
@@ -62,8 +62,6 @@ export async function createApplication(
   const loadError = requireElement(document, "#load-error");
   const reloadButton = requireElement(document, "#reload-data");
   const controls = {
-    up: requireElement(document, "#move-up"), down: requireElement(document, "#move-down"),
-    left: requireElement(document, "#move-left"), right: requireElement(document, "#move-right"),
     a: requireElement(document, "#action-a"), b: requireElement(document, "#action-b"),
   };
   const context = canvas.getContext("2d");
@@ -86,12 +84,12 @@ export async function createApplication(
 
   function updateMapText() {
     if (!region || !tileState) return;
-    const available = canInteract(tileState, region);
+    const activeResident = getInteractableResident(tileState, region);
     currentRegion.textContent = region.label;
     positionStatus.textContent = `${region.label} · ${tileState.player.x}, ${tileState.player.y}`;
-    interactionStatus.textContent = available
-      ? formatResidentInteraction(region.resident.role)
-      : `${region.landmarkLabel}의 주민을 향해 이동하세요`;
+    interactionStatus.textContent = activeResident
+      ? formatResidentInteraction(activeResident.role)
+      : `${region.residents.length}명의 주민을 찾아 대화해 보세요`;
     canvas.setAttribute(
       "aria-label",
       `${region.label} 지도. 현재 위치 ${tileState.player.x}, ${tileState.player.y}. ${interactionStatus.textContent}`,
@@ -101,8 +99,10 @@ export async function createApplication(
   function draw() {
     if (!region || !tileState) return;
     updateMapText();
+    const activeResident = getInteractableResident(tileState, region);
     renderTileWorld(context, region, tileState, {
-      interactionAvailable: canInteract(tileState, region),
+      interactionAvailable: activeResident !== null,
+      interactionResident: activeResident,
     });
   }
 
@@ -137,6 +137,8 @@ export async function createApplication(
     initialSelection.hidden = true;
     inputController?.reset();
     setMode("map");
+    canvas.focus?.();
+    window.scrollTo?.(0, 0);
     draw();
     appStatus.textContent = `${region.label} 탐험을 시작했습니다.`;
     return true;
@@ -185,13 +187,14 @@ export async function createApplication(
       draw();
       return true;
     }
-    if (action === "A" && canInteract(tileState, region)) {
+    const interactableResident = getInteractableResident(tileState, region);
+    if (action === "A" && interactableResident) {
       return dialogue.open({
         completed: progressStore.isCompleted(region.id),
         invokingControl: document.activeElement,
         isAdjacent: true,
         isFacing: true,
-        resident: region.resident,
+        resident: interactableResident,
       });
     }
     return false;

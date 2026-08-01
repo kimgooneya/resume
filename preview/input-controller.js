@@ -1,22 +1,14 @@
 const KEY_ACTIONS = Object.freeze({
   ArrowUp: "up",
-  KeyW: "up",
   ArrowDown: "down",
-  KeyS: "down",
   ArrowLeft: "left",
-  KeyA: "left",
   ArrowRight: "right",
-  KeyD: "right",
   Enter: "A",
   Space: "A",
   Escape: "B",
 });
 
 const BUTTON_ACTIONS = Object.freeze({
-  up: "up",
-  down: "down",
-  left: "left",
-  right: "right",
   a: "A",
   b: "B",
   close: "B",

@@ -40,8 +40,8 @@ export function createDialogueBox({
     )));
     copy.dataset.lineCount = String(lines.length);
     actions.textContent = stage === "result"
-      ? "A 기록 자세히 보기 · B 대화 끝내기"
-      : "A 다음 · B 닫기";
+      ? "Space 기록 자세히 보기 · Esc 대화 끝내기"
+      : "Space 다음 · Esc 닫기";
 
     for (const element of stageElements) {
       if (element.dataset.dialogueStage === stage) {

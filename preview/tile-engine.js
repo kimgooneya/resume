@@ -76,16 +76,17 @@ function isUsableState(state) {
 
 export function createTileState(region) {
   if (!isRegion(region)) {
-    throw new TypeError("region must provide a valid ID, start, and 40 by 64 tile map");
+    throw new TypeError("region must provide a valid ID, start, and 48 by 40 tile map");
   }
+  const cameraTargetX = Number.isInteger(region.landmark?.x) ? region.landmark.x : region.start.x;
   const camera = {
     x: clamp(
-      region.start.x - Math.floor(VIEWPORT_WIDTH / 2),
+      cameraTargetX - Math.floor(VIEWPORT_WIDTH / 2),
       CAMERA_ORIGIN_BOUNDS.minX,
       CAMERA_ORIGIN_BOUNDS.maxX,
     ),
     y: clamp(
-      region.start.y - Math.floor(VIEWPORT_HEIGHT / 2),
+      region.start.y - (VIEWPORT_HEIGHT - 3),
       CAMERA_ORIGIN_BOUNDS.minY,
       CAMERA_ORIGIN_BOUNDS.maxY,
     ),
@@ -138,17 +139,23 @@ export function reduceTileState(state, action, region) {
   );
 }
 
-export function canInteract(state, region) {
-  if (state?.regionId !== region?.id || !isUsableState(state) || !isMapPoint(region.resident)) {
-    return false;
-  }
+export function getInteractableResident(state, region) {
+  if (state?.regionId !== region?.id || !isUsableState(state)) return null;
   const facing = state.player.facing;
   const step = typeof facing === "string" && Object.hasOwn(DIRECTION_STEPS, facing)
     ? DIRECTION_STEPS[facing]
     : undefined;
-  return Boolean(
-    step &&
-    state.player.x + step.x === region.resident.x &&
-    state.player.y + step.y === region.resident.y,
-  );
+  if (!step) return null;
+  const residents = Array.isArray(region.residents)
+    ? region.residents
+    : [region.resident].filter(Boolean);
+  return residents.find((resident) =>
+    isMapPoint(resident) &&
+    state.player.x + step.x === resident.x &&
+    state.player.y + step.y === resident.y,
+  ) ?? null;
+}
+
+export function canInteract(state, region) {
+  return getInteractableResident(state, region) !== null;
 }
