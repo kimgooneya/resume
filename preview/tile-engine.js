@@ -76,7 +76,7 @@ function isUsableState(state) {
 
 export function createTileState(region) {
   if (!isRegion(region)) {
-    throw new TypeError("region must provide a valid ID, start, and 48 by 40 tile map");
+    throw new TypeError("region must provide a valid ID, start, and expanded tile map");
   }
   const cameraTargetX = Number.isInteger(region.landmark?.x) ? region.landmark.x : region.start.x;
   const camera = {

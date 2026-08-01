@@ -380,7 +380,7 @@ describe("classic RPG application integration", () => {
 
     // Then: open-space movement remains immediate and accumulates both steps
     expect(afterFirstStep).toBeGreaterThan(before);
-    expect(app.getState().tileState.player).toEqual({ x: 24, y: 28, facing: "up" });
+    expect(app.getState().tileState.player).toEqual({ x: 30, y: 38, facing: "up" });
     expect(surface.context.fillRectCalls).toBeGreaterThan(afterFirstStep);
     app.destroy();
   });

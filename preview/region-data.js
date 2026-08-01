@@ -5,8 +5,11 @@ import {
   SCENERY_ROLES,
 } from "./region-scenery.js";
 
-export const MAP_WIDTH = 48;
-export const MAP_HEIGHT = 40;
+const SOURCE_MAP_WIDTH = 48;
+const SOURCE_MAP_HEIGHT = 40;
+
+export const MAP_WIDTH = 60;
+export const MAP_HEIGHT = 50;
 export const VIEWPORT_WIDTH = 24;
 export const VIEWPORT_HEIGHT = 18;
 export const TILE_SIZE = 16;
@@ -281,6 +284,24 @@ function deepFreeze(value) {
   return value;
 }
 
+function expandCoordinate(value, sourceMaximum, targetMaximum) {
+  return Math.round((value * targetMaximum) / sourceMaximum);
+}
+
+function expandPoint({ x, y }) {
+  return {
+    x: expandCoordinate(x, SOURCE_MAP_WIDTH - 1, MAP_WIDTH - 1),
+    y: expandCoordinate(y, SOURCE_MAP_HEIGHT - 1, MAP_HEIGHT - 1),
+  };
+}
+
+function expandInteraction(residentPoint, interactionPoint, expandedResidentPoint) {
+  return {
+    x: expandedResidentPoint.x + interactionPoint.x - residentPoint.x,
+    y: expandedResidentPoint.y + interactionPoint.y - residentPoint.y,
+  };
+}
+
 function buildMap({ signposts, start, landmark, residents }) {
   const tiles = Array.from({ length: MAP_HEIGHT }, (_, y) =>
     Array.from({ length: MAP_WIDTH }, (_, x) =>
@@ -369,7 +390,7 @@ export function validateRegion(region) {
         maskValid && filled >= 8 && fillRatio >= 0.35 && fillRatio <= 0.9;
     },
   ), "scenery descriptors are invalid");
-  assert(Array.isArray(region.tiles) && region.tiles.length === MAP_HEIGHT && region.tiles.every((row) => Array.isArray(row) && row.length === MAP_WIDTH), "map dimensions must be 48 by 40");
+  assert(Array.isArray(region.tiles) && region.tiles.length === MAP_HEIGHT && region.tiles.every((row) => Array.isArray(row) && row.length === MAP_WIDTH), "map dimensions must match the expanded village contract");
   const counts = Object.fromEntries(["start", "landmark", "resident", "interaction"].map((tile) => [tile, 0]));
   for (let y = 0; y < MAP_HEIGHT; y += 1) for (let x = 0; x < MAP_WIDTH; x += 1) {
     const tile = region.tiles[y][x];
@@ -391,11 +412,24 @@ export function validateRegion(region) {
 }
 
 function buildRegion(config) {
-  const { id, label, terrain, landmarkLabel, palette, start, interaction, landmark, signposts } = config;
+  const { id, label, terrain, landmarkLabel, palette } = config;
+  const sourceStart = expandPoint(config.start);
+  const start = { ...sourceStart, y: Math.max(sourceStart.y, MAP_HEIGHT - 10) };
+  const landmark = { ...expandPoint(config.landmark), sprite: config.landmark.sprite, prop: config.landmark.prop };
+  const signposts = config.signposts.map(expandPoint);
   const [residentId, role, sprite, prop, residentPoint, lines] = config.resident;
+  const primaryPosition = expandPoint(residentPoint);
+  const interaction = expandInteraction(residentPoint, config.interaction, primaryPosition);
   const residentConfigs = [
-    { id: residentId, role, sprite, prop, position: residentPoint, interaction, lines },
-    ...(config.additionalResidents ?? []),
+    { id: residentId, role, sprite, prop, position: primaryPosition, interaction, lines },
+    ...(config.additionalResidents ?? []).map(({ position, interaction: residentInteraction, ...resident }) => {
+      const expandedPosition = expandPoint(position);
+      return {
+        ...resident,
+        position: expandedPosition,
+        interaction: expandInteraction(position, residentInteraction, expandedPosition),
+      };
+    }),
   ];
   const residents = residentConfigs.map((residentConfig) => {
     const dialogue = Object.fromEntries(DIALOGUE_STAGES.map((stage, index) => [stage, Object.freeze({ lines: Object.freeze(residentConfig.lines[index]) })]));

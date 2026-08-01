@@ -4,8 +4,8 @@ function feature(kind, role, band, x, y, width, profile) {
   return { kind, role, band, x, y, width, height: mask.length, mask };
 }
 
-const AUTHORED_MAP_WIDTH = 48;
-const AUTHORED_MAP_HEIGHT = 40;
+const AUTHORED_MAP_WIDTH = 60;
+const AUTHORED_MAP_HEIGHT = 50;
 
 function resizeMask(mask, width, height) {
   return Array.from({ length: height }, (_, y) =>
@@ -19,14 +19,14 @@ function resizeMask(mask, width, height) {
 
 function fitScenery(regionId, scenery) {
   return scenery.map((source) => {
-    const width = Math.min(AUTHORED_MAP_WIDTH, Math.max(2, Math.round(source.width * 1.2)));
-    const height = Math.min(AUTHORED_MAP_HEIGHT, Math.max(2, Math.round(source.height * 0.58)));
+    const width = Math.min(AUTHORED_MAP_WIDTH, Math.max(2, Math.round(source.width * 1.5)));
+    const height = Math.min(AUTHORED_MAP_HEIGHT, Math.max(2, Math.round(source.height * 0.725)));
     const x = source.role === "landmark-precinct"
       ? Math.floor((AUTHORED_MAP_WIDTH - width) / 2)
-      : Math.min(AUTHORED_MAP_WIDTH - width, Math.round(source.x * 1.2));
+      : Math.min(AUTHORED_MAP_WIDTH - width, Math.round(source.x * 1.5));
     const y = source.role === "landmark-precinct"
-      ? 15
-      : Math.min(AUTHORED_MAP_HEIGHT - height, Math.round(source.y * 0.58));
+      ? Math.floor((AUTHORED_MAP_HEIGHT - height) / 2)
+      : Math.min(AUTHORED_MAP_HEIGHT - height, Math.round(source.y * 0.725));
     return {
       ...source,
       band: source.role === "landmark-precinct" ? "middle" : source.band,

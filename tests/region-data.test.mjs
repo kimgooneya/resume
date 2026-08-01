@@ -57,7 +57,7 @@ function featureCells(feature) {
 }
 
 describe("region data contract", () => {
-  test("provides five ordered 48 by 40 LCD regions", () => {
+  test("provides five ordered 60 by 50 LCD regions", () => {
     // Given: the immutable region catalogue
     const dimensions = [MAP_WIDTH, MAP_HEIGHT, VIEWPORT_WIDTH, VIEWPORT_HEIGHT, TILE_SIZE];
 
@@ -65,7 +65,7 @@ describe("region data contract", () => {
     const ids = REGIONS.map(({ id }) => id);
 
     // Then: the map and logical viewport match the field-guide contract
-    expect(dimensions).toEqual([48, 40, 24, 18, 16]);
+    expect(dimensions).toEqual([60, 50, 24, 18, 16]);
     expect(REGION_IDS).toEqual(["forest", "city", "desert", "snow", "coast"]);
     expect(ids).toEqual(REGION_IDS);
     expect(REGIONS).toHaveLength(5);
@@ -242,7 +242,7 @@ describe("region data contract", () => {
       snow: ["ridge", "snowbank", "stream"],
       coast: ["bridge", "dock", "shore", "water"],
     };
-    const bands = [[0, 12], [13, 26], [27, 39]];
+    const bands = [[0, 15], [16, 33], [34, 49]];
 
     // When: descriptor bounds, semantic grammar, and visible band coverage are measured
     const summaries = REGIONS.map((region) => ({
@@ -418,7 +418,7 @@ describe("region data contract", () => {
     malformed.scenery[0].x = MAP_WIDTH - 1;
     malformed.scenery[0].width = 4;
 
-    // When / Then: validation rejects composition outside the 48 by 40 map
+    // When / Then: validation rejects composition outside the 60 by 50 map
     expect(() => validateRegion(malformed)).toThrow(/scenery/);
   });
 

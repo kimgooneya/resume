@@ -118,7 +118,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 > **Current contract:** the interior is an open field. Only the outer border, landmark body, and resident cells block movement; scenery is a decorative overlay and never creates a maze wall.
 
-- **Structure**: 지역마다 독립된 48×40 타일 가로형 마을 맵, 열린 바닥·환경물·중앙 랜드마크·주민·캐릭터. 화면에는 한 번에 24×18 타일만 보인다.
+- **Structure**: 지역마다 독립된 60×50 타일 가로형 마을 맵, 열린 바닥·환경물·중앙 랜드마크·주민·캐릭터. 화면에는 한 번에 24×18 타일만 보인다. 첫 확장 샘플은 지도보다 크게 읽히는 인물의 실루엣·소품·직업별 자세를 중심으로 한다.
 - **States**: free, resident-near, landmark-near, discovered
 - **Rendering**: `imageSmoothingEnabled = false`, `image-rendering: pixelated`
 - **Accessibility**: 캔버스 주변에 현재 위치, 목적지, 상호작용 가능 상태를 텍스트로 제공
@@ -127,7 +127,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 ### Scrolling Camera
 
-- **Viewport**: 논리 화면 `384×288`, 24×18 타일. 지역 전체 48×40 타일 중 현재 위치 주변만 보여준다.
+- **Viewport**: 논리 화면 `384×288`, 24×18 타일. 지역 전체 60×50 타일 중 현재 위치 주변만 보여준다.
 - **Primary axis**: 시작점은 남쪽, 랜드마크와 첫 주민은 마을 중앙 광장에 둔다. 북·남·동·서 가장자리에 산개한 주민과 생태별 환경 실루엣이 열린 필드의 방향감을 만든다.
 - **Follow**: 캐릭터가 화면 중앙의 8×6 타일 안전 영역을 벗어날 때 카메라가 한 타일 단위로 따라간다.
 - **Edge clamp**: 지역 가장자리에서는 카메라를 맵 경계에 고정해 빈 바깥 영역이 보이지 않게 한다.
@@ -139,7 +139,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 > **Current input contract:** ArrowUp, ArrowDown, ArrowLeft, and ArrowRight are the only movement keys. WASD and pointer movement are intentionally unsupported.
 
-- **Structure**: 최대 24×30px의 오리지널 필드 카토그래퍼. 얼굴·머리/캡·스카프·재킷·지도 장치가 달린 숄더백·분리된 팔과 부츠를 짙은 외곽선으로 묶어 한눈에 사람으로 읽히게 한다.
+- **Structure**: 약 32×44px의 오리지널 필드 카토그래퍼. 얼굴·머리/캡·스카프·재킷·지도 장치가 달린 숄더백·분리된 팔과 부츠를 짙은 외곽선으로 묶어 한눈에 사람으로 읽히게 한다. 주민도 같은 확대 비율을 쓰되, 연구원의 기록판·기술자의 장비·장인의 도구·관제사의 안테나·안내원의 표식을 서로 다르게 드러낸다.
 - **States**: up/right/down/left 네 방향마다 얼굴, 머리, 가방, 팔의 실루엣을 다르게 그리고, 타일 좌표 홀짝으로 step-a/step-b 보폭을 교대한다.
 - **Art boundary**: 네 단계 지역 팔레트와 정수 사각 픽셀만 사용한다. 특정 상용 게임의 캐릭터, 의상, 색 배치, 실루엣은 복제하지 않는다.
 - **Input**: 방향키만 이동에 사용한다. WASD와 터치 방향 입력은 이동을 발생시키지 않는다.

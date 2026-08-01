@@ -84,7 +84,7 @@ describe("four-tone tile renderer", () => {
     expect(recordings.every((commands) => commands.length >= 20)).toBe(true);
     expect(recordings.every((commands) => {
       const size = bounds(commands);
-      return size.width >= 22 && size.height >= 28;
+      return size.width >= 30 && size.height >= 40;
     })).toBe(true);
     expect(recordings.every((commands) =>
       new Set(commands.map(([, color]) => color)).size === 4)).toBe(true);
@@ -292,16 +292,20 @@ describe("four-tone tile renderer", () => {
       landmark.top >= 2 && landmark.width >= 80 && landmark.height >= 58)).toBe(true);
     expect(measurements.every(({ landmarkParts }) => landmarkParts >= 15)).toBe(true);
     expect(measurements.every(({ resident, residentAnchor }) =>
-      resident.left >= residentAnchor && resident.width >= 24 && resident.height >= 34)).toBe(true);
-    expect(measurements.every(({ residentParts }) => residentParts >= 11)).toBe(true);
+      resident.left >= residentAnchor && resident.width >= 30 && resident.height >= 40)).toBe(true);
+    expect(measurements.every(({ residentParts }) => residentParts >= 20)).toBe(true);
   });
 
   test("draws global layers in ground, decor, landmark, resident, player, marker order", () => {
     // Given: a camera containing every special forest object
     const context = recordingContext();
     const forest = REGIONS_BY_ID.forest;
-    const camera = { x: 12, y: 14 };
-    const player = { x: 23, y: 22, facing: "right" };
+    const camera = { x: forest.landmark.x - 12, y: forest.landmark.y - 8 };
+    const player = { ...forest.interaction, facing: "right" };
+    const screenPoint = (point) => ({
+      x: (point.x - camera.x) * TILE_SIZE,
+      y: (point.y - camera.y) * TILE_SIZE,
+    });
 
     // When: the marked interaction state is rendered
     renderTileWorld(context, forest, state(camera, player), { interactionAvailable: true });
@@ -314,10 +318,10 @@ describe("four-tone tile renderer", () => {
       return standaloneContext.commands;
     };
     const groups = [
-      standalone((target) => drawLandmark(target, forest, { x: 192, y: 80 })),
-      standalone((target) => drawResident(target, forest, { x: 192, y: 128 })),
-      standalone((target) => drawPlayer(target, forest.palette, player, { x: 176, y: 128 })),
-      standalone((target) => drawMarker(target, forest.palette, { x: 176, y: 128 })),
+      standalone((target) => drawLandmark(target, forest, screenPoint(forest.landmark))),
+      standalone((target) => drawResident(target, forest, screenPoint(forest.resident))),
+      standalone((target) => drawPlayer(target, forest.palette, player, screenPoint(player))),
+      standalone((target) => drawMarker(target, forest.palette, screenPoint(player))),
     ];
     const findGroup = (group, from) => {
       for (let index = from; index <= commands.length - group.length; index += 1) {
