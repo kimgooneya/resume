@@ -118,7 +118,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 > **Current contract:** the interior is an open field. Only the outer border, landmark body, and resident cells block movement; scenery is a decorative overlay and never creates a maze wall.
 
-- **Structure**: 지역마다 독립된 40×64 타일 세로형 맵, 길·환경물·랜드마크·주민·캐릭터. 화면에는 한 번에 24×18 타일만 보인다.
+- **Structure**: 지역마다 독립된 48×40 타일 가로형 마을 맵, 열린 바닥·환경물·중앙 랜드마크·주민·캐릭터. 화면에는 한 번에 24×18 타일만 보인다.
 - **States**: free, resident-near, landmark-near, discovered
 - **Rendering**: `imageSmoothingEnabled = false`, `image-rendering: pixelated`
 - **Accessibility**: 캔버스 주변에 현재 위치, 목적지, 상호작용 가능 상태를 텍스트로 제공
@@ -127,12 +127,12 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 ### Scrolling Camera
 
-- **Viewport**: 논리 화면 `384×288`, 24×18 타일. 지역 전체 40×64 타일 중 현재 위치 주변만 보여준다.
-- **Primary axis**: 시작점은 남쪽, 랜드마크는 북쪽에 둔다. 열린 필드는 최소 2.5개 뷰포트 높이이며 카메라는 상하 이동을 중심으로 따라간다.
+- **Viewport**: 논리 화면 `384×288`, 24×18 타일. 지역 전체 48×40 타일 중 현재 위치 주변만 보여준다.
+- **Primary axis**: 시작점은 남쪽, 랜드마크와 첫 주민은 마을 중앙 광장에 둔다. 북·남·동·서 가장자리에 산개한 주민과 생태별 환경 실루엣이 열린 필드의 방향감을 만든다.
 - **Follow**: 캐릭터가 화면 중앙의 8×6 타일 안전 영역을 벗어날 때 카메라가 한 타일 단위로 따라간다.
 - **Edge clamp**: 지역 가장자리에서는 카메라를 맵 경계에 고정해 빈 바깥 영역이 보이지 않게 한다.
 - **Region entry**: 지역 목록에서 선택하면 지역 시작점에 캐릭터를 배치하고 카메라를 해당 시작점에 즉시 맞춘다.
-- **Landmark reveal**: 시작점에서 랜드마크까지 열린 바닥·표지판·환경 실루엣으로 방향을 안내한다. 현대적인 미니맵이나 화면 위 화살표는 사용하지 않는다.
+- **Landmark reveal**: 시작점에서 중앙 랜드마크까지 열린 바닥·표지판·환경 실루엣으로 방향을 안내한다. 현대적인 미니맵이나 화면 위 화살표는 사용하지 않는다.
 - **Reduced motion**: 카메라 보간 없이 즉시 다음 타일 위치로 갱신한다. 기본 모드에서도 고전 게임처럼 짧고 단단한 타일 스크롤만 사용한다.
 
 ### Player Sprite
@@ -156,9 +156,9 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 ### Landmark Resident
 
-> **Current roster contract:** every region exposes four residents. The first is the landmark resident; the other three explain project context from the middle and southern map.
+> **Current roster contract:** every region exposes four residents. The first is the central landmark resident; the other three are scattered across the open town and explain project context from different working viewpoints.
 
-각 지역은 하나의 랜드마크와 네 명의 주민을 가진다. 첫 주민은 랜드마크 앞을 지키고, 나머지 주민은 필드 곳곳에서 프로젝트 맥락을 설명한다. 주민에게 A/Enter로 말을 걸면 작업 소개가 열린다.
+각 지역은 하나의 랜드마크와 네 명의 주민을 가진다. 첫 주민은 중앙 랜드마크 앞을 지키고, 나머지 주민은 필드에 적당히 산개해 프로젝트에서 얻은 교훈과 구현 디테일을 설명한다. 주민에게 Space/Enter 또는 A 버튼으로 말을 걸면 작업 소개가 열린다.
 
 | Region | Landmark | Resident role | Explains |
 |---|---|---|---|
@@ -169,8 +169,8 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 | Coast | 연결의 등대 | 협업 안내원 | 사람과 시스템의 맥락 연결 |
 
 - **States**: idle, resident-near, talking, explained
-- **Interaction**: 캐릭터가 어느 주민이든 향한 상태에서 A/Enter를 누르면 해당 주민의 대화가 시작된다
-- **Content**: 첫 대화는 주민의 한 문장 소개, 다음 입력은 구조화된 프로젝트 소개
+- **Interaction**: 캐릭터가 어느 주민이든 향한 상태에서 Space/Enter 또는 A 버튼을 누르면 해당 주민의 대화가 시작된다. 지도에 들어오면 캔버스가 포커스를 받아 키보드 입력을 바로 소유한다.
+- **Content**: 세 단계 대화가 문제·접근·결과 순서로 프로젝트의 교훈, 판단 기준, 구현 디테일을 설명한다
 - **Discovery**: 프로젝트 소개를 끝까지 열었을 때 해당 지역을 `완료`로 기록
 
 ### Dialogue Box
@@ -185,7 +185,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 - **Structure**: 상단 프로젝트명/역할/연도, 요약, 세 가지 결과, 기술 목록, 닫기 버튼
 - **Data**: `preview/projects.json`을 단일 원본으로 유지한다.
 - **States**: closed, open
-- **Input**: 건물 앞 `Space`/`Enter`/A 버튼으로 열고 `Escape`/B/닫기로 닫는다.
+- **Input**: 주민·랜드마크 앞 `Space`/`Enter`/A 버튼으로 열고 `Escape`/B/닫기로 닫는다. Escape는 열린 프로젝트 기록을 먼저 닫고, 다시 누르면 주민 대화를 닫는다.
 - **Focus**: 열 때 닫기 버튼에 포커스, 닫을 때 직전 트리거로 복귀
 - **Motion**: 기본은 120ms opacity/scale. reduced-motion에서는 즉시 표시
 
