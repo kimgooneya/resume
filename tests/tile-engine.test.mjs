@@ -67,11 +67,34 @@ describe("pure tile engine", () => {
     expect(state).toEqual({
       regionId: "forest",
       player: { x: 30, y: 40, facing: "down" },
-      camera: { x: 18, y: 25 },
+      camera: { x: 19, y: 29 },
     });
     expect(Object.isFrozen(state)).toBe(true);
     expect(Object.isFrozen(state.player)).toBe(true);
     expect(Object.isFrozen(state.camera)).toBe(true);
+  });
+
+  test("keeps every region start on-screen without a first-move camera jump", () => {
+    // Given: every region at its fresh southern-start entry state
+    const entries = Object.values(REGIONS_BY_ID).map((region) => ({
+      region,
+      before: createTileState(region),
+    }));
+
+    // When: the player takes the first walkable northward step
+    const observations = entries.map(({ region, before }) => ({
+      before,
+      after: reduceTileState(before, "up", region),
+    }));
+
+    // Then: the fresh camera already contains the player in the documented safe area
+    expect(observations.every(({ before }) => {
+      const screenX = before.player.x - before.camera.x;
+      const screenY = before.player.y - before.camera.y;
+      return screenX >= 8 && screenX <= 15 && screenY >= 6 && screenY <= 11;
+    })).toBe(true);
+    expect(observations.every(({ before, after }) =>
+      after.camera.x === before.camera.x && after.camera.y === before.camera.y)).toBe(true);
   });
 
   test("moves exactly one walkable tile for one accepted action", () => {

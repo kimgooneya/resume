@@ -80,8 +80,8 @@ describe("four-tone tile renderer", () => {
     const stepA = draw("down", 20, 20);
     const stepB = draw("down", 21, 20);
 
-    // Then: silhouette, face, outfit, pack, and stance remain readable in four tones
-    expect(recordings.every((commands) => commands.length >= 20)).toBe(true);
+    // Then: silhouette, face, outfit, pack, separated limbs, and stance remain readable in four tones
+    expect(recordings.every((commands) => commands.length >= 28)).toBe(true);
     expect(recordings.every((commands) => {
       const size = bounds(commands);
       return size.width >= 30 && size.height >= 40;
@@ -90,6 +90,32 @@ describe("four-tone tile renderer", () => {
       new Set(commands.map(([, color]) => color)).size === 4)).toBe(true);
     expect(new Set(facingSignatures).size).toBe(4);
     expect(stepA).not.toEqual(stepB);
+    expect(new Set(stepA.map(([, , x, y, width, height]) => `${x}:${y}:${width}:${height}`))
+      .difference(new Set(stepB.map(([, , x, y, width, height]) => `${x}:${y}:${width}:${height}`))).size).toBeGreaterThan(8);
+  });
+
+  test("keeps the maker tool and guide sign detached from their bodies", () => {
+    // Given: two role-specific residents rendered at the same interior anchor
+    const anchor = { x: 96, y: 96 };
+    const bounds = (region) => {
+      const context = recordingContext();
+      drawResident(context, region, anchor);
+      const draws = context.commands.filter(([name]) => name === "fillRect");
+      return {
+        right: Math.max(...draws.map(([, , x, , width]) => x + width)),
+        colors: new Set(draws.map(([, color]) => color)),
+      };
+    };
+
+    // When: each prop's exterior silhouette is measured
+    const maker = bounds(REGIONS_BY_ID.desert);
+    const guide = bounds(REGIONS_BY_ID.coast);
+
+    // Then: both props extend beyond the shared character body in the active four-tone ramp
+    expect(maker.right).toBeGreaterThanOrEqual(anchor.x + 42);
+    expect(guide.right).toBeGreaterThanOrEqual(anchor.x + 49);
+    expect([...maker.colors].every((color) => REGIONS_BY_ID.desert.palette.includes(color))).toBe(true);
+    expect([...guide.colors].every((color) => REGIONS_BY_ID.coast.palette.includes(color))).toBe(true);
   });
 
   test("iterates exactly the current 24 by 18 camera slice in row-major order", () => {

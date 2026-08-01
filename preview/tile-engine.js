@@ -78,15 +78,14 @@ export function createTileState(region) {
   if (!isRegion(region)) {
     throw new TypeError("region must provide a valid ID, start, and expanded tile map");
   }
-  const cameraTargetX = Number.isInteger(region.landmark?.x) ? region.landmark.x : region.start.x;
   const camera = {
     x: clamp(
-      cameraTargetX - Math.floor(VIEWPORT_WIDTH / 2),
+      region.start.x - Math.floor((SAFE_SCREEN_BOUNDS.minX + SAFE_SCREEN_BOUNDS.maxX) / 2),
       CAMERA_ORIGIN_BOUNDS.minX,
       CAMERA_ORIGIN_BOUNDS.maxX,
     ),
     y: clamp(
-      region.start.y - (VIEWPORT_HEIGHT - 3),
+      region.start.y - SAFE_SCREEN_BOUNDS.maxY,
       CAMERA_ORIGIN_BOUNDS.minY,
       CAMERA_ORIGIN_BOUNDS.maxY,
     ),
