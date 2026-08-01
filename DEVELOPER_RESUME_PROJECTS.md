@@ -20,49 +20,12 @@ C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험
 
 ## 프로젝트별 이력서용 정리
 
-### langcodestartup/CelltrionPowerBIWebApp
-
-- 역할: 제조·품질 데이터 리포트 웹 애플리케이션 개발자
-- 기여:
-  - CPVR/APQR 리포트의 테이블·차트·필터·다운로드·인쇄 기능 구현
-  - LIMS 매핑, 파라미터 표시, 쿼리 오류와 빈 값 처리, SQL 방어 로직 개선
-  - 고객 피드백을 기능 단위 PR로 분해해 75개 authored PR 중 72개를 병합
-- 이력서 문장: 제조 데이터 분석 서비스의 CPVR/APQR 리포트 기능을 개발하고, LIMS 매핑·차트·필터·다운로드·인쇄와 오류 대응을 포함한 75개 PR로 기능을 납품했습니다.
-- 근거: [PR #264](https://github.com/langcodestartup/CelltrionPowerBIWebApp/pull/264), [PR #245](https://github.com/langcodestartup/CelltrionPowerBIWebApp/pull/245), [PR #113](https://github.com/langcodestartup/CelltrionPowerBIWebApp/pull/113)
-
-### langcodestartup/CelltrionPowerBIFunction
-
-- 역할: 제조 데이터 업무 로직 및 서버리스 백엔드 개발자
-- 기여:
-  - LIMS 매핑 CRUD와 미부착 판정·대상 조회·변경 이력 기능 구현
-  - MSP/캠페인·수율 변수 CRUD·Ad Hoc Calculation 로직 개발
-  - 17개 authored PR을 모두 병합
-- 이력서 문장: 제조 데이터 도메인의 LIMS 매핑·캠페인·수율 계산 서버리스 기능을 구현하고 17개 병합 PR로 업무 로직을 제품에 반영했습니다.
-- 근거: [PR #33](https://github.com/langcodestartup/CelltrionPowerBIFunction/pull/33), [PR #19](https://github.com/langcodestartup/CelltrionPowerBIFunction/pull/19), [PR #20](https://github.com/langcodestartup/CelltrionPowerBIFunction/pull/20)
-
-### langcodestartup/NHBank
-
-- 역할: 금융권 AI 백엔드 및 LLM 통합 개발자
-- 기여:
-  - Azure OpenAI 토큰 사용량 안정화
-  - LLM 환경변수화와 Azure.AI.OpenAI SDK v2 마이그레이션
-  - TCB 오류 수정, 서비스 최신화, 라이브 컨트롤러 기능 반영
-- 이력서 문장: 금융 AI 서비스에서 Azure OpenAI 운영 안정화와 SDK v2 마이그레이션을 수행하고, 환경변수 기반 배포와 오류 수정까지 5개 기능 PR로 반영했습니다.
-- 근거: [PR #98](https://github.com/langcodestartup/NHBank/pull/98), [PR #97](https://github.com/langcodestartup/NHBank/pull/97), [PR #91](https://github.com/langcodestartup/NHBank/pull/91)
-
-### langcodestartup/NHRS
-
-- 역할: AI 상담·모니터링 서비스 풀스택 개발자
-- 기여:
-  - 채팅 이력 표시와 대시보드 조회 쿼리 개선
-  - TCB API, 조회 조건 UI, 필터, 구조 변경 반영
-  - 96개 authored PR이 관찰된 장기 기능·운영 개선 흐름에 참여
-- 이력서 문장: AI 상담·모니터링 서비스의 대시보드·채팅 이력·조회 필터와 TCB 연동을 지속 개선하며 96개 authored PR 규모의 기능 개발 및 운영 수정에 참여했습니다.
-- 근거: [PR 목록](https://github.com/langcodestartup/NHRS/pulls?q=is%3Apr+author%3Akimgooneya), [commit #113](https://github.com/langcodestartup/NHRS/commit/dc316dd9db0cf008a70749e08964e466e30d559c)
+- 정렬 기준: GitHub 감사에서 확인된 프로젝트별 최신 PR·commit 활동일 내림차순입니다. 날짜는 프로젝트 전체 기간이 아니라 이번 조사에서 확인된 최신 활동일입니다.
 
 ### langcodestartup/kt-gsi
 
 - 역할: Text-to-SQL DAG 아키텍처 핵심 설계 및 AI 검색/질의 서비스 백엔드·보안 설정 개발자
+- 최신 확인 활동: 2026-07-18 (GitHub PR/commit 기준)
 - 기여:
   - Text-to-SQL 처리 흐름을 DAG 구조로 설계하고 핵심 오케스트레이션 역할 수행
   - secrets import/export와 Azure 리소스 기반 설정 경계 정리
@@ -72,141 +35,21 @@ C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험
 - 이력서 문장: Text-to-SQL DAG 아키텍처를 핵심적으로 설계하고, AI 질의 서비스의 secrets 관리·cloud/keyless 전환과 SQL 오류 대응을 포함한 9개 병합 PR을 수행했습니다.
 - 근거: [PR #9](https://github.com/langcodestartup/kt-gsi/pull/9), [PR #7](https://github.com/langcodestartup/kt-gsi/pull/7), [PR #1](https://github.com/langcodestartup/kt-gsi/pull/1)
 
-### langcodestartup/Langcode.CXP
+### langcodestartup/NHBank
 
-- 역할: CXP 플랫폼 공통 모델·도메인 기능 개발자
+- 역할: 금융권 AI 백엔드 및 LLM 통합 개발자
+- 최신 확인 활동: 2026-06-20 (GitHub PR/commit 기준)
 - 기여:
-  - 고객·파트너 정보 CRUD 구현
-  - 공통 모델·필드·타입 정비
-  - Cosmos bulk service 추가 및 플랫폼 기능 확장
-- 이력서 문장: CXP 플랫폼의 공통 도메인 모델과 고객·파트너 CRUD를 구현하고 Cosmos bulk service를 추가했습니다.
-- 근거: [PR #20](https://github.com/langcodestartup/Langcode.CXP/pull/20), [PR #13](https://github.com/langcodestartup/Langcode.CXP/pull/13), [PR #12](https://github.com/langcodestartup/Langcode.CXP/pull/12)
-
-### langcodestartup/langcode.cxp.back
-
-- 역할: CXP 백엔드 인증·Identity 모듈 개발자
-- 기여:
-  - Keycloak 로그인 기능 구현
-  - Identities 모듈 리팩터링과 Identity 모듈 동작 복구
-  - 로그인 흐름과 백엔드 인증 안정화에 참여
-  - authored PR 24개가 관찰됨
-- 이력서 문장: CXP 백엔드에서 Keycloak 로그인과 Identity 모듈을 구현·리팩터링해 인증 흐름을 안정화했습니다.
-- 근거: [commit: Keycloak 로그인](https://github.com/langcodestartup/langcode.cxp.back/commit/8b00d833c6edc7ba3b9de751a8207541c889c35c), [PR 목록](https://github.com/langcodestartup/langcode.cxp.back/pulls?q=is%3Apr+author%3Akimgooneya)
-
-### langcodestartup/cxp-light-fe
-
-- 역할: CXP 프론트엔드 및 배포 설정 개발자
-- 기여:
-  - BFF Auth Proxy로 cross-origin 인증 쿠키 문제 해결
-  - 모델 관리·프로바이더 관리·채팅 모델 선택 UI 구현
-  - standalone 배포, 환경변수 통일, Settings 레이아웃과 프로필 수정 기능 반영
-  - 15개 authored PR을 모두 병합
-- 이력서 문장: CXP 프론트엔드에서 BFF 인증 프록시와 모델 관리 UI를 구현하고, standalone 배포·환경변수 설정을 정비하는 15개 병합 PR을 수행했습니다.
-- 근거: [PR #16](https://github.com/langcodestartup/cxp-light-fe/pull/16), [PR #13](https://github.com/langcodestartup/cxp-light-fe/pull/13), [PR #10](https://github.com/langcodestartup/cxp-light-fe/pull/10)
-
-### langcodestartup/langcode.cxp.front
-
-- 역할: CXP 프론트엔드 빌드·런타임·인증 개발자
-- 기여:
-  - standalone 빌드 실패 원인 제거와 Next runtime 환경변수 전환
-  - refresh token 쿠키 정책 조정
-  - Chrome 디버깅 자동화 스크립트와 worktree/PR 개발 가이드 추가
-- 이력서 문장: CXP 프론트엔드의 standalone 빌드와 런타임 환경변수를 정비하고 refresh token 쿠키·개발 자동화·배포 문서를 개선했습니다.
-- 근거: [commit: runtime 환경변수](https://github.com/langcodestartup/langcode.cxp.front/commit/b35971c4fc75d505e8088bf907fde8f6762080de), [commit: standalone 빌드](https://github.com/langcodestartup/langcode.cxp.front/commit/2de19066f43f42d280c1c0272a07788675dededf)
-
-### langcodestartup/LangcodeApp
-
-- 역할: CXP 애플리케이션 기능 개발자
-- 기여:
-  - Guide QnA CRUD와 Reference CRUD 기능 구현
-  - Guide 화면 버그 수정과 storyboard 기능 개발
-  - 34개 authored PR이 관찰됨
-- 이력서 문장: CXP 애플리케이션의 Guide·Reference 업무 기능과 CRUD 흐름을 구현하고 UI/스토리보드 오류를 수정했습니다.
-- 근거: [PR #44](https://github.com/langcodestartup/LangcodeApp/pull/44), [PR #43](https://github.com/langcodestartup/LangcodeApp/pull/43), [PR #39](https://github.com/langcodestartup/LangcodeApp/pull/39)
-
-### langcodestartup/PaperPop
-
-- 역할: 주문·업로드 업무 시스템 개발자
-- 기여:
-  - 업로드 템플릿과 CNPlus 변경 양식 지원
-  - 업로드 파일을 Order 데이터로 변환하는 오류 수정
-  - 99개 authored PR이 관찰됨
-- 이력서 문장: 주문·업로드 업무 시스템에서 외부 양식(CNPlus) 대응과 파일-to-Order 변환 오류를 개선하며 99개 authored PR에 참여했습니다.
-- 근거: [PR 목록](https://github.com/langcodestartup/PaperPop/pulls?q=is%3Apr+author%3Akimgooneya), [commit: 업로드 변환 오류](https://github.com/langcodestartup/PaperPop/commit/ce406203621da99d274e64f1f7ee37a51e4f3fba)
-
-### langcodestartup/KbhcCosmosEngine
-
-- 역할: 식이·건강 데이터 서비스 백엔드 개발자
-- 기여:
-  - 식이 데이터 오류 수정과 누락 값을 0으로 환산하는 처리
-  - Journey 통계 수정 및 식이·음료·음주 기능 반영
-  - 32개 authored PR이 관찰됨
-- 이력서 문장: 식이·건강 데이터 서비스에서 누락 데이터 정규화와 통계·식이 기능을 개선하는 32개 authored PR을 수행했습니다.
-- 근거: [PR #62](https://github.com/langcodestartup/KbhcCosmosEngine/pull/62), [PR #61](https://github.com/langcodestartup/KbhcCosmosEngine/pull/61)
-
-### langcodestartup/Seegene.V2
-
-- 역할: 진단·검사 업무 시스템의 기능 개발자
-- 기여:
-  - SGAL 오류 및 검사 업무 로직 수정
-  - 44개 authored PR을 모두 병합
-- 이력서 문장: 진단·검사 업무 시스템에서 SGAL 오류와 업무 로직을 수정하고 44개 authored PR을 모두 병합했습니다.
-- 근거: [PR #63](https://github.com/langcodestartup/Seegene.V2/pull/63), [PR #62](https://github.com/langcodestartup/Seegene.V2/pull/62), [PR #60](https://github.com/langcodestartup/Seegene.V2/pull/60)
-
-### langcodestartup/SpinInvoice
-
-- 역할: 구독·청구 업무 시스템 개발자
-- 기여:
-  - 청구·구독 업무 기능과 오류 수정 PR을 반복적으로 반영
-  - 54개 authored PR 중 47개 병합
-  - commit metadata에서 primary 계정과 langcode-shkim 계정의 활동이 함께 관찰되므로 기여 주체는 분리 기록
-- 이력서 문장: 구독 청구 시스템의 기능 개발과 오류 수정을 지속 수행해 54개 authored PR 중 47개를 병합했습니다.
-- 근거: [PR #98](https://github.com/langcodestartup/SpinInvoice/pull/98), [PR #95](https://github.com/langcodestartup/SpinInvoice/pull/95), [commit: kimgooneya](https://github.com/langcodestartup/SpinInvoice/commit/63906a3efdaf8eeac75f8fc39b7eae03d5eb07a8)
-
-### langcodestartup/KotraCXP
-
-- 역할: 문서·지식 기반 AI 서비스 개발자
-- 기여:
-  - KnowledgeBase Factory, DI, NuGet 패키지 구성
-  - Azure Form Recognizer 서비스 연동
-  - 공통 모델·필드·타입 정비
-- 이력서 문장: 문서·지식 기반 AI 서비스에서 KnowledgeBase Factory와 DI 구조를 구성하고 Azure Form Recognizer 연동을 구현했습니다.
-- 근거: [commit: Form Recognizer](https://github.com/langcodestartup/KotraCXP/commit/d4a88ff5dff8cc5c29a60ebcc093141976ef1a03), [commit: KnowledgeBase Factory](https://github.com/langcodestartup/KotraCXP/commit/b561d8974deefd082365fcf9e773c2f022f73f04)
-
-### langcodestartup/KyoboPrePoC
-
-- 역할: 금융·문서 처리 PoC 기능 개발자
-- 기여:
-  - ChatMessageType 확장과 F1 오류 메시지 표시 개선
-  - 검증 조건과 오차 항목 표시 방식 개선
-  - 6개 authored PR이 관찰됨
-- 이력서 문장: 금융 문서 처리 PoC에서 검증 결과와 오류 메시지 표시를 개선하고 사용자 피드백을 반영했습니다.
-- 근거: [commit: 오류 메시지 표시](https://github.com/langcodestartup/KyoboPrePoC/commit/ab6ab0ea0c5e8db71cb78b3158e2d0f621a58b84)
-
-### langcodestartup/KyoboPrePoC-Function
-
-- 역할: 문서 처리 서버리스 기능 개발자
-- 기여:
-  - Excel 저장 기능과 output path 처리 구현
-  - Excel 범위 지정 스타일과 오차 값 표시 정책 반영
-  - 6개 authored PR이 관찰됨
-- 이력서 문장: 문서 처리 서버리스 기능에서 Excel 저장·출력 경로·범위 스타일을 구현하고 결과 표시 정책을 정비했습니다.
-- 근거: [commit: Excel 저장](https://github.com/langcodestartup/KyoboPrePoC-Function/commit/81a74ff959762bcf90a1eb4caa229be7290155c6), [commit: output path](https://github.com/langcodestartup/KyoboPrePoC-Function/commit/de212e3e95ab644db0f96e37c87f208bbbfccce8)
-
-### langcodestartup/dcai-onpremise
-
-- 역할: 온프레미스 AI 에이전트·오케스트레이션 개발자
-- 기여:
-  - AI Agents Phase 4 구현
-  - agent handoff와 orchestration workflow 구현
-  - urgent alert, 3-panel dashboard, light/dark theme, multilingual meeting minutes 기능 반영
-  - 8개 authored PR을 모두 병합
-- 이력서 문장: 온프레미스 AI 에이전트 시스템에서 handoff·orchestration workflow와 운영 대시보드·다국어 회의록 기능을 구현하는 8개 병합 PR을 수행했습니다.
-- 근거: [PR #8](https://github.com/langcodestartup/dcai-onpremise/pull/8), [PR #4](https://github.com/langcodestartup/dcai-onpremise/pull/4), [PR #3](https://github.com/langcodestartup/dcai-onpremise/pull/3)
+  - Azure OpenAI 토큰 사용량 안정화
+  - LLM 환경변수화와 Azure.AI.OpenAI SDK v2 마이그레이션
+  - TCB 오류 수정, 서비스 최신화, 라이브 컨트롤러 기능 반영
+- 이력서 문장: 금융 AI 서비스에서 Azure OpenAI 운영 안정화와 SDK v2 마이그레이션을 수행하고, 환경변수 기반 배포와 오류 수정까지 5개 기능 PR로 반영했습니다.
+- 근거: [PR #98](https://github.com/langcodestartup/NHBank/pull/98), [PR #97](https://github.com/langcodestartup/NHBank/pull/97), [PR #91](https://github.com/langcodestartup/NHBank/pull/91)
 
 ### langcodestartup/excel-parser
 
 - 역할: 비정형 Excel 데이터 파싱·추출 라이브러리 개발자
+- 최신 확인 활동: 2026-06-13 (GitHub PR/commit 기준)
 - 기여:
   - 희소 시계열의 날짜 행과 빈 헤더 선행 키 컬럼 보존
   - BIS Quarterly Series 헤더 탐지와 다단 헤더·병합 제목행 처리
@@ -218,6 +61,7 @@ C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험
 ### wezenhealthcare/wezen-rfid-scanner
 
 - 역할: RFID 스캐너 제품의 지속 개발·유지보수 기여자
+- 최신 확인 활동: 2026-04-04 (GitHub PR/commit 기준)
 - 기여:
   - 100건 결과 상한에 도달한 authored PR 결과에서 최소 100개 병합 PR 확인
   - 직접 authored commit도 확인
@@ -225,50 +69,235 @@ C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험
 - 이력서 문장: RFID 스캐너 제품에서 최소 100개의 병합 PR을 수행하며 지속적인 기능 개발과 유지보수에 기여했습니다.
 - 근거: [PR #141](https://github.com/wezenhealthcare/wezen-rfid-scanner/pull/141), [PR #140](https://github.com/wezenhealthcare/wezen-rfid-scanner/pull/140), [commit #141](https://github.com/wezenhealthcare/wezen-rfid-scanner/commit/36c2098bef61eb38214cf22430679c5857cf4cc2)
 
-### langcodestartup/LCDocumentParser
+### langcodestartup/langcode.cxp.front
 
-- 역할: 문서 파싱 서비스 초기 구조·안정화 개발자
+- 역할: CXP 프론트엔드 빌드·런타임·인증 개발자
+- 최신 확인 활동: 2026-03-26 (GitHub PR/commit 기준)
 - 기여:
-  - 프로젝트 기본 구조와 문서 엔드포인트 초기화
-  - import 안정성 개선과 API 주석 보강
-- 이력서 문장: 문서 파싱 서비스의 초기 구조와 엔드포인트를 구성하고 import 안정성을 개선했습니다.
-- 근거: [commit: import 안정성 개선](https://github.com/langcodestartup/LCDocumentParser/commit/74052831aa8325fb1a35dfb0db803fd91cdb2336), [commit: 초기 구조](https://github.com/langcodestartup/LCDocumentParser/commit/9d44e9f372771cbb136d8f28eee8e327dd92f2a8)
+  - standalone 빌드 실패 원인 제거와 Next runtime 환경변수 전환
+  - refresh token 쿠키 정책 조정
+  - Chrome 디버깅 자동화 스크립트와 worktree/PR 개발 가이드 추가
+- 이력서 문장: CXP 프론트엔드의 standalone 빌드와 런타임 환경변수를 정비하고 refresh token 쿠키·개발 자동화·배포 문서를 개선했습니다.
+- 근거: [commit: runtime 환경변수](https://github.com/langcodestartup/langcode.cxp.front/commit/b35971c4fc75d505e8088bf907fde8f6762080de), [commit: standalone 빌드](https://github.com/langcodestartup/langcode.cxp.front/commit/2de19066f43f42d280c1c0272a07788675dededf)
+
+### langcodestartup/cxp-light-fe
+
+- 역할: CXP 프론트엔드 및 배포 설정 개발자
+- 최신 확인 활동: 2026-03-20 (GitHub PR/commit 기준)
+- 기여:
+  - BFF Auth Proxy로 cross-origin 인증 쿠키 문제 해결
+  - 모델 관리·프로바이더 관리·채팅 모델 선택 UI 구현
+  - standalone 배포, 환경변수 통일, Settings 레이아웃과 프로필 수정 기능 반영
+  - 15개 authored PR을 모두 병합
+- 이력서 문장: CXP 프론트엔드에서 BFF 인증 프록시와 모델 관리 UI를 구현하고, standalone 배포·환경변수 설정을 정비하는 15개 병합 PR을 수행했습니다.
+- 근거: [PR #16](https://github.com/langcodestartup/cxp-light-fe/pull/16), [PR #13](https://github.com/langcodestartup/cxp-light-fe/pull/13), [PR #10](https://github.com/langcodestartup/cxp-light-fe/pull/10)
+
+### langcodestartup/dcai-onpremise
+
+- 역할: 온프레미스 AI 에이전트·오케스트레이션 개발자
+- 최신 확인 활동: 2025-12-10 (GitHub PR/commit 기준)
+- 기여:
+  - AI Agents Phase 4 구현
+  - agent handoff와 orchestration workflow 구현
+  - urgent alert, 3-panel dashboard, light/dark theme, multilingual meeting minutes 기능 반영
+  - 8개 authored PR을 모두 병합
+- 이력서 문장: 온프레미스 AI 에이전트 시스템에서 handoff·orchestration workflow와 운영 대시보드·다국어 회의록 기능을 구현하는 8개 병합 PR을 수행했습니다.
+- 근거: [PR #8](https://github.com/langcodestartup/dcai-onpremise/pull/8), [PR #4](https://github.com/langcodestartup/dcai-onpremise/pull/4), [PR #3](https://github.com/langcodestartup/dcai-onpremise/pull/3)
+
+### langcodestartup/KyoboPrePoC
+
+- 역할: 금융·문서 처리 PoC 기능 개발자
+- 최신 확인 활동: 2025-08-08 (GitHub PR/commit 기준)
+- 기여:
+  - ChatMessageType 확장과 F1 오류 메시지 표시 개선
+  - 검증 조건과 오차 항목 표시 방식 개선
+  - 6개 authored PR이 관찰됨
+- 이력서 문장: 금융 문서 처리 PoC에서 검증 결과와 오류 메시지 표시를 개선하고 사용자 피드백을 반영했습니다.
+- 근거: [commit: 오류 메시지 표시](https://github.com/langcodestartup/KyoboPrePoC/commit/ab6ab0ea0c5e8db71cb78b3158e2d0f621a58b84)
+
+### langcodestartup/KyoboPrePoC-Function
+
+- 역할: 문서 처리 서버리스 기능 개발자
+- 최신 확인 활동: 2025-08-08 (GitHub PR/commit 기준)
+- 기여:
+  - Excel 저장 기능과 output path 처리 구현
+  - Excel 범위 지정 스타일과 오차 값 표시 정책 반영
+  - 6개 authored PR이 관찰됨
+- 이력서 문장: 문서 처리 서버리스 기능에서 Excel 저장·출력 경로·범위 스타일을 구현하고 결과 표시 정책을 정비했습니다.
+- 근거: [commit: Excel 저장](https://github.com/langcodestartup/KyoboPrePoC-Function/commit/81a74ff959762bcf90a1eb4caa229be7290155c6), [commit: output path](https://github.com/langcodestartup/KyoboPrePoC-Function/commit/de212e3e95ab644db0f96e37c87f208bbbfccce8)
+
+### langcodestartup/langcode.cxp.back
+
+- 역할: CXP 백엔드 인증·Identity 모듈 개발자
+- 최신 확인 활동: 2025-06-12 (GitHub PR/commit 기준)
+- 기여:
+  - Keycloak 로그인 기능 구현
+  - Identities 모듈 리팩터링과 Identity 모듈 동작 복구
+  - 로그인 흐름과 백엔드 인증 안정화에 참여
+  - authored PR 24개가 관찰됨
+- 이력서 문장: CXP 백엔드에서 Keycloak 로그인과 Identity 모듈을 구현·리팩터링해 인증 흐름을 안정화했습니다.
+- 근거: [commit: Keycloak 로그인](https://github.com/langcodestartup/langcode.cxp.back/commit/8b00d833c6edc7ba3b9de751a8207541c889c35c), [PR 목록](https://github.com/langcodestartup/langcode.cxp.back/pulls?q=is%3Apr+author%3Akimgooneya)
 
 ### langcodestartup/keycloak-react
 
 - 역할: React 기반 인증 프론트엔드 개발자
+- 최신 확인 활동: 2025-03-21 (GitHub PR/commit 기준)
 - 기여:
   - Create React App 기반 프로젝트 초기화
   - Keycloak 관련 코드 완성과 사용 문서 정리
 - 이력서 문장: React 기반 Keycloak 인증 프론트엔드의 초기 구조와 구현을 완성하고 사용 문서를 정리했습니다.
 - 근거: [commit: code complete](https://github.com/langcodestartup/keycloak-react/commit/995ec54036315a91bfa95a923b21f07b1c19bb31)
 
-### langcodestartup/ibkPoC
+### langcodestartup/LCDocumentParser
 
-- 역할: 금융권 PoC 채팅 UI·피드백 기능 개발자
+- 역할: 문서 파싱 서비스 초기 구조·안정화 개발자
+- 최신 확인 활동: 2025-03-10 (GitHub PR/commit 기준)
 - 기여:
-  - 채팅 입력창 자동 높이 조정
-  - 피드 정렬과 테스트 피드백 요구사항 반영
-- 이력서 문장: 금융권 AI PoC에서 채팅 입력 UX와 피드 정렬·피드백 요구사항을 반영했습니다.
-- 근거: [commit: chat input auto height](https://github.com/langcodestartup/ibkPoC/commit/1f9b15c18b7fc6f768bb4f6b546d717a87c4fa5b)
+  - 프로젝트 기본 구조와 문서 엔드포인트 초기화
+  - import 안정성 개선과 API 주석 보강
+- 이력서 문장: 문서 파싱 서비스의 초기 구조와 엔드포인트를 구성하고 import 안정성을 개선했습니다.
+- 근거: [commit: import 안정성 개선](https://github.com/langcodestartup/LCDocumentParser/commit/74052831aa8325fb1a35dfb0db803fd91cdb2336), [commit: 초기 구조](https://github.com/langcodestartup/LCDocumentParser/commit/9d44e9f372771cbb136d8f28eee8e327dd92f2a8)
+
+### langcodestartup/Seegene.V2
+
+- 역할: 진단·검사 업무 시스템의 기능 개발자
+- 최신 확인 활동: 2024-12-04 (GitHub PR/commit 기준)
+- 기여:
+  - SGAL 오류 및 검사 업무 로직 수정
+  - 44개 authored PR을 모두 병합
+- 이력서 문장: 진단·검사 업무 시스템에서 SGAL 오류와 업무 로직을 수정하고 44개 authored PR을 모두 병합했습니다.
+- 근거: [PR #63](https://github.com/langcodestartup/Seegene.V2/pull/63), [PR #62](https://github.com/langcodestartup/Seegene.V2/pull/62), [PR #60](https://github.com/langcodestartup/Seegene.V2/pull/60)
+
+### langcodestartup/NHRS
+
+- 역할: AI 상담·모니터링 서비스 풀스택 개발자
+- 최신 확인 활동: 2024-06-28 (GitHub PR/commit 기준)
+- 기여:
+  - 채팅 이력 표시와 대시보드 조회 쿼리 개선
+  - TCB API, 조회 조건 UI, 필터, 구조 변경 반영
+  - 96개 authored PR이 관찰된 장기 기능·운영 개선 흐름에 참여
+- 이력서 문장: AI 상담·모니터링 서비스의 대시보드·채팅 이력·조회 필터와 TCB 연동을 지속 개선하며 96개 authored PR 규모의 기능 개발 및 운영 수정에 참여했습니다.
+- 근거: [PR 목록](https://github.com/langcodestartup/NHRS/pulls?q=is%3Apr+author%3Akimgooneya), [commit #113](https://github.com/langcodestartup/NHRS/commit/dc316dd9db0cf008a70749e08964e466e30d559c)
+
+### langcodestartup/SpinInvoice
+
+- 역할: 구독·청구 업무 시스템 개발자
+- 최신 확인 활동: 2023-10-17 (GitHub PR/commit 기준)
+- 기여:
+  - 청구·구독 업무 기능과 오류 수정 PR을 반복적으로 반영
+  - 54개 authored PR 중 47개 병합
+  - commit metadata에서 primary 계정과 langcode-shkim 계정의 활동이 함께 관찰되므로 기여 주체는 분리 기록
+- 이력서 문장: 구독 청구 시스템의 기능 개발과 오류 수정을 지속 수행해 54개 authored PR 중 47개를 병합했습니다.
+- 근거: [PR #98](https://github.com/langcodestartup/SpinInvoice/pull/98), [PR #95](https://github.com/langcodestartup/SpinInvoice/pull/95), [commit: kimgooneya](https://github.com/langcodestartup/SpinInvoice/commit/63906a3efdaf8eeac75f8fc39b7eae03d5eb07a8)
+
+### langcodestartup/KbhcCosmosEngine
+
+- 역할: 식이·건강 데이터 서비스 백엔드 개발자
+- 최신 확인 활동: 2023-09-08 (GitHub PR/commit 기준)
+- 기여:
+  - 식이 데이터 오류 수정과 누락 값을 0으로 환산하는 처리
+  - Journey 통계 수정 및 식이·음료·음주 기능 반영
+  - 32개 authored PR이 관찰됨
+- 이력서 문장: 식이·건강 데이터 서비스에서 누락 데이터 정규화와 통계·식이 기능을 개선하는 32개 authored PR을 수행했습니다.
+- 근거: [PR #62](https://github.com/langcodestartup/KbhcCosmosEngine/pull/62), [PR #61](https://github.com/langcodestartup/KbhcCosmosEngine/pull/61)
+
+### langcodestartup/PaperPop
+
+- 역할: 주문·업로드 업무 시스템 개발자
+- 최신 확인 활동: 2023-08-23 (GitHub PR/commit 기준)
+- 기여:
+  - 업로드 템플릿과 CNPlus 변경 양식 지원
+  - 업로드 파일을 Order 데이터로 변환하는 오류 수정
+  - 99개 authored PR이 관찰됨
+- 이력서 문장: 주문·업로드 업무 시스템에서 외부 양식(CNPlus) 대응과 파일-to-Order 변환 오류를 개선하며 99개 authored PR에 참여했습니다.
+- 근거: [PR 목록](https://github.com/langcodestartup/PaperPop/pulls?q=is%3Apr+author%3Akimgooneya), [commit: 업로드 변환 오류](https://github.com/langcodestartup/PaperPop/commit/ce406203621da99d274e64f1f7ee37a51e4f3fba)
+
+### langcodestartup/KotraCXP
+
+- 역할: 문서·지식 기반 AI 서비스 개발자
+- 최신 확인 활동: 2023-08-17 (GitHub PR/commit 기준)
+- 기여:
+  - KnowledgeBase Factory, DI, NuGet 패키지 구성
+  - Azure Form Recognizer 서비스 연동
+  - 공통 모델·필드·타입 정비
+- 이력서 문장: 문서·지식 기반 AI 서비스에서 KnowledgeBase Factory와 DI 구조를 구성하고 Azure Form Recognizer 연동을 구현했습니다.
+- 근거: [commit: Form Recognizer](https://github.com/langcodestartup/KotraCXP/commit/d4a88ff5dff8cc5c29a60ebcc093141976ef1a03), [commit: KnowledgeBase Factory](https://github.com/langcodestartup/KotraCXP/commit/b561d8974deefd082365fcf9e773c2f022f73f04)
+
+### langcodestartup/CelltrionPowerBIWebApp
+
+- 역할: 제조·품질 데이터 리포트 웹 애플리케이션 개발자
+- 최신 확인 활동: 2023-07-17 (GitHub PR/commit 기준)
+- 기여:
+  - CPVR/APQR 리포트의 테이블·차트·필터·다운로드·인쇄 기능 구현
+  - LIMS 매핑, 파라미터 표시, 쿼리 오류와 빈 값 처리, SQL 방어 로직 개선
+  - 고객 피드백을 기능 단위 PR로 분해해 75개 authored PR 중 72개를 병합
+- 이력서 문장: 제조 데이터 분석 서비스의 CPVR/APQR 리포트 기능을 개발하고, LIMS 매핑·차트·필터·다운로드·인쇄와 오류 대응을 포함한 75개 PR로 기능을 납품했습니다.
+- 근거: [PR #264](https://github.com/langcodestartup/CelltrionPowerBIWebApp/pull/264), [PR #245](https://github.com/langcodestartup/CelltrionPowerBIWebApp/pull/245), [PR #113](https://github.com/langcodestartup/CelltrionPowerBIWebApp/pull/113)
+
+### langcodestartup/CelltrionPowerBIFunction
+
+- 역할: 제조 데이터 업무 로직 및 서버리스 백엔드 개발자
+- 최신 확인 활동: 2023-04-07 (GitHub PR/commit 기준)
+- 기여:
+  - LIMS 매핑 CRUD와 미부착 판정·대상 조회·변경 이력 기능 구현
+  - MSP/캠페인·수율 변수 CRUD·Ad Hoc Calculation 로직 개발
+  - 17개 authored PR을 모두 병합
+- 이력서 문장: 제조 데이터 도메인의 LIMS 매핑·캠페인·수율 계산 서버리스 기능을 구현하고 17개 병합 PR로 업무 로직을 제품에 반영했습니다.
+- 근거: [PR #33](https://github.com/langcodestartup/CelltrionPowerBIFunction/pull/33), [PR #19](https://github.com/langcodestartup/CelltrionPowerBIFunction/pull/19), [PR #20](https://github.com/langcodestartup/CelltrionPowerBIFunction/pull/20)
 
 ### langcodestartup/IdentityExample
 
 - 역할: ASP.NET Identity 인증 예제 개발자
+- 최신 확인 활동: 2023-02-15 (GitHub PR/commit 기준)
 - 기여:
   - ASP.NET Identity 기반 프로젝트 초기화
   - Register 페이지 scaffolding 구현
 - 이력서 문장: ASP.NET Identity 기반 인증 예제의 프로젝트 초기 구조와 회원가입 페이지 scaffolding을 구현했습니다.
 - 근거: [commit: Register Page](https://github.com/langcodestartup/IdentityExample/commit/3440b532b393aca9e9e9432c498738f8cbe59642)
 
+### langcodestartup/ibkPoC
+
+- 역할: 금융권 PoC 채팅 UI·피드백 기능 개발자
+- 최신 확인 활동: 2022-12-08 (GitHub PR/commit 기준)
+- 기여:
+  - 채팅 입력창 자동 높이 조정
+  - 피드 정렬과 테스트 피드백 요구사항 반영
+- 이력서 문장: 금융권 AI PoC에서 채팅 입력 UX와 피드 정렬·피드백 요구사항을 반영했습니다.
+- 근거: [commit: chat input auto height](https://github.com/langcodestartup/ibkPoC/commit/1f9b15c18b7fc6f768bb4f6b546d717a87c4fa5b)
+
+### langcodestartup/Langcode.CXP
+
+- 역할: CXP 플랫폼 공통 모델·도메인 기능 개발자
+- 최신 확인 활동: 2022-11-15 (GitHub PR/commit 기준)
+- 기여:
+  - 고객·파트너 정보 CRUD 구현
+  - 공통 모델·필드·타입 정비
+  - Cosmos bulk service 추가 및 플랫폼 기능 확장
+- 이력서 문장: CXP 플랫폼의 공통 도메인 모델과 고객·파트너 CRUD를 구현하고 Cosmos bulk service를 추가했습니다.
+- 근거: [PR #20](https://github.com/langcodestartup/Langcode.CXP/pull/20), [PR #13](https://github.com/langcodestartup/Langcode.CXP/pull/13), [PR #12](https://github.com/langcodestartup/Langcode.CXP/pull/12)
+
 ### langcodestartup/Langcode.CarbonDesign
 
 - 역할: Carbon Design System UI 개발자
+- 최신 확인 활동: 2022-03-02 (GitHub PR/commit 기준)
 - 기여:
   - Content switcher 컴포넌트 구현
   - 1개 병합 PR 확인
 - 이력서 문장: Carbon Design System 기반 UI에서 content switcher 컴포넌트를 구현했습니다.
 - 근거: [PR #4](https://github.com/langcodestartup/Langcode.CarbonDesign/pull/4)
+
+### langcodestartup/LangcodeApp
+
+- 역할: CXP 애플리케이션 기능 개발자
+- 최신 확인 활동: 2021-12-10 (GitHub PR/commit 기준)
+- 기여:
+  - Guide QnA CRUD와 Reference CRUD 기능 구현
+  - Guide 화면 버그 수정과 storyboard 기능 개발
+  - 34개 authored PR이 관찰됨
+- 이력서 문장: CXP 애플리케이션의 Guide·Reference 업무 기능과 CRUD 흐름을 구현하고 UI/스토리보드 오류를 수정했습니다.
+- 근거: [PR #44](https://github.com/langcodestartup/LangcodeApp/pull/44), [PR #43](https://github.com/langcodestartup/LangcodeApp/pull/43), [PR #39](https://github.com/langcodestartup/LangcodeApp/pull/39)
+
+
 
 ### 기타 직접 commit 근거 프로젝트
 
