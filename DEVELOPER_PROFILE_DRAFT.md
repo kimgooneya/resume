@@ -58,15 +58,7 @@ Text-to-SQL DAG 아키텍처와 AI·데이터 서비스 백엔드를 중심으�
 - 성과: authored PR 12개 중 11개 병합
 - 이력서 표현: `비정형 Excel 추출 라이브러리에서 헤더 탐지, 다단 헤더, 희소 시계열, 날짜 타입 오류 처리를 개선했습니다.`
 
-### 4. wezen-rfid-scanner | RFID 제품 개발·유지보수
-
-- 최신 확인 활동: 2026-04-04
-- 역할: RFID 스캐너 제품의 지속 개발 및 유지보수
-- 주요 근거: authored PR 최소 100개 병합 확인, 직접 authored commit 확인
-- 주의사항: GitHub 검색 결과가 100건 상한에 도달했으므로 실제 전체 PR 수는 더 클 수 있습니다.
-- 이력서 표현: `RFID 스캐너 제품의 기능 개발과 유지보수를 담당하며 최소 100개의 병합 PR을 수행했습니다.`
-
-### 5. CXP 플랫폼 | 인증·프론트엔드·공통 백엔드
+### 4. CXP 플랫폼 | 인증·프론트엔드·공통 백엔드
 
 - 최신 확인 활동: 2026-03-26부터 2025-06-12까지 확인
 - 대상 프로젝트: `langcode.cxp.front`, `cxp-light-fe`, `langcode.cxp.back`, `Langcode.CXP`, `LangcodeApp`
@@ -80,7 +72,7 @@ Text-to-SQL DAG 아키텍처와 AI·데이터 서비스 백엔드를 중심으�
 - 성과: `cxp-light-fe` authored PR 15개 전부 병합, `langcode.cxp.back` authored PR 24개 관찰
 - 이력서 표현: `CXP 플랫폼에서 Keycloak·Identity 인증과 BFF 인증 프록시를 구현하고, 모델 관리 UI와 standalone 배포 구조를 정비했습니다.`
 
-### 6. dcai-onpremise | 온프레미스 AI 에이전트
+### 5. dcai-onpremise | 온프레미스 AI 에이전트
 
 - 최신 확인 활동: 2025-12-10
 - 역할: AI 에이전트 handoff·orchestration 및 운영 화면 개발
@@ -91,7 +83,7 @@ Text-to-SQL DAG 아키텍처와 AI·데이터 서비스 백엔드를 중심으�
 - 성과: authored PR 8개 전부 병합
 - 이력서 표현: `온프레미스 AI 에이전트 시스템에서 handoff·orchestration workflow와 운영 대시보드·다국어 회의록 기능을 구현했습니다.`
 
-### 7. KyoboPrePoC | 문서 처리 PoC
+### 6. KyoboPrePoC | 문서 처리 PoC
 
 - 최신 확인 활동: 2025-08-08
 - 역할: 금융·문서 처리 PoC 및 서버리스 기능 개발
@@ -102,7 +94,7 @@ Text-to-SQL DAG 아키텍처와 AI·데이터 서비스 백엔드를 중심으�
 - 대상 프로젝트: `KyoboPrePoC`, `KyoboPrePoC-Function`
 - 이력서 표현: `금융 문서 처리 PoC에서 검증 결과와 오류 메시지 표시를 개선하고, 서버리스 Excel 출력 기능을 구현했습니다.`
 
-### 8. 제조·진단·업무 도메인 서비스
+### 7. 제조·진단·업무 도메인 서비스
 
 - `CelltrionPowerBIWebApp`: CPVR/APQR 리포트, LIMS 매핑, 차트·필터·다운로드·인쇄 기능 개발. authored PR 75개 중 72개 병합
 - `CelltrionPowerBIFunction`: LIMS 매핑 CRUD, 캠페인·수율 계산 서버리스 로직 개발. authored PR 17개 전부 병합
@@ -131,7 +123,6 @@ API·도메인 모델·인증·배포 설정뿐 아니라 모델 관리 UI, 채�
 - 전체 감사에서 authored PR 700건 이상이 관찰되었습니다. GitHub 검색 상한과 rate limit 때문에 실제 수가 아닌 관찰 하한으로 사용해야 합니다.
 - `kt-gsi` 9개, `cxp-light-fe` 15개, `Seegene.V2` 44개 authored PR은 모두 병합된 것으로 확인되었습니다.
 - `CelltrionPowerBIWebApp`은 75개 중 72개, `SpinInvoice`는 54개 중 47개 authored PR이 병합되었습니다.
-- `wezen-rfid-scanner`는 100건 결과 상한으로 인해 최소 100개의 병합 PR이 확인되었습니다.
 
 ## 이력서 상단에 바로 사용할 수 있는 문장
 
