@@ -15,7 +15,7 @@
 
 초기 단색 휴대용 게임 카트리지에서 막 꺼낸 듯한 작은 포트폴리오 지역이다. 화면은 정확히 네 단계로 나뉜 LCD 팔레트와 짙은 1픽셀 윤곽, 큰 픽셀 덩어리로 구성한다. 컬러 일러스트처럼 세밀한 명암, 안티앨리어싱, 현대적인 유리 패널, 그라데이션, 둥근 카드, 3D 원근은 사용하지 않는다.
 
-핵심 경험은 `지역 목록에서 선택 → 해당 지역 안에서 탐험 → 랜드마크 옆 주민과 대화 → 작업 소개 읽기`다. 지역 사이는 걸어서 이동할 수 없으며 지역 목록만이 유일한 지역 전환 수단이다. 소개 내용은 장식보다 우선하고, 모든 기능은 키보드와 터치 양쪽에서 완주할 수 있어야 한다.
+핵심 경험은 `지역 목록에서 선택 → 해당 지역 안에서 탐험 → 여러 주민과 대화 → 작업 소개 읽기`다. 지역 사이는 걸어서 이동할 수 없으며 지역 목록만이 유일한 지역 전환 수단이다. 소개 내용은 장식보다 우선하고, 지도 이동은 방향키만 허용한다.
 
 ## 2. Color
 
@@ -116,8 +116,10 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 ### Local Tile Map
 
+> **Current contract:** the interior is an open field. Only the outer border, landmark body, and resident cells block movement; scenery is a decorative overlay and never creates a maze wall.
+
 - **Structure**: 지역마다 독립된 40×64 타일 세로형 맵, 길·환경물·랜드마크·주민·캐릭터. 화면에는 한 번에 24×18 타일만 보인다.
-- **States**: free, destination-selected, landmark-near, discovered
+- **States**: free, resident-near, landmark-near, discovered
 - **Rendering**: `imageSmoothingEnabled = false`, `image-rendering: pixelated`
 - **Accessibility**: 캔버스 주변에 현재 위치, 목적지, 상호작용 가능 상태를 텍스트로 제공
 - **Motion**: 한 칸 이동은 즉시 갱신한다. 자동 장식 애니메이션은 없다.
@@ -126,20 +128,22 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 ### Scrolling Camera
 
 - **Viewport**: 논리 화면 `384×288`, 24×18 타일. 지역 전체 40×64 타일 중 현재 위치 주변만 보여준다.
-- **Primary axis**: 시작점은 남쪽, 랜드마크는 북쪽에 둔다. 주 동선은 최소 2.5개 뷰포트 높이이며 카메라는 상하 이동을 중심으로 따라간다.
+- **Primary axis**: 시작점은 남쪽, 랜드마크는 북쪽에 둔다. 열린 필드는 최소 2.5개 뷰포트 높이이며 카메라는 상하 이동을 중심으로 따라간다.
 - **Follow**: 캐릭터가 화면 중앙의 8×6 타일 안전 영역을 벗어날 때 카메라가 한 타일 단위로 따라간다.
 - **Edge clamp**: 지역 가장자리에서는 카메라를 맵 경계에 고정해 빈 바깥 영역이 보이지 않게 한다.
 - **Region entry**: 지역 목록에서 선택하면 지역 시작점에 캐릭터를 배치하고 카메라를 해당 시작점에 즉시 맞춘다.
-- **Landmark reveal**: 시작점에서 랜드마크까지 길·표지판·환경 실루엣으로 방향을 안내한다. 현대적인 미니맵이나 화면 위 화살표는 사용하지 않는다.
+- **Landmark reveal**: 시작점에서 랜드마크까지 열린 바닥·표지판·환경 실루엣으로 방향을 안내한다. 현대적인 미니맵이나 화면 위 화살표는 사용하지 않는다.
 - **Reduced motion**: 카메라 보간 없이 즉시 다음 타일 위치로 갱신한다. 기본 모드에서도 고전 게임처럼 짧고 단단한 타일 스크롤만 사용한다.
 
 ### Player Sprite
 
+> **Current input contract:** ArrowUp, ArrowDown, ArrowLeft, and ArrowRight are the only movement keys. WASD and pointer movement are intentionally unsupported.
+
 - **Structure**: 최대 24×30px의 오리지널 필드 카토그래퍼. 얼굴·머리/캡·스카프·재킷·지도 장치가 달린 숄더백·분리된 팔과 부츠를 짙은 외곽선으로 묶어 한눈에 사람으로 읽히게 한다.
 - **States**: up/right/down/left 네 방향마다 얼굴, 머리, 가방, 팔의 실루엣을 다르게 그리고, 타일 좌표 홀짝으로 step-a/step-b 보폭을 교대한다.
 - **Art boundary**: 네 단계 지역 팔레트와 정수 사각 픽셀만 사용한다. 특정 상용 게임의 캐릭터, 의상, 색 배치, 실루엣은 복제하지 않는다.
-- **Input**: WASD/방향키 또는 터치 방향 패드
-- **Collision**: 물, 나무, 건물 본체, 지도 경계를 통과하지 않는다.
+- **Input**: 방향키만 이동에 사용한다. WASD와 터치 방향 입력은 이동을 발생시키지 않는다.
+- **Collision**: 지도 경계·랜드마크 본체·주민을 통과하지 않는다. 환경물은 열린 바닥 위 장식으로 그린다.
 
 ### Region Menu
 
@@ -152,7 +156,9 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 ### Landmark Resident
 
-각 지역은 하나의 랜드마크와 그 앞을 지키는 한 명의 주민을 가진다. 주민에게 A/Enter로 말을 걸면 작업 소개가 열린다.
+> **Current roster contract:** every region exposes four residents. The first is the landmark resident; the other three explain project context from the middle and southern map.
+
+각 지역은 하나의 랜드마크와 네 명의 주민을 가진다. 첫 주민은 랜드마크 앞을 지키고, 나머지 주민은 필드 곳곳에서 프로젝트 맥락을 설명한다. 주민에게 A/Enter로 말을 걸면 작업 소개가 열린다.
 
 | Region | Landmark | Resident role | Explains |
 |---|---|---|---|
@@ -162,8 +168,8 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 | Snow | 릴레이 기지 | 운영 관제사 | 안정성·배포·복구 체계 |
 | Coast | 연결의 등대 | 협업 안내원 | 사람과 시스템의 맥락 연결 |
 
-- **States**: idle, player-near, talking, explained
-- **Interaction**: 캐릭터가 주민을 향한 상태에서 A/Enter를 누르면 대화 시작
+- **States**: idle, resident-near, talking, explained
+- **Interaction**: 캐릭터가 어느 주민이든 향한 상태에서 A/Enter를 누르면 해당 주민의 대화가 시작된다
 - **Content**: 첫 대화는 주민의 한 문장 소개, 다음 입력은 구조화된 프로젝트 소개
 - **Discovery**: 프로젝트 소개를 끝까지 열었을 때 해당 지역을 `완료`로 기록
 
@@ -183,7 +189,9 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 - **Focus**: 열 때 닫기 버튼에 포커스, 닫을 때 직전 트리거로 복귀
 - **Motion**: 기본은 120ms opacity/scale. reduced-motion에서는 즉시 표시
 
-### Touch Controls
+### Keyboard Controls
+
+> **Current control contract:** the former D-pad is now a non-interactive keyboard direction guide. A/B remain optional action buttons, but they never move the player.
 
 - **Structure**: 하단 조작 덱의 왼쪽에 168px 십자형 4방향 패드, 오른쪽에 64px A/B 버튼을 엇갈려 배치한다. 키보드 환경에서도 시각적으로 항상 표시한다.
 - **Color boundary**: 덱 바탕은 `--chrome-light`, D-pad와 A/B는 `--chrome-dark`, 외곽선과 라벨은 `--chrome-ink`를 사용한다. 지역 선택으로 변하지 않는다.
@@ -234,7 +242,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 ### Personas
 
 - 키보드 사용자: Tab, 방향키, Enter/Space, Escape만으로 탐험과 소개 열기/닫기 가능
-- 터치 사용자: 방향 패드, A/B, 지역 메뉴로 동일 흐름 가능
+- 포인팅 사용자: 지역 메뉴와 A/B 보조 버튼을 사용할 수 있지만 지도 이동은 방향키만 허용
 - 모션 민감 사용자: 맵 자동 이동과 장식 애니메이션 없이 즉시 상태 전환
 - 저시력 사용자: 확대 시 픽셀 캔버스는 유지되고 텍스트 UI는 브라우저 확대에 맞춰 커짐
 
