@@ -138,17 +138,23 @@ export function reduceTileState(state, action, region) {
   );
 }
 
-export function canInteract(state, region) {
-  if (state?.regionId !== region?.id || !isUsableState(state) || !isMapPoint(region.resident)) {
-    return false;
-  }
+export function getInteractableResident(state, region) {
+  if (state?.regionId !== region?.id || !isUsableState(state)) return null;
   const facing = state.player.facing;
   const step = typeof facing === "string" && Object.hasOwn(DIRECTION_STEPS, facing)
     ? DIRECTION_STEPS[facing]
     : undefined;
-  return Boolean(
-    step &&
-    state.player.x + step.x === region.resident.x &&
-    state.player.y + step.y === region.resident.y,
-  );
+  if (!step) return null;
+  const residents = Array.isArray(region.residents)
+    ? region.residents
+    : [region.resident].filter(Boolean);
+  return residents.find((resident) =>
+    isMapPoint(resident) &&
+    state.player.x + step.x === resident.x &&
+    state.player.y + step.y === resident.y,
+  ) ?? null;
+}
+
+export function canInteract(state, region) {
+  return getInteractableResident(state, region) !== null;
 }

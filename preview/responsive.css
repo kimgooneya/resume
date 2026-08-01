@@ -151,7 +151,7 @@
     grid-template: repeat(3, var(--control-min-mobile)) / repeat(3, var(--control-min-mobile));
   }
 
-  .dpad button {
+  .dpad-key {
     min-width: var(--control-min-mobile);
     min-height: var(--control-min-mobile);
   }

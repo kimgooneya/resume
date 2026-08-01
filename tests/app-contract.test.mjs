@@ -19,10 +19,6 @@ const requiredIds = [
   "mobile-regions-trigger",
   "mobile-region-panel",
   "dialogue-box",
-  "move-up",
-  "move-down",
-  "move-left",
-  "move-right",
   "action-a",
   "action-b",
   "reset-trigger",
@@ -126,7 +122,7 @@ const tokenConsumers = {
   "--shadow-step": /\.map-panel,\s*\.field-guide\s*\{[^}]*box-shadow:\s*var\(--shadow-step\) var\(--shadow-step\)/s,
   "--shadow-shell": /\.game-shell\s*\{[^}]*box-shadow:\s*var\(--shadow-shell\) var\(--shadow-shell\)/s,
   "--shadow-dialog": /\.project-dialog\s*\{[^}]*box-shadow:\s*var\(--shadow-dialog\) var\(--shadow-dialog\)/s,
-  "--control-inset": /\.dpad button\s*\{[^}]*box-shadow:\s*inset var\(--control-inset\) var\(--control-inset\)/s,
+  "--control-inset": /\.dpad-key\s*\{[^}]*box-shadow:\s*inset var\(--control-inset\) var\(--control-inset\)/s,
   "--masthead-min-height": /\.masthead\s*\{[^}]*min-height:\s*var\(--masthead-min-height\)/s,
   "--guide-min-width": /\.play-grid\s*\{[^}]*minmax\(var\(--guide-min-width\),\s*var\(--guide-share\)\)/s,
   "--map-canvas-width": /#map-canvas\s*\{[^}]*width:\s*var\(--map-canvas-width\)/s,
@@ -266,13 +262,9 @@ function assertContract(candidateHtml, candidateStyles, candidateResponsive) {
   expect(candidateHtml).toMatch(/id=["']load-error["'][^>]*role=["']alert["']/);
   expect(candidateHtml).toMatch(/id=["']app-status["'][^>]*role=["']status["']/);
 
-  for (const direction of ["up", "down", "left", "right"]) {
-    expect(candidateHtml).toMatch(
-      new RegExp(
-        `<button[^>]*id=["']move-${direction}["'][^>]*data-action=["']move-${direction}["']`,
-      ),
-    );
-  }
+  expect(candidateHtml).toMatch(/class=["'][^"']*dpad[^"']*["'][^>]*role=["']img["']/);
+  expect(candidateHtml).toContain("↑ ↓ ← → 이동");
+  expect(candidateHtml).not.toContain("WASD");
   for (const action of ["a", "b"]) {
     expect(candidateHtml).toMatch(
       new RegExp(
@@ -362,7 +354,7 @@ function assertContract(candidateHtml, candidateStyles, candidateResponsive) {
     /\.mobile-region-panel \.region-list\s*\{[\s\S]*?grid-template-columns:\s*1fr\b/,
   );
   expect(combinedCss).toMatch(
-    /\.dpad button\s*\{[\s\S]*?min-width:\s*var\(--control-min\)[\s\S]*?min-height:\s*var\(--control-min\)/,
+    /\.dpad-key\s*\{[\s\S]*?min-width:\s*var\(--control-min\)[\s\S]*?min-height:\s*var\(--control-min\)/,
   );
   expect(candidateStyles).toMatch(
     /\.skip-link\s*\{[\s\S]*?width:\s*1px\b[\s\S]*?height:\s*1px\b[\s\S]*?overflow:\s*hidden\b[\s\S]*?clip-path:\s*inset\(50%\)/,
@@ -426,12 +418,12 @@ describe("classic RPG shell contract", () => {
       /\.map-screen\s*\{[^}]*min-height:\s*0[^}]*aspect-ratio:\s*var\(--map-ratio\)/s,
     );
 
-    // Then: touch controls retain the familiar cross silhouette with 44px targets
+    // Then: the keyboard guide retains the cross silhouette at the compact size
     expect(mobileDeck).toMatch(
       /\.dpad\s*\{[^}]*grid-template:\s*repeat\(3,\s*var\(--control-min-mobile\)\)\s*\/\s*repeat\(3,\s*var\(--control-min-mobile\)\)/s,
     );
     expect(mobileDeck).toMatch(
-      /\.dpad button\s*\{[^}]*min-width:\s*var\(--control-min-mobile\)[^}]*min-height:\s*var\(--control-min-mobile\)/s,
+      /\.dpad-key\s*\{[^}]*min-width:\s*var\(--control-min-mobile\)[^}]*min-height:\s*var\(--control-min-mobile\)/s,
     );
     expect(mobileDeck).toMatch(/\.dpad-up\s*\{\s*grid-area:\s*1\s*\/\s*2/);
     expect(mobileDeck).toMatch(/\.dpad-left\s*\{\s*grid-area:\s*2\s*\/\s*1/);

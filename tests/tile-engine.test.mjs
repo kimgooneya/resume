@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   canInteract,
   createTileState,
+  getInteractableResident,
   reduceTileState,
 } from "../preview/tile-engine.js";
 import {
@@ -87,9 +88,13 @@ describe("pure tile engine", () => {
   });
 
   test("changes facing but not position for blocked and out-of-bounds steps", () => {
-    // Given: one collision tile and one state at the map boundary
+    // Given: a resident collision tile and one state at the map boundary
     const forest = REGIONS_BY_ID.forest;
-    const collision = createTileState(forest);
+    const collision = Object.freeze({
+      regionId: forest.id,
+      player: Object.freeze({ x: 6, y: 12, facing: "down" }),
+      camera: Object.freeze({ x: 0, y: 0 }),
+    });
     const boundary = Object.freeze({
       regionId: forest.id,
       player: Object.freeze({ x: 0, y: 0, facing: "down" }),
@@ -101,7 +106,7 @@ describe("pure tile engine", () => {
     const outside = reduceTileState(boundary, "left", forest);
 
     // Then: both inputs apply facing without applying position
-    expect(blocked.player).toEqual({ x: 20, y: 58, facing: "up" });
+    expect(blocked.player).toEqual({ x: 6, y: 12, facing: "up" });
     expect(outside.player).toEqual({ x: 0, y: 0, facing: "left" });
     expect(blocked.camera).toEqual(collision.camera);
     expect(outside.camera).toEqual(boundary.camera);
@@ -140,12 +145,37 @@ describe("pure tile engine", () => {
     const facing = reduceTileState(nonFacing, "right", forest);
 
     // Then: interaction is exposed only for Manhattan distance one plus facing
-    expect(route.length).toBeGreaterThanOrEqual(110);
+    expect(route.length).toBeGreaterThanOrEqual(40);
     expect(nonFacing.player).toEqual({ x: 5, y: 11, facing: "up" });
     expect(canInteract(nonFacing, forest)).toBe(false);
     expect(facing.player).toEqual({ x: 5, y: 11, facing: "right" });
     expect(canInteract(facing, forest)).toBe(true);
     expect(reduceTileState(facing, "A", forest)).toBe(facing);
+  });
+
+  test("finds any resident in the open map, not only the landmark resident", () => {
+    // Given: a player at the interaction point of a secondary resident
+    const region = REGIONS_BY_ID.forest;
+    const resident = region.residents[1];
+    const facing = resident.x > resident.interaction.x
+      ? "right"
+      : resident.x < resident.interaction.x
+        ? "left"
+        : resident.y > resident.interaction.y
+          ? "down"
+          : "up";
+    const state = {
+      regionId: region.id,
+      player: { ...resident.interaction, facing },
+      camera: { x: 0, y: 0 },
+    };
+
+    // When: interaction eligibility is checked against the full resident roster
+    const found = getInteractableResident(state, region);
+
+    // Then: the secondary resident is the active project explainer
+    expect(found).toBe(resident);
+    expect(canInteract(state, region)).toBe(true);
   });
 
   test("resets instead of applying movement when a stale state enters a region", () => {
@@ -245,12 +275,12 @@ describe("pure tile engine", () => {
   });
 
   test("does not freeze or mutate caller-owned camera on blocked reduction", () => {
-    // Given: a mutable valid state whose next forest tile is blocked
+    // Given: a mutable valid state whose next forest tile is a resident
     const forest = REGIONS_BY_ID.forest;
     const state = {
       regionId: forest.id,
-      player: { x: 20, y: 58, facing: "down" },
-      camera: { x: 8, y: 46 },
+      player: { x: 6, y: 12, facing: "down" },
+      camera: { x: 0, y: 0 },
     };
     const cameraBefore = { ...state.camera };
 
@@ -262,7 +292,7 @@ describe("pure tile engine", () => {
     expect(Object.isFrozen(state.player)).toBe(false);
     expect(Object.isFrozen(state.camera)).toBe(false);
     expect(state.camera).toEqual(cameraBefore);
-    expect(blocked.player).toEqual({ x: 20, y: 58, facing: "up" });
+    expect(blocked.player).toEqual({ x: 6, y: 12, facing: "up" });
     expect(blocked.camera).toEqual(cameraBefore);
     expect(blocked.camera).not.toBe(state.camera);
     expect(Object.isFrozen(blocked)).toBe(true);
@@ -271,9 +301,13 @@ describe("pure tile engine", () => {
   });
 
   test("applies every repeated blocked input without accumulating movement", () => {
-    // Given: a blocked tile directly north of the forest start
+    // Given: a blocked resident directly north of the player
     const forest = REGIONS_BY_ID.forest;
-    let state = createTileState(forest);
+    let state = Object.freeze({
+      regionId: forest.id,
+      player: Object.freeze({ x: 6, y: 12, facing: "down" }),
+      camera: Object.freeze({ x: 0, y: 0 }),
+    });
 
     // When: the same blocked input is reduced repeatedly
     for (let count = 0; count < 50; count += 1) {
@@ -281,7 +315,7 @@ describe("pure tile engine", () => {
     }
 
     // Then: position and camera never advance while facing is applied
-    expect(state.player).toEqual({ x: 20, y: 58, facing: "up" });
-    expect(state.camera).toEqual({ x: 8, y: 46 });
+    expect(state.player).toEqual({ x: 6, y: 12, facing: "up" });
+    expect(state.camera).toEqual({ x: 0, y: 0 });
   });
 });

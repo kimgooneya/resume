@@ -49,11 +49,6 @@ function pathCells(region) {
   ));
 }
 
-function similarity(first, second) {
-  const shared = [...first].filter((cell) => second.has(cell)).length;
-  return shared / new Set([...first, ...second]).size;
-}
-
 function featureCells(feature) {
   return new Set(feature.mask.flatMap((row, localY) =>
     [...row].flatMap((cell, localX) =>
@@ -106,7 +101,7 @@ describe("region data contract", () => {
     ]);
   });
 
-  test("places one southern start and one northern landmark resident pair per map", () => {
+  test("places one southern start and a northern landmark resident per map", () => {
     // Given: all authored region maps
     const locationCounts = REGIONS.map((region) => {
       const cells = region.tiles.flat();
@@ -127,13 +122,38 @@ describe("region data contract", () => {
     }));
 
     // Then: the traversal starts south and ends adjacent to a northern resident
-    expect(locationCounts).toEqual([[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]]);
+    expect(locationCounts).toEqual([[1, 1, 4, 4], [1, 1, 4, 4], [1, 1, 4, 4], [1, 1, 4, 4], [1, 1, 4, 4]]);
     for (const { start, landmark, resident, interaction } of positions) {
       expect(start.y).toBeGreaterThanOrEqual(52);
       expect(landmark.y).toBeLessThanOrEqual(12);
       expect(resident.y).toBeLessThanOrEqual(12);
       expect(Math.abs(interaction.x - resident.x) + Math.abs(interaction.y - resident.y)).toBe(1);
     }
+  });
+
+  test("keeps every local interior open and places a resident team around each project", () => {
+    // Given: the five authored local maps
+    const summaries = REGIONS.map((region) => {
+      const interior = region.tiles
+        .slice(1, -1)
+        .flatMap((row) => row.slice(1, -1));
+      return {
+        residentCount: region.residents.length,
+        residentIds: new Set(region.residents.map(({ id }) => id)).size,
+        interactionCount: region.residents.filter(({ interaction }) =>
+          region.tiles[interaction.y][interaction.x] === "interaction",
+        ).length,
+        interiorTerrain: interior.filter((tile) => tile === "terrain").length,
+      };
+    });
+
+    // When / Then: open interiors and distinct explanatory residents are inspected
+    expect(summaries).toEqual(REGIONS.map(() => ({
+      residentCount: 4,
+      residentIds: 4,
+      interactionCount: 4,
+      interiorTerrain: 0,
+    })));
   });
 
   test("blocks every map edge from walking exits", () => {
@@ -149,25 +169,20 @@ describe("region data contract", () => {
     expect(exits).toEqual([]);
   });
 
-  test("keeps each northern interaction reachable through a long local route", () => {
+  test("keeps each primary resident reachable through a direct open-field route", () => {
     // Given: every region's southern start and interaction tile
     const distances = REGIONS.map(shortestPathLength);
 
     // When: breadth-first travel distance is measured
-    const outOfRange = distances.filter((distance) => distance === null || distance < 110 || distance > 180);
+    const outOfRange = distances.filter((distance) => distance === null || distance < 40 || distance > 80);
 
-    // Then: the route is reachable and supports the intended traversal duration
+    // Then: the open field is reachable without a forced maze traversal
     expect(outOfRange).toEqual([]);
   });
 
-  test("includes rejoining route branches and signposts at their decision points", () => {
+  test("keeps signposts decorative while every interior direction remains open", () => {
     // Given: all map sign metadata
-    const routeDetails = REGIONS.map(({ branches, signposts, tiles }) => ({
-      branchEndpoints: branches.map(({ entry, rejoin }) => [
-        tiles[entry.y][entry.x],
-        tiles[rejoin.y][rejoin.x],
-        entry.x !== rejoin.x,
-      ]),
+    const routeDetails = REGIONS.map(({ signposts, tiles }) => ({
       signs: signposts.map(({ x, y }) => {
         const neighbors = [[0, -1], [1, 0], [0, 1], [-1, 0]].filter(([deltaX, deltaY]) =>
           isWalkableTile(tiles[y + deltaY]?.[x + deltaX]),
@@ -177,31 +192,24 @@ describe("region data contract", () => {
     }));
 
     // When: sign tiles and their adjacent decision points are inspected
-    const invalidBranches = routeDetails.flatMap(({ branchEndpoints }) => branchEndpoints).filter(
-      ([entry, rejoin, separatesRoute]) => !isWalkableTile(entry) || !isWalkableTile(rejoin) || !separatesRoute,
-    );
     const invalidSigns = routeDetails.flatMap(({ signs }) => signs).filter(
       ([tile, neighbors]) => tile !== "sign" || neighbors === 0,
     );
 
-    // Then: every authored detour has a visible guide beside the route
-    expect(routeDetails.map(({ branchEndpoints }) => branchEndpoints.length)).toEqual([2, 2, 2, 2, 2]);
-    expect(invalidBranches).toEqual([]);
+    // Then: guides add context without creating a mandatory decision path
     expect(invalidSigns).toEqual([]);
   });
 
-  test("authors materially different path topology and destination placement for every region", () => {
+  test("keeps every region open while preserving distinct destination placement", () => {
     // Given: each complete walkable map and its spatial destination grammar
     const paths = REGIONS.map(pathCells);
     const placementSignatures = REGIONS.map(({ start, landmark, resident, interaction }) =>
       JSON.stringify({ start, landmark, resident: { x: resident.x, y: resident.y }, interaction }));
 
-    // When: pairwise overlap is measured across the full 40 by 64 maps
-    const pairwiseSimilarities = paths.flatMap((first, firstIndex) =>
-      paths.slice(firstIndex + 1).map((second) => similarity(first, second)));
+    // When: open-cell coverage and destination placement are measured
+    expect(paths.every((path) => path.size >= (MAP_WIDTH - 2) * (MAP_HEIGHT - 2) - 6)).toBe(true);
 
-    // Then: no shared dominant route or reused destination arrangement can define the regions
-    expect(Math.max(...pairwiseSimilarities)).toBeLessThan(0.45);
+    // Then: the maps share an open grammar but each project still has its own landmarks
     expect(new Set(placementSignatures).size).toBe(REGIONS.length);
   });
 
@@ -332,8 +340,8 @@ describe("region data contract", () => {
       Object.isFrozen(region.palette),
       Object.isFrozen(region.tiles),
       Object.isFrozen(region.tiles[0]),
-      Object.isFrozen(region.branches),
-      Object.isFrozen(region.branches[0]),
+      Object.isFrozen(region.residents),
+      Object.isFrozen(region.residents[0]),
       Object.isFrozen(region.resident),
       Object.isFrozen(region.resident.dialogue),
     ]);
@@ -341,7 +349,7 @@ describe("region data contract", () => {
     // When: its immutable boundaries and dialogue stages are read
     const stages = REGIONS.map(({ resident }) => Object.keys(resident.dialogue).sort());
 
-    // Then: callers cannot alter shared maps, palettes, or resident copy
+    // Then: callers cannot alter shared maps, palettes, or the resident roster
     expect(Object.isFrozen(REGIONS)).toBe(true);
     expect(mutability).toEqual([[true, true, true, true, true, true, true, true], [true, true, true, true, true, true, true, true], [true, true, true, true, true, true, true, true], [true, true, true, true, true, true, true, true], [true, true, true, true, true, true, true, true]]);
     expect(stages).toEqual([
@@ -362,8 +370,8 @@ describe("region data contract", () => {
       if (malformed.tiles[y]?.[x] === "path") malformed.tiles[y][x] = "terrain";
     }
 
-    // When / Then: validation refuses the unreachable interaction tile
-    expect(() => validateRegion(malformed)).toThrow(/reachable/);
+    // When / Then: validation refuses the reintroduced interior wall
+    expect(() => validateRegion(malformed)).toThrow(/open|reachable/);
   });
 
   test("rejects a cloned map with a walkable edge exit", () => {

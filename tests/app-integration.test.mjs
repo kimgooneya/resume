@@ -137,7 +137,7 @@ function createSurface({ desktopGuideVisible = true, reduced = false } = {}) {
   add("#app-status", "p");
   add("#load-error", "div");
   add("#reload-data", "button");
-  for (const id of ["move-up", "move-down", "move-left", "move-right", "action-a", "action-b"]) {
+  for (const id of ["action-a", "action-b"]) {
     add(`#${id}`, "button");
   }
   const desktopGuide = add("#field-guide .region-list", "nav");
@@ -360,8 +360,8 @@ describe("classic RPG application integration", () => {
     app.destroy();
   });
 
-  test("Given unchanged blocked-facing state, When the same blocked movement repeats, Then only the first facing change redraws", async () => {
-    // Given: forest starts facing down with blocked terrain directly north
+  test("Given an open interior, When the same arrow movement repeats, Then both steps advance the player", async () => {
+    // Given: forest starts on an open field
     const surface = createSurface();
     const app = await createApplication({
       document: surface.document,
@@ -374,14 +374,37 @@ describe("classic RPG application integration", () => {
 
     // When: north is pressed twice without any intervening state change
     app.handleAction("up");
-    const afterFacingChange = surface.context.fillRectCalls;
-    const firstState = app.getState().tileState;
+    const afterFirstStep = surface.context.fillRectCalls;
     app.handleAction("up");
 
-    // Then: facing changes/render once, while the deep-identical repeat is ignored
-    expect(afterFacingChange).toBeGreaterThan(before);
-    expect(app.getState().tileState).toEqual(firstState);
-    expect(surface.context.fillRectCalls).toBe(afterFacingChange);
+    // Then: open-space movement remains immediate and accumulates both steps
+    expect(afterFirstStep).toBeGreaterThan(before);
+    expect(app.getState().tileState.player).toEqual({ x: 20, y: 56, facing: "up" });
+    expect(surface.context.fillRectCalls).toBeGreaterThan(afterFirstStep);
+    app.destroy();
+  });
+
+  test("Given a secondary resident on the open field, When the player approaches and confirms, Then that resident explains the project", async () => {
+    // Given: a selected forest and the second resident's interaction point
+    const surface = createSurface({ reduced: true });
+    const app = await createApplication({
+      document: surface.document,
+      loadProjects: async () => projects,
+      storage: createStorage(),
+      window: surface.window,
+    });
+    surface.elements.get("#field-guide .region-list").children[0].click();
+    const resident = REGIONS[0].residents[1];
+    for (let count = 0; count < REGIONS[0].start.x - resident.interaction.x; count += 1) app.handleAction("left");
+    for (let count = 0; count < REGIONS[0].start.y - resident.interaction.y; count += 1) app.handleAction("up");
+    app.handleAction("up");
+
+    // When: the keyboard confirmation opens the nearby resident's conversation
+    press(surface.window, "Enter");
+
+    // Then: the secondary resident, not the landmark resident, owns the dialogue
+    expect(surface.elements.get("#dialogue-speaker").textContent).toBe(resident.role);
+    expect(surface.elements.get("#dialogue-copy").textContent).toContain(resident.dialogue.problem.lines[0]);
     app.destroy();
   });
 
@@ -461,10 +484,6 @@ describe("classic RPG application integration", () => {
     expect(Object.values({
       a: surface.elements.get("#action-a"),
       b: surface.elements.get("#action-b"),
-      down: surface.elements.get("#move-down"),
-      left: surface.elements.get("#move-left"),
-      right: surface.elements.get("#move-right"),
-      up: surface.elements.get("#move-up"),
     }).every((button) => button.listenerCount() === 0)).toBe(true);
   });
 

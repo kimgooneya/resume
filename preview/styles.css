@@ -79,7 +79,7 @@ button:active { box-shadow: none; transform: translate(var(--border-thin), var(-
 .dpad-group { position: relative; display: grid; justify-items: center; }
 .dpad-group > strong { position: absolute; z-index: 2; top: 50%; left: 50%; color: var(--chrome-light); font-size: var(--font-size-micro); pointer-events: none; transform: translate(-50%, -50%); }
 .dpad { width: var(--dpad-size); height: var(--dpad-size); display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr); margin: 0; padding: 0; border: 0; }
-.dpad button { z-index: 1; min-width: var(--control-min); min-height: var(--control-min); padding: 0; border-color: var(--chrome-ink); background: var(--chrome-dark); color: var(--chrome-light); box-shadow: inset var(--control-inset) var(--control-inset) 0 var(--chrome-mid); }
+.dpad-key { z-index: 1; min-width: var(--control-min); min-height: var(--control-min); display: grid; place-items: center; padding: 0; border: var(--pixel-border) solid var(--chrome-ink); background: var(--chrome-dark); color: var(--chrome-light); box-shadow: inset var(--control-inset) var(--control-inset) 0 var(--chrome-mid); font: inherit; font-style: normal; }
 .dpad-up { grid-area: 1 / 2; align-self: start; justify-self: center; }
 .dpad-left { grid-area: 2 / 1; align-self: center; justify-self: start; }
 .dpad-center { grid-area: 2 / 2; background: var(--chrome-ink); }

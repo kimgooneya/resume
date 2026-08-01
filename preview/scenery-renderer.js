@@ -1,5 +1,4 @@
 import {
-  TILE_KINDS,
   TILE_SIZE,
   VIEWPORT_HEIGHT,
   VIEWPORT_WIDTH,
@@ -114,7 +113,6 @@ function paintFeature(context, region, camera, feature) {
   const endY = Math.min(feature.y + feature.height, camera.y + VIEWPORT_HEIGHT);
   for (let worldY = startY; worldY < endY; worldY += 1) {
     for (let worldX = startX; worldX < endX; worldX += 1) {
-      if (region.tiles[worldY][worldX] !== TILE_KINDS.TERRAIN) continue;
       const localX = worldX - feature.x;
       const localY = worldY - feature.y;
       if (!maskCell(feature, localX, localY)) continue;

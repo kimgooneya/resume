@@ -126,7 +126,7 @@ export function drawLandmark(context, region, point) {
   }
 }
 
-export function drawResident(context, region, point) {
+export function drawResident(context, region, point, resident = region.resident) {
   const [darkest, dark, mid, light] = region.palette;
   const { x, y } = point;
   fill(context, darkest, x, y + 25, 26, 4);
@@ -141,7 +141,7 @@ export function drawResident(context, region, point) {
   fill(context, darkest, x + 16, y + 20, 7, 7);
   fill(context, light, x + 21, y + 7, 4, 8);
 
-  switch (region.resident.sprite) {
+  switch (resident.sprite) {
     case "researcher":
       fill(context, light, x + 17, y + 6, 11, 15);
       fill(context, darkest, x + 25, y + 4, 3, 20);
