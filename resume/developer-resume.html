@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="김수현 개발자 이력서. Text-to-SQL DAG, AI·데이터 서비스, C#/.NET, TypeScript/React 개발 경험.">
+    <title>김수현 | AI·데이터 서비스 개발자</title>
+    <style>
+      :root {
+        --paper: #fbfaf7;
+        --paper-surround: #e8e5df;
+        --ink: #242321;
+        --ink-secondary: #625f59;
+        --ink-muted: #8c8880;
+        --rule: #d9d5ce;
+        --accent: #24546a;
+        --accent-soft: #e7eff1;
+        --type-name: 30px;
+        --type-title: 11px;
+        --type-section: 11px;
+        --type-project: 12px;
+        --type-body: 10.5px;
+        --type-meta: 9.5px;
+        --type-footer: 9px;
+        --space-1: 4px;
+        --space-2: 8px;
+        --space-3: 12px;
+        --space-4: 16px;
+        --space-5: 20px;
+        --page-width: 210mm;
+        --page-height: 297mm;
+        --page-padding-x: 17mm;
+        --page-padding-y: 16mm;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--paper-surround);
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--paper-surround);
+        font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+        font-size: var(--type-body);
+        line-height: 1.48;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      a {
+        color: var(--accent);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      a:hover,
+      a:focus-visible {
+        color: var(--ink);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .print-preview {
+        padding: 24px 0;
+      }
+
+      .resume-sheet {
+        width: var(--page-width);
+        min-height: var(--page-height);
+        margin: 0 auto 24px;
+        padding: var(--page-padding-y) var(--page-padding-x);
+        background: var(--paper);
+        box-shadow: 0 14px 40px rgba(36, 35, 33, 0.12);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .resume-sheet + .resume-sheet {
+        break-before: page;
+      }
+
+      .masthead {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: var(--space-4);
+        align-items: end;
+        padding-bottom: var(--space-4);
+        border-bottom: 1px solid var(--ink);
+      }
+
+      .eyebrow,
+      .section-kicker,
+      .contact-label,
+      .evidence-label {
+        color: var(--accent);
+        font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", monospace;
+        font-size: var(--type-meta);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        margin-bottom: var(--space-2);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Noto Serif KR", serif;
+        font-size: var(--type-name);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+      }
+
+      .masthead-title {
+        margin-top: var(--space-1);
+        color: var(--ink-secondary);
+        font-size: var(--type-title);
+        font-weight: 700;
+      }
+
+      .contact-list {
+        display: grid;
+        gap: var(--space-1);
+        justify-items: end;
+        color: var(--ink-secondary);
+        font-size: var(--type-meta);
+        line-height: 1.4;
+        text-align: right;
+      }
+
+      .contact-list span,
+      .contact-list a {
+        white-space: nowrap;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: 22% minmax(0, 1fr);
+        gap: var(--space-4);
+        padding: var(--space-4) 0 var(--space-5);
+      }
+
+      .intro-copy {
+        max-width: 132mm;
+        color: var(--ink-secondary);
+        font-size: 10px;
+        line-height: 1.62;
+        word-break: keep-all;
+      }
+
+      .section {
+        margin-top: var(--space-5);
+      }
+
+      .section:first-child {
+        margin-top: 0;
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: baseline;
+        gap: var(--space-2);
+        margin-bottom: var(--space-3);
+        padding-bottom: var(--space-2);
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .section-heading h2 {
+        color: var(--ink);
+        font-size: var(--type-section);
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      .section-kicker {
+        color: var(--ink-muted);
+        letter-spacing: 0.04em;
+      }
+
+      .competency-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-3) var(--space-5);
+      }
+
+      .competency {
+        display: grid;
+        grid-template-columns: 62px minmax(0, 1fr);
+        gap: var(--space-2);
+        align-items: baseline;
+        padding-top: var(--space-2);
+        border-top: 1px solid var(--rule);
+      }
+
+      .competency h3 {
+        color: var(--accent);
+        font-size: var(--type-meta);
+        font-weight: 700;
+      }
+
+      .competency p {
+        color: var(--ink-secondary);
+        font-size: var(--type-meta);
+        word-break: keep-all;
+      }
+
+      .experience-list {
+        display: grid;
+      }
+
+      .experience-row {
+        display: grid;
+        grid-template-columns: 25mm minmax(0, 1fr);
+        gap: var(--space-4);
+        padding: var(--space-3) 0;
+        border-top: 1px solid var(--rule);
+        break-inside: avoid;
+      }
+
+      .experience-row:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .experience-meta {
+        display: grid;
+        align-content: start;
+        gap: var(--space-1);
+        color: var(--ink-muted);
+        font-size: var(--type-meta);
+        line-height: 1.4;
+      }
+
+      .experience-meta strong {
+        color: var(--accent);
+        font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", monospace;
+        font-size: var(--type-meta);
+        font-weight: 600;
+      }
+
+      .project-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: var(--space-2);
+        margin-bottom: var(--space-1);
+      }
+
+      .project-header h3 {
+        font-size: var(--type-project);
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      .project-role {
+        color: var(--ink-secondary);
+        font-size: var(--type-meta);
+        font-weight: 600;
+      }
+
+      .project-summary {
+        margin-bottom: var(--space-1);
+        color: var(--ink-secondary);
+        font-size: var(--type-body);
+        word-break: keep-all;
+      }
+
+      .project-list,
+      .strength-list {
+        margin: 0;
+        padding-left: 13px;
+        color: var(--ink-secondary);
+        font-size: var(--type-meta);
+        word-break: keep-all;
+      }
+
+      .project-list li,
+      .strength-list li {
+        margin: 2px 0;
+        padding-left: 2px;
+      }
+
+      .project-list li::marker,
+      .strength-list li::marker {
+        color: var(--accent);
+      }
+
+      .evidence {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-1) var(--space-2);
+        margin-top: var(--space-2);
+      }
+
+      .evidence-item {
+        padding: 4px 7px;
+        color: var(--accent);
+        background: var(--accent-soft);
+        font-size: var(--type-meta);
+        font-weight: 600;
+        line-height: 1.35;
+        white-space: nowrap;
+      }
+
+      .page-context {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: var(--space-4);
+        padding-bottom: var(--space-2);
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .page-context strong {
+        font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", monospace;
+        font-size: var(--type-meta);
+        font-weight: 600;
+        letter-spacing: 0.05em;
+      }
+
+      .page-context span {
+        color: var(--ink-muted);
+        font-size: var(--type-meta);
+      }
+
+      .grouped-projects {
+        display: grid;
+        gap: var(--space-2);
+      }
+
+      .grouped-project {
+        display: grid;
+        grid-template-columns: 48mm minmax(0, 1fr);
+        gap: var(--space-3);
+        padding: var(--space-2) 0;
+        border-top: 1px solid var(--rule);
+        break-inside: avoid;
+      }
+
+      .grouped-project:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .grouped-project strong {
+        color: var(--ink);
+        font-size: var(--type-meta);
+      }
+
+      .grouped-project p {
+        color: var(--ink-secondary);
+        font-size: var(--type-meta);
+        word-break: keep-all;
+      }
+
+      .intro > *,
+      .competency,
+      .experience-row > *,
+      .grouped-project > *,
+      .strength {
+        min-width: 0;
+      }
+
+      .strength-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--space-4);
+      }
+
+      .strength {
+        padding-top: var(--space-2);
+        border-top: 1px solid var(--rule);
+      }
+
+      .strength h3 {
+        margin-bottom: var(--space-1);
+        color: var(--accent);
+        font-size: var(--type-project);
+        font-weight: 700;
+      }
+
+      .strength-list {
+        font-size: var(--type-meta);
+      }
+
+      .outcome-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-4);
+      }
+
+      .outcome {
+        min-width: 0;
+        padding-top: var(--space-3);
+        border-top: 1px solid var(--rule);
+      }
+
+      .outcome h3 {
+        margin-bottom: var(--space-1);
+        color: var(--accent);
+        font-size: var(--type-project);
+        font-weight: 700;
+      }
+
+      .outcome h3 a {
+        color: inherit;
+      }
+
+      .outcome p {
+        color: var(--ink-secondary);
+        font-size: var(--type-meta);
+        word-break: keep-all;
+      }
+
+      .resume-footer {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--space-3);
+        margin-top: auto;
+        padding-top: var(--space-4);
+        color: var(--ink-muted);
+        font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", monospace;
+        font-size: var(--type-footer);
+        letter-spacing: 0.03em;
+      }
+
+      .resume-footer > *,
+      .page-context > * {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .no-break {
+        white-space: nowrap;
+      }
+
+      @media screen and (max-width: 840px) {
+        html,
+        body {
+          background: var(--paper);
+        }
+
+        .print-preview {
+          padding: 0;
+        }
+
+        .resume-sheet {
+          width: 100%;
+          min-height: auto;
+          margin: 0;
+          padding: 32px 24px;
+          box-shadow: none;
+        }
+
+        .resume-sheet + .resume-sheet {
+          margin-top: 24px;
+          border-top: 1px solid var(--rule);
+        }
+
+        .masthead,
+        .intro,
+        .competency-grid,
+        .strength-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .contact-list {
+          justify-items: start;
+          text-align: left;
+        }
+
+        .experience-row,
+        .grouped-project {
+          grid-template-columns: 1fr;
+          gap: var(--space-2);
+        }
+
+        .experience-row {
+          padding: var(--space-4) 0;
+        }
+
+        .outcome-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .resume-footer {
+          flex-wrap: wrap;
+        }
+      }
+
+      @media print {
+        :root {
+          --type-body: 8.5px;
+          --type-meta: 8.5px;
+          --type-footer: 8px;
+          --space-2: 6px;
+          --space-3: 8px;
+          --space-4: 12px;
+          --space-5: 14px;
+        }
+
+        html,
+        body {
+          background: #fff;
+        }
+
+        .print-preview {
+          padding: 0;
+        }
+
+        .resume-sheet {
+          margin: 0;
+          height: 297mm;
+          min-height: 297mm;
+          box-shadow: none;
+          break-after: page;
+        }
+
+        .resume-footer {
+          margin-top: auto;
+          padding-top: 8px;
+        }
+
+        .resume-sheet:last-child .resume-footer {
+          display: flex;
+          margin-top: auto;
+          padding-top: 4px;
+        }
+
+        .resume-sheet:last-child {
+          break-after: auto;
+        }
+
+        a {
+          color: inherit;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="print-preview">
+      <article class="resume-sheet" aria-labelledby="resume-name">
+        <header class="masthead">
+          <div>
+            <p class="eyebrow">Developer Resume / 2026</p>
+            <h1 id="resume-name">김수현</h1>
+            <p class="masthead-title">AI · Data Service Developer / C#·.NET · TypeScript·React</p>
+          </div>
+          <div class="contact-list">
+            <span>Seoul · Republic of Korea</span>
+            <a href="https://github.com/kimgooneya" target="_blank" rel="noreferrer">github.com/kimgooneya</a>
+            <span>연락처는 제출 전 입력</span>
+          </div>
+        </header>
+
+        <section class="intro section" aria-labelledby="profile-heading">
+          <div>
+            <p class="section-kicker">Profile</p>
+            <h2 id="profile-heading">프로필</h2>
+          </div>
+          <p class="intro-copy">Text-to-SQL DAG 아키텍처와 AI·데이터 서비스 백엔드를 중심으로, C#/.NET 및 TypeScript/React 기반의 B2B 서비스 설계·구현·운영 안정화를 수행해 온 개발자입니다. LLM 연동, 문서·Excel 데이터 처리, 인증·Identity, 업무 도메인 기능을 제품의 사용자 흐름과 연결해 구현합니다.</p>
+        </section>
+
+        <section class="section" aria-labelledby="competencies-heading">
+          <div class="section-heading">
+            <span class="section-kicker">01</span>
+            <h2 id="competencies-heading">Core competencies</h2>
+          </div>
+          <div class="competency-grid">
+            <div class="competency">
+              <h3>AI / Data</h3>
+              <p>Text-to-SQL · DAG orchestration · Azure OpenAI · LLM SDK migration · RAG/CXP · Cosmos DB · Form Recognizer · Excel parsing</p>
+            </div>
+            <div class="competency">
+              <h3>Backend</h3>
+              <p>C#/.NET · ASP.NET Core · Azure Functions · REST API · DI · CRUD · 업무 도메인 모델링</p>
+            </div>
+            <div class="competency">
+              <h3>Frontend</h3>
+              <p>TypeScript · React · Next.js · Blazor · BFF · 인증 쿠키 · 모델·프로바이더 관리 UI</p>
+            </div>
+            <div class="competency">
+              <h3>Platform</h3>
+              <p>Keycloak · ASP.NET Identity · secrets import/export · cloud/keyless configuration · standalone deployment</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="recent-heading">
+          <div class="section-heading">
+            <span class="section-kicker">02</span>
+            <h2 id="recent-heading">Selected experience · latest first</h2>
+          </div>
+          <div class="experience-list">
+            <article class="experience-row" id="project-kt-gsi">
+              <div class="experience-meta"><strong>2026.07</strong><span>9 / 9 PR merged</span></div>
+              <div>
+                <div class="project-header"><h3>kt-gsi</h3><span class="project-role">Text-to-SQL DAG 아키텍처 · AI 질의 백엔드</span></div>
+                <p class="project-summary">Text-to-SQL 처리 흐름을 DAG 구조로 설계하고 핵심 오케스트레이션 역할을 수행했습니다.</p>
+                <ul class="project-list"><li>secrets import/export와 Azure 리소스 기반 설정 경계 정리</li><li>cloud/keyless 전환, 날짜 타입 오류 사전 차단·재시도, 상품 조회 조건 개선</li></ul>
+                <div class="evidence"><span class="evidence-item">DAG design</span><span class="evidence-item">SQL reliability</span><span class="evidence-item">Keyless config</span></div>
+              </div>
+            </article>
+
+            <article class="experience-row" id="project-nhbank">
+              <div class="experience-meta"><strong>2026.06</strong><span>5 feature PRs</span></div>
+              <div>
+                <div class="project-header"><h3>NHBank</h3><span class="project-role">금융권 AI 백엔드 · LLM 통합</span></div>
+                <p class="project-summary">Azure OpenAI 운영 안정화와 SDK v2 마이그레이션을 수행하고 배포·오류 대응까지 반영했습니다.</p>
+                <ul class="project-list"><li>토큰 사용량 안정화와 LLM 환경변수화</li><li>TCB 오류 수정, 서비스 최신화, 라이브 컨트롤러 기능 반영</li></ul>
+                <div class="evidence"><span class="evidence-item">Azure OpenAI</span><span class="evidence-item">SDK v2</span><span class="evidence-item">Production fixes</span></div>
+              </div>
+            </article>
+
+            <article class="experience-row" id="project-excel-parser">
+              <div class="experience-meta"><strong>2026.06</strong><span>11 / 12 PR merged</span></div>
+              <div>
+                <div class="project-header"><h3>excel-parser</h3><span class="project-role">비정형 Excel 파싱·추출 라이브러리</span></div>
+                <p class="project-summary">복잡한 문서 구조를 안정적으로 추출할 수 있도록 헤더·희소 시계열·날짜 타입 처리를 개선했습니다.</p>
+                <ul class="project-list"><li>다단 헤더·병합 제목행·BIS Quarterly Series 헤더 탐지</li><li>notes 표면화, date dtype 실패 시 중단 방지, 빈 선행 키 컬럼 보존</li></ul>
+                <div class="evidence"><span class="evidence-item">Parsing heuristics</span><span class="evidence-item">Data resilience</span></div>
+              </div>
+            </article>
+
+            <article class="experience-row" id="project-cxp-platform">
+              <div class="experience-meta"><strong>2025.06–2026.03</strong><span>CXP platform</span></div>
+              <div>
+                <div class="project-header"><h3>CXP platform</h3><span class="project-role">인증 · 프론트엔드 · 공통 백엔드</span></div>
+                <p class="project-summary">Keycloak·Identity 인증, BFF 프록시, 모델 관리 UI와 standalone 배포 구조를 연결했습니다.</p>
+                <ul class="project-list"><li>cross-origin 인증 쿠키 문제 해결과 refresh token 정책 정비</li><li>모델·프로바이더 관리, 고객·파트너 CRUD, Cosmos bulk service 구현</li></ul>
+                <div class="evidence"><span class="evidence-item">15 / 15 PR merged</span><span class="evidence-item">Keycloak</span><span class="evidence-item">BFF auth</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <footer class="resume-footer">
+          <span>김수현 · AI / Backend / Data</span>
+          <span>01 / 02</span>
+        </footer>
+      </article>
+
+      <article class="resume-sheet" aria-labelledby="continued-heading">
+        <div class="page-context">
+          <strong id="continued-heading">KIM SOO HYEON / SELECTED WORK</strong>
+          <span>continued · latest activity order</span>
+        </div>
+
+        <section class="section" aria-labelledby="continued-experience-heading">
+          <div class="section-heading">
+            <span class="section-kicker">03</span>
+            <h2 id="continued-experience-heading">Selected experience · continued</h2>
+          </div>
+          <div class="experience-list">
+            <article class="experience-row">
+              <div class="experience-meta"><strong>2025.12</strong><span>8 / 8 PR merged</span></div>
+              <div>
+                <div class="project-header"><h3>dcai-onpremise</h3><span class="project-role">온프레미스 AI 에이전트 · 오케스트레이션</span></div>
+                <p class="project-summary">AI agent handoff와 orchestration workflow를 운영 화면과 함께 구현했습니다.</p>
+                <ul class="project-list"><li>AI Agents Phase 4와 agent handoff 흐름 구현</li><li>urgent alert, 3-panel dashboard, 다국어 회의록 기능 반영</li></ul>
+                <div class="evidence"><span class="evidence-item">Agent workflow</span><span class="evidence-item">On-premise</span></div>
+              </div>
+            </article>
+
+            <article class="experience-row">
+              <div class="experience-meta"><strong>2025.08</strong><span>PoC / serverless</span></div>
+              <div>
+                <div class="project-header"><h3>KyoboPrePoC</h3><span class="project-role">금융·문서 처리 PoC</span></div>
+                <p class="project-summary">검증 결과와 오류 메시지 표시를 개선하고 서버리스 Excel 출력 기능을 구현했습니다.</p>
+                <ul class="project-list"><li>F1 오류 메시지와 검증 조건·오차 항목 표시 개선</li><li>Excel 저장, output path, 범위 지정 스타일 구현</li></ul>
+                <div class="evidence"><span class="evidence-item">Document workflow</span><span class="evidence-item">Azure Functions</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="domain-heading">
+          <div class="section-heading">
+            <span class="section-kicker">04</span>
+            <h2 id="domain-heading">Domain delivery</h2>
+          </div>
+          <div class="grouped-projects">
+            <div class="grouped-project"><strong>CelltrionPowerBIWebApp / Function</strong><p>제조·품질 데이터의 CPVR/APQR 리포트, LIMS 매핑 CRUD, 차트·필터·다운로드·인쇄 기능을 개발했습니다. WebApp 72 / 75 PR, Function 17 / 17 PR 병합.</p></div>
+            <div class="grouped-project"><strong>Seegene.V2</strong><p>진단·검사 업무 시스템의 SGAL 오류와 검사 업무 로직을 수정했습니다. authored PR 44개 전부 병합.</p></div>
+            <div class="grouped-project"><strong>SpinInvoice</strong><p>구독·청구 업무 기능과 오류 수정을 지속 반영했습니다. authored PR 54개 중 47개 병합.</p></div>
+            <div class="grouped-project"><strong>KbhcCosmosEngine</strong><p>누락 데이터 정규화, Journey 통계, 식이·음료·음주 기능을 개선했습니다.</p></div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="strengths-heading">
+          <div class="section-heading">
+            <span class="section-kicker">05</span>
+            <h2 id="strengths-heading">How I work</h2>
+          </div>
+          <div class="strength-grid">
+            <div class="strength"><h3>Structure the flow</h3><ul class="strength-list"><li>복잡한 AI 질의·에이전트 흐름을 DAG와 책임 단위로 분리</li><li>설정 경계, 실패 지점, 재시도까지 함께 설계</li></ul></div>
+            <div class="strength"><h3>Stabilize the product</h3><ul class="strength-list"><li>날짜 타입, 인증 쿠키, 환경변수, SDK 변경 문제를 원인 단위로 해결</li><li>재현 가능한 수정으로 운영 이슈를 제품 개선으로 전환</li></ul></div>
+            <div class="strength"><h3>Ship across layers</h3><ul class="strength-list"><li>API·도메인·인증·배포부터 모델 UI와 사용자 흐름까지 연결</li><li>PR 단위로 변경 범위를 관리하고 리뷰 가능한 형태로 전달</li></ul></div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="outcomes-heading">
+          <div class="section-heading">
+            <span class="section-kicker">06</span>
+            <h2 id="outcomes-heading">Selected outcomes</h2>
+          </div>
+          <div class="outcome-grid">
+            <div class="outcome"><h3><a href="#project-kt-gsi">kt-gsi · AI 흐름을 구조화</a></h3><p>Text-to-SQL 실행 단계를 DAG와 책임 단위로 나누고, handoff·재시도·SQL 안전성 경계를 설계했습니다.</p></div>
+            <div class="outcome"><h3><a href="#project-nhbank">NHBank · LLM 변경을 운영에 안착</a></h3><p>Azure OpenAI SDK v2 마이그레이션과 토큰·환경변수·TCB 오류를 정리해 배포 가능한 백엔드로 안정화했습니다.</p></div>
+            <div class="outcome"><h3><a href="#project-excel-parser">excel-parser · 비정형 데이터를 제품화</a></h3><p>Excel 헤더·병합 셀·Quarterly Series와 날짜 타입 예외를 다루는 파싱 규칙을 구현했습니다.</p></div>
+            <div class="outcome"><h3><a href="#project-cxp-platform">CXP platform · 전 계층을 한 흐름으로 출시</a></h3><p>Keycloak·BFF·도메인 API·모델 UI·CRUD·서버리스 배포를 연결해 사용자 기능으로 전달했습니다.</p></div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="positioning-heading">
+          <div class="section-heading">
+            <span class="section-kicker">07</span>
+            <h2 id="positioning-heading">Positioning statement</h2>
+          </div>
+          <p class="intro-copy">Text-to-SQL DAG 설계를 중심으로 AI 질의 서비스의 실행 흐름을 구조화하고, Azure OpenAI·Cosmos DB·Form Recognizer 기반 백엔드와 TypeScript/React 프론트엔드를 구현했습니다. 금융·제조·진단 도메인에서 인증, 데이터 파싱, 리포트, 업무 CRUD, 배포 설정과 운영 오류를 PR 단위로 개선해 제품에 반영했습니다.</p>
+        </section>
+
+        <footer class="resume-footer">
+          <span>김수현 · Selected work / Outcomes</span>
+          <span>02 / 02</span>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
