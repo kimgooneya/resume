@@ -13,7 +13,7 @@ C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험
 ## 핵심 역량 키워드
 
 - Backend: C#, .NET, ASP.NET Core, Azure Functions, REST API, CRUD, DI
-- AI/Data: Azure OpenAI, LLM SDK migration, RAG/CXP, Cosmos DB, Form Recognizer, Excel/document parsing
+- AI/Data: Azure OpenAI, LLM SDK migration, Text-to-SQL, DAG orchestration, RAG/CXP, Cosmos DB, Form Recognizer, Excel/document parsing
 - Frontend: React, TypeScript, Next.js, Blazor, BFF, authentication cookie, model management UI
 - Platform: Keycloak, Identity, secrets import/export, cloud/keyless configuration, deployment configuration
 - Delivery: PR 기반 개발, 기능 단위 릴리스, 운영 오류 수정, 고객 피드백 반영, PoC-to-product iteration
@@ -62,13 +62,14 @@ C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험
 
 ### langcodestartup/kt-gsi
 
-- 역할: AI 검색/질의 서비스의 백엔드·보안 설정 개발자
+- 역할: Text-to-SQL DAG 아키텍처 핵심 설계 및 AI 검색/질의 서비스 백엔드·보안 설정 개발자
 - 기여:
+  - Text-to-SQL 처리 흐름을 DAG 구조로 설계하고 핵심 오케스트레이션 역할 수행
   - secrets import/export와 Azure 리소스 기반 설정 경계 정리
   - 로컬 DB 의존성을 제거하고 cloud/keyless 기준으로 전환
   - 날짜 타입 오류 사전 차단·재시도, 상품 조회 조건과 채널 앵커링 로직 개선
   - 9개 authored PR을 모두 병합
-- 이력서 문장: AI 질의 서비스에서 secrets 관리와 cloud/keyless 전환을 구현하고, SQL 날짜 오류·재시도·상품 조회 조건을 개선하는 9개 병합 PR을 수행했습니다.
+- 이력서 문장: Text-to-SQL DAG 아키텍처를 핵심적으로 설계하고, AI 질의 서비스의 secrets 관리·cloud/keyless 전환과 SQL 오류 대응을 포함한 9개 병합 PR을 수행했습니다.
 - 근거: [PR #9](https://github.com/langcodestartup/kt-gsi/pull/9), [PR #7](https://github.com/langcodestartup/kt-gsi/pull/7), [PR #1](https://github.com/langcodestartup/kt-gsi/pull/1)
 
 ### langcodestartup/Langcode.CXP
