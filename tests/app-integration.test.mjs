@@ -243,6 +243,7 @@ describe("classic RPG application integration", () => {
     expect(surface.elements.get(".game-shell").dataset.theme).toBeUndefined();
     surface.elements.get("#field-guide .region-list").children[1].click();
     expect(surface.elements.get(".game-shell").dataset.theme).toBe("city");
+    expect(surface.document.activeElement).toBe(surface.canvas);
     app.destroy();
   });
 
@@ -379,7 +380,7 @@ describe("classic RPG application integration", () => {
 
     // Then: open-space movement remains immediate and accumulates both steps
     expect(afterFirstStep).toBeGreaterThan(before);
-    expect(app.getState().tileState.player).toEqual({ x: 20, y: 56, facing: "up" });
+    expect(app.getState().tileState.player).toEqual({ x: 24, y: 28, facing: "up" });
     expect(surface.context.fillRectCalls).toBeGreaterThan(afterFirstStep);
     app.destroy();
   });
@@ -405,6 +406,40 @@ describe("classic RPG application integration", () => {
     // Then: the secondary resident, not the landmark resident, owns the dialogue
     expect(surface.elements.get("#dialogue-speaker").textContent).toBe(resident.role);
     expect(surface.elements.get("#dialogue-copy").textContent).toContain(resident.dialogue.problem.lines[0]);
+    app.destroy();
+  });
+
+  test("Given the central landmark resident, When Space and Escape are pressed, Then the record opens and both explanation layers close", async () => {
+    // Given: the player reaches the central forest plaza and faces its resident
+    const surface = createSurface({ reduced: true });
+    const app = await createApplication({
+      document: surface.document,
+      loadProjects: async () => projects,
+      storage: createStorage(),
+      window: surface.window,
+    });
+    surface.elements.get("#field-guide .region-list").children[0].click();
+    const region = REGIONS[0];
+    for (const action of shortestActions(region)) app.handleAction(action);
+    app.handleAction("right");
+
+    // When: Space advances the resident story into the detailed project record
+    press(surface.window, "Space");
+    press(surface.window, "Space");
+    press(surface.window, "Space");
+    press(surface.window, "Space");
+
+    // Then: the landmark explanation is readable and Escape closes the modal first
+    expect(surface.elements.get("#dialogue-speaker").textContent).toBe(region.resident.role);
+    expect(surface.elements.get("#project-dialog").open).toBe(true);
+    press(surface.window, "Escape");
+    expect(surface.elements.get("#project-dialog").open).toBe(false);
+    expect(app.getState().mode).toBe("dialogue");
+
+    // And: Escape closes the resident conversation and returns control to the map
+    press(surface.window, "Escape");
+    expect(surface.elements.get("#dialogue-box").hidden).toBe(true);
+    expect(app.getState().mode).toBe("map");
     app.destroy();
   });
 

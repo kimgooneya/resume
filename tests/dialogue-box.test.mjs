@@ -128,7 +128,7 @@ describe("resident dialogue box", () => {
     expect(elements["#dialogue-copy"].children.filter(({ tagName }) => tagName === "BR"))
       .toHaveLength(1);
     expect(elements["#dialogue-progress"].textContent).toBe("01/03");
-    expect(elements[".dialogue-actions"].textContent).toBe("A 다음 · B 닫기");
+    expect(elements[".dialogue-actions"].textContent).toBe("Space 다음 · Esc 닫기");
     expect(stageElements[0].getAttribute("aria-current")).toBe("step");
     expect(modes).toEqual(["dialogue"]);
   });
@@ -162,7 +162,7 @@ describe("resident dialogue box", () => {
     });
 
     expect(results).toEqual(actions.map(() => ({
-      actions: "A 기록 자세히 보기 · B 대화 끝내기",
+      actions: "Space 기록 자세히 보기 · Esc 대화 끝내기",
       completed: ["city"],
       progress: "03/03",
     })));

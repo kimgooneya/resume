@@ -57,7 +57,7 @@ function featureCells(feature) {
 }
 
 describe("region data contract", () => {
-  test("provides five ordered 40 by 64 LCD regions", () => {
+  test("provides five ordered 48 by 40 LCD regions", () => {
     // Given: the immutable region catalogue
     const dimensions = [MAP_WIDTH, MAP_HEIGHT, VIEWPORT_WIDTH, VIEWPORT_HEIGHT, TILE_SIZE];
 
@@ -65,7 +65,7 @@ describe("region data contract", () => {
     const ids = REGIONS.map(({ id }) => id);
 
     // Then: the map and logical viewport match the field-guide contract
-    expect(dimensions).toEqual([40, 64, 24, 18, 16]);
+    expect(dimensions).toEqual([48, 40, 24, 18, 16]);
     expect(REGION_IDS).toEqual(["forest", "city", "desert", "snow", "coast"]);
     expect(ids).toEqual(REGION_IDS);
     expect(REGIONS).toHaveLength(5);
@@ -101,7 +101,7 @@ describe("region data contract", () => {
     ]);
   });
 
-  test("places one southern start and a northern landmark resident per map", () => {
+  test("places one southern start and a central landmark resident per map", () => {
     // Given: all authored region maps
     const locationCounts = REGIONS.map((region) => {
       const cells = region.tiles.flat();
@@ -121,12 +121,14 @@ describe("region data contract", () => {
       interaction,
     }));
 
-    // Then: the traversal starts south and ends adjacent to a northern resident
+    // Then: the traversal starts south and ends adjacent to a central resident
     expect(locationCounts).toEqual([[1, 1, 4, 4], [1, 1, 4, 4], [1, 1, 4, 4], [1, 1, 4, 4], [1, 1, 4, 4]]);
     for (const { start, landmark, resident, interaction } of positions) {
-      expect(start.y).toBeGreaterThanOrEqual(52);
-      expect(landmark.y).toBeLessThanOrEqual(12);
-      expect(resident.y).toBeLessThanOrEqual(12);
+      expect(start.y).toBeGreaterThanOrEqual(MAP_HEIGHT - 10);
+      expect(Math.abs(landmark.x - MAP_WIDTH / 2)).toBeLessThanOrEqual(3);
+      expect(Math.abs(landmark.y - MAP_HEIGHT / 2)).toBeLessThanOrEqual(3);
+      expect(Math.abs(resident.x - MAP_WIDTH / 2)).toBeLessThanOrEqual(3);
+      expect(Math.abs(resident.y - MAP_HEIGHT / 2)).toBeLessThanOrEqual(3);
       expect(Math.abs(interaction.x - resident.x) + Math.abs(interaction.y - resident.y)).toBe(1);
     }
   });
@@ -156,6 +158,24 @@ describe("region data contract", () => {
     })));
   });
 
+  test("scatters residents across the open town instead of stacking them at the landmark", () => {
+    // Given: each region's complete resident roster
+    const spread = REGIONS.map(({ residents }) => {
+      const xs = residents.map(({ x }) => x);
+      const ys = residents.map(({ y }) => y);
+      const quadrants = new Set(residents.map(({ x, y }) => `${x < MAP_WIDTH / 2 ? "west" : "east"}:${y < MAP_HEIGHT / 2 ? "north" : "south"}`));
+      return {
+        horizontalSpan: Math.max(...xs) - Math.min(...xs),
+        verticalSpan: Math.max(...ys) - Math.min(...ys),
+        quadrants: quadrants.size,
+      };
+    });
+
+    // When / Then: positions cover the field's corners and central plaza
+    expect(spread.every(({ horizontalSpan, verticalSpan, quadrants }) =>
+      horizontalSpan >= 24 && verticalSpan >= 16 && quadrants >= 3)).toBe(true);
+  });
+
   test("blocks every map edge from walking exits", () => {
     // Given: the perimeter of each local map
     const edgeTiles = REGIONS.flatMap(({ tiles }) => tiles.flatMap((row, y) =>
@@ -174,7 +194,7 @@ describe("region data contract", () => {
     const distances = REGIONS.map(shortestPathLength);
 
     // When: breadth-first travel distance is measured
-    const outOfRange = distances.filter((distance) => distance === null || distance < 40 || distance > 80);
+    const outOfRange = distances.filter((distance) => distance === null || distance < 8 || distance > 36);
 
     // Then: the open field is reachable without a forced maze traversal
     expect(outOfRange).toEqual([]);
@@ -222,7 +242,7 @@ describe("region data contract", () => {
       snow: ["ridge", "snowbank", "stream"],
       coast: ["bridge", "dock", "shore", "water"],
     };
-    const bands = [[0, 22], [23, 45], [46, 63]];
+    const bands = [[0, 12], [13, 26], [27, 39]];
 
     // When: descriptor bounds, semantic grammar, and visible band coverage are measured
     const summaries = REGIONS.map((region) => ({
@@ -275,8 +295,8 @@ describe("region data contract", () => {
     expect(measurements.every(({ frozen }) => frozen)).toBe(true);
   });
 
-  test("authors one dominant northern precinct around each landmark and resident", () => {
-    // Given: every region's destination geometry and its named precinct cluster
+  test("authors one dominant central precinct around each landmark and resident", () => {
+    // Given: every region's central destination geometry and its named precinct cluster
     const precincts = REGIONS.map((region) => {
       const matches = region.scenery.filter(({ role }) => role === "landmark-precinct");
       const precinct = matches[0];
@@ -290,9 +310,9 @@ describe("region data contract", () => {
       };
     });
 
-    // When / Then: each north destination reads as one authored place, not a loose sprite
+    // When / Then: each central destination reads as one authored place, not a loose sprite
     expect(precincts.every(({ count }) => count === 1)).toBe(true);
-    expect(precincts.every(({ band }) => band === "north")).toBe(true);
+    expect(precincts.every(({ band }) => band === "middle")).toBe(true);
     expect(precincts.every(({ area }) => area >= 70)).toBe(true);
     expect(precincts.every(({ includesLandmark, includesResident }) =>
       includesLandmark && includesResident)).toBe(true);
@@ -398,7 +418,7 @@ describe("region data contract", () => {
     malformed.scenery[0].x = MAP_WIDTH - 1;
     malformed.scenery[0].width = 4;
 
-    // When / Then: validation rejects composition outside the 40 by 64 map
+    // When / Then: validation rejects composition outside the 48 by 40 map
     expect(() => validateRegion(malformed)).toThrow(/scenery/);
   });
 

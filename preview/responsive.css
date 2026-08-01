@@ -162,7 +162,13 @@
   .dpad-down { grid-area: 3 / 2; }
 
   .keyboard-help {
-    display: none;
+    align-content: center;
+    align-items: center;
+    min-width: 0;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    font-size: var(--font-size-micro);
+    line-height: var(--leading-tight);
   }
 
   .action-buttons {

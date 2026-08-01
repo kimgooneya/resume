@@ -137,6 +137,8 @@ export async function createApplication(
     initialSelection.hidden = true;
     inputController?.reset();
     setMode("map");
+    canvas.focus?.();
+    window.scrollTo?.(0, 0);
     draw();
     appStatus.textContent = `${region.label} 탐험을 시작했습니다.`;
     return true;

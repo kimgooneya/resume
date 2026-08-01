@@ -4,6 +4,41 @@ function feature(kind, role, band, x, y, width, profile) {
   return { kind, role, band, x, y, width, height: mask.length, mask };
 }
 
+const AUTHORED_MAP_WIDTH = 48;
+const AUTHORED_MAP_HEIGHT = 40;
+
+function resizeMask(mask, width, height) {
+  return Array.from({ length: height }, (_, y) =>
+    Array.from({ length: width }, (_, x) => {
+      const sourceY = Math.min(mask.length - 1, Math.floor((y * mask.length) / height));
+      const sourceX = Math.min(mask[0].length - 1, Math.floor((x * mask[0].length) / width));
+      return mask[sourceY][sourceX];
+    }).join(""),
+  );
+}
+
+function fitScenery(regionId, scenery) {
+  return scenery.map((source) => {
+    const width = Math.min(AUTHORED_MAP_WIDTH, Math.max(2, Math.round(source.width * 1.2)));
+    const height = Math.min(AUTHORED_MAP_HEIGHT, Math.max(2, Math.round(source.height * 0.58)));
+    const x = source.role === "landmark-precinct"
+      ? Math.floor((AUTHORED_MAP_WIDTH - width) / 2)
+      : Math.min(AUTHORED_MAP_WIDTH - width, Math.round(source.x * 1.2));
+    const y = source.role === "landmark-precinct"
+      ? 15
+      : Math.min(AUTHORED_MAP_HEIGHT - height, Math.round(source.y * 0.58));
+    return {
+      ...source,
+      band: source.role === "landmark-precinct" ? "middle" : source.band,
+      x,
+      y,
+      width,
+      height,
+      mask: resizeMask(source.mask, width, height),
+    };
+  });
+}
+
 const SCENERY_TABLE = {
   forest: [
     feature("canopy", "mass", "north", 0, 0, 18, [
@@ -274,7 +309,7 @@ export const SCENERY_ROLES = Object.freeze(["accent", "landmark-precinct", "mass
 export const SCENERY_BY_REGION_ID = Object.freeze(Object.fromEntries(
   Object.entries(SCENERY_TABLE).map(([regionId, features]) => [
     regionId,
-    Object.freeze(features.map((scenery) => Object.freeze({
+    Object.freeze(fitScenery(regionId, features).map((scenery) => Object.freeze({
       ...scenery,
       mask: Object.freeze(scenery.mask),
     }))),

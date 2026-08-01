@@ -347,6 +347,9 @@ function assertContract(candidateHtml, candidateStyles, candidateResponsive) {
   expect(mobileDeck).toMatch(
     /\.action-buttons\s*\{[\s\S]*?justify-content:\s*center\b/,
   );
+  expect(mobileDeck).not.toMatch(
+    /\.keyboard-help\s*\{[\s\S]*?display:\s*none\b/,
+  );
   expect(candidateHtml).toMatch(
     /<div(?=[^>]*data-mobile-region-list)(?=[^>]*class=["'][^"']*region-list)/,
   );

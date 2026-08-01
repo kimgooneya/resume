@@ -66,8 +66,8 @@ describe("pure tile engine", () => {
     // Then: player and camera reset immediately without persisted position
     expect(state).toEqual({
       regionId: "forest",
-      player: { x: 20, y: 58, facing: "down" },
-      camera: { x: 8, y: 46 },
+      player: { x: 24, y: 30, facing: "down" },
+      camera: { x: 12, y: 15 },
     });
     expect(Object.isFrozen(state)).toBe(true);
     expect(Object.isFrozen(state.player)).toBe(true);
@@ -83,16 +83,17 @@ describe("pure tile engine", () => {
     const after = reduceTileState(before, "left", forest);
 
     // Then: only one tile is traversed and the prior state stays unchanged
-    expect(after.player).toEqual({ x: 19, y: 58, facing: "left" });
-    expect(before.player).toEqual({ x: 20, y: 58, facing: "down" });
+    expect(after.player).toEqual({ x: 23, y: 30, facing: "left" });
+    expect(before.player).toEqual({ x: 24, y: 30, facing: "down" });
   });
 
   test("changes facing but not position for blocked and out-of-bounds steps", () => {
     // Given: a resident collision tile and one state at the map boundary
     const forest = REGIONS_BY_ID.forest;
+    const collisionResident = forest.residents[1];
     const collision = Object.freeze({
       regionId: forest.id,
-      player: Object.freeze({ x: 6, y: 12, facing: "down" }),
+      player: Object.freeze({ ...collisionResident.interaction, facing: "down" }),
       camera: Object.freeze({ x: 0, y: 0 }),
     });
     const boundary = Object.freeze({
@@ -106,7 +107,7 @@ describe("pure tile engine", () => {
     const outside = reduceTileState(boundary, "left", forest);
 
     // Then: both inputs apply facing without applying position
-    expect(blocked.player).toEqual({ x: 6, y: 12, facing: "up" });
+    expect(blocked.player).toEqual({ ...collisionResident.interaction, facing: "up" });
     expect(outside.player).toEqual({ x: 0, y: 0, facing: "left" });
     expect(blocked.camera).toEqual(collision.camera);
     expect(outside.camera).toEqual(boundary.camera);
@@ -128,27 +129,27 @@ describe("pure tile engine", () => {
       const screenY = state.player.y - state.camera.y;
       expect(Math.abs(state.player.x - previous.player.x) +
         Math.abs(state.player.y - previous.player.y)).toBe(1);
-      expect(state.camera.x).toBeWithin(0, 17);
-      expect(state.camera.y).toBeWithin(0, 47);
+      expect(state.camera.x).toBeWithin(0, MAP_WIDTH - 24 + 1);
+      expect(state.camera.y).toBeWithin(0, MAP_HEIGHT - 18 + 1);
       expect(
         (screenX >= 8 && screenX <= 15) ||
         state.camera.x === 0 ||
-        state.camera.x === 16,
+        state.camera.x === MAP_WIDTH - 24,
       ).toBe(true);
       expect(
         (screenY >= 6 && screenY <= 11) ||
         state.camera.y === 0 ||
-        state.camera.y === 46,
+        state.camera.y === MAP_HEIGHT - 18,
       ).toBe(true);
     }
     const nonFacing = state;
     const facing = reduceTileState(nonFacing, "right", forest);
 
     // Then: interaction is exposed only for Manhattan distance one plus facing
-    expect(route.length).toBeGreaterThanOrEqual(40);
-    expect(nonFacing.player).toEqual({ x: 5, y: 11, facing: "up" });
+    expect(route.length).toBeGreaterThanOrEqual(8);
+    expect(nonFacing.player).toEqual({ x: 23, y: 22, facing: "up" });
     expect(canInteract(nonFacing, forest)).toBe(false);
-    expect(facing.player).toEqual({ x: 5, y: 11, facing: "right" });
+    expect(facing.player).toEqual({ x: 23, y: 22, facing: "right" });
     expect(canInteract(facing, forest)).toBe(true);
     expect(reduceTileState(facing, "A", forest)).toBe(facing);
   });
@@ -217,8 +218,8 @@ describe("pure tile engine", () => {
     const region = openRegion();
     const state = Object.freeze({
       regionId: region.id,
-      player: Object.freeze({ x: 24, y: 52, facing: "down" }),
-      camera: Object.freeze({ x: 16, y: 46 }),
+      player: Object.freeze({ x: 24, y: 28, facing: "down" }),
+      camera: Object.freeze({ x: 16, y: 22 }),
     });
 
     // When: successful left and up steps cross each boundary
@@ -226,8 +227,8 @@ describe("pure tile engine", () => {
     const up = reduceTileState(left, "up", region);
 
     // Then: origins shift one tile on both axes
-    expect(left.camera).toEqual({ x: 15, y: 46 });
-    expect(up.camera).toEqual({ x: 15, y: 45 });
+    expect(left.camera).toEqual({ x: 15, y: 22 });
+    expect(up.camera).toEqual({ x: 15, y: 21 });
   });
 
   test("clamps camera origin at all four map edges", () => {
@@ -235,9 +236,9 @@ describe("pure tile engine", () => {
     const region = openRegion();
     const cases = [
       [{ x: 8, y: 20, facing: "right" }, { x: 0, y: 11 }, "left", { x: 0, y: 11 }],
-      [{ x: 31, y: 20, facing: "left" }, { x: 16, y: 11 }, "right", { x: 16, y: 11 }],
+      [{ x: 31, y: 20, facing: "left" }, { x: 24, y: 11 }, "right", { x: 24, y: 11 }],
       [{ x: 20, y: 6, facing: "down" }, { x: 8, y: 0 }, "up", { x: 8, y: 0 }],
-      [{ x: 20, y: 57, facing: "up" }, { x: 8, y: 46 }, "down", { x: 8, y: 46 }],
+      [{ x: 20, y: 37, facing: "up" }, { x: 8, y: 22 }, "down", { x: 8, y: 22 }],
     ];
 
     // When: each action attempts to track beyond an origin limit
@@ -248,7 +249,7 @@ describe("pure tile engine", () => {
         camera: Object.freeze(camera),
       }, action, region).camera);
 
-    // Then: x remains within 0..16 and y remains within 0..46
+    // Then: x remains within 0..24 and y remains within 0..22
     expect(cameras).toEqual(cases.map((entry) => entry[3]));
   });
 
@@ -258,8 +259,8 @@ describe("pure tile engine", () => {
     const valid = createTileState(forest);
     const malformed = {
       regionId: forest.id,
-      player: { x: Number.NaN, y: 58, facing: "down" },
-      camera: { x: 8, y: 46 },
+      player: { x: Number.NaN, y: 36, facing: "down" },
+      camera: { x: 12, y: 22 },
     };
 
     // When: unsupported inputs cross the pure reducer boundary
@@ -277,9 +278,10 @@ describe("pure tile engine", () => {
   test("does not freeze or mutate caller-owned camera on blocked reduction", () => {
     // Given: a mutable valid state whose next forest tile is a resident
     const forest = REGIONS_BY_ID.forest;
+    const blockedResident = forest.residents[1];
     const state = {
       regionId: forest.id,
-      player: { x: 6, y: 12, facing: "down" },
+      player: { ...blockedResident.interaction, facing: "down" },
       camera: { x: 0, y: 0 },
     };
     const cameraBefore = { ...state.camera };
@@ -292,7 +294,7 @@ describe("pure tile engine", () => {
     expect(Object.isFrozen(state.player)).toBe(false);
     expect(Object.isFrozen(state.camera)).toBe(false);
     expect(state.camera).toEqual(cameraBefore);
-    expect(blocked.player).toEqual({ x: 6, y: 12, facing: "up" });
+    expect(blocked.player).toEqual({ ...blockedResident.interaction, facing: "up" });
     expect(blocked.camera).toEqual(cameraBefore);
     expect(blocked.camera).not.toBe(state.camera);
     expect(Object.isFrozen(blocked)).toBe(true);
@@ -305,7 +307,7 @@ describe("pure tile engine", () => {
     const forest = REGIONS_BY_ID.forest;
     let state = Object.freeze({
       regionId: forest.id,
-      player: Object.freeze({ x: 6, y: 12, facing: "down" }),
+      player: Object.freeze({ ...forest.residents[1].interaction, facing: "down" }),
       camera: Object.freeze({ x: 0, y: 0 }),
     });
 
@@ -315,7 +317,7 @@ describe("pure tile engine", () => {
     }
 
     // Then: position and camera never advance while facing is applied
-    expect(state.player).toEqual({ x: 6, y: 12, facing: "up" });
+    expect(state.player).toEqual({ ...forest.residents[1].interaction, facing: "up" });
     expect(state.camera).toEqual({ x: 0, y: 0 });
   });
 });
