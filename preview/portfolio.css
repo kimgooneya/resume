@@ -11,6 +11,7 @@
   --archive-font-sans: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", sans-serif;
   --archive-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --archive-type-hero: clamp(2.8rem, 6vw, 5.2rem);
+  --archive-type-hero-mobile: clamp(2.55rem, 13vw, 4.2rem);
   --archive-type-section: clamp(1.8rem, 3vw, 3.2rem);
   --archive-type-card: clamp(1.2rem, 2vw, 1.65rem);
   --archive-type-body: 1rem;
@@ -838,9 +839,9 @@ summary {
   }
 
   .hero-title {
-    max-width: 8ch;
+    max-width: 100%;
     margin-top: var(--archive-space-4);
-    font-size: clamp(2.55rem, 13vw, 4.2rem);
+    font-size: var(--archive-type-hero-mobile);
   }
 
   .hero-summary {

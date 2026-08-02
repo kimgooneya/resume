@@ -26,7 +26,7 @@ describe("professional archive entry", () => {
     expect(html).toContain('aria-describedby="diagram-description"');
     expect(html).toContain("SCHEMA RETRIEVAL");
     expect(html).toContain('M340 275H364');
-    expect(html).toContain('M484 184V232H420V250');
+    expect(html).toContain('M484 168V216H420V250');
     expect(script).toContain('document.createElement("details")');
     expect(script).toContain("판단과 결과 접기");
   });
@@ -46,6 +46,7 @@ describe("professional archive entry", () => {
   test("keeps the archive visual system token-driven and responsive", () => {
     expect(css).toContain("--archive-paper: #f6f4ee");
     expect(css).toContain("--archive-font-display: \"Hahmlet\"");
+    expect(css).toContain("--archive-type-hero-mobile");
     expect(css).toContain("word-break: keep-all");
     expect(css).toContain("@media (max-width: 560px)");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");

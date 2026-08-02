@@ -299,6 +299,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 | `--archive-font-sans` | `"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", sans-serif` | 본문, 내비게이션, 버튼 |
 | `--archive-font-mono` | `ui-monospace, SFMono-Regular, Menlo, monospace` | 근거 라벨, 연도, 기술명 |
 | `--archive-type-hero` | `clamp(2.8rem, 6vw, 5.2rem)` | 첫 화면 선언 |
+| `--archive-type-hero-mobile` | `clamp(2.55rem, 13vw, 4.2rem)` | 560px 이하 첫 화면 선언 |
 | `--archive-type-section` | `clamp(1.8rem, 3vw, 3.2rem)` | 섹션 제목 |
 | `--archive-type-card` | `clamp(1.2rem, 2vw, 1.65rem)` | 사례 제목 |
 | `--archive-type-body` | `1rem` | 기본 본문 |
