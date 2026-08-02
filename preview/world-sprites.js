@@ -1,5 +1,6 @@
 const CANVAS_WIDTH = 384;
 const CANVAS_HEIGHT = 288;
+// allow: SIZE_OK — coordinate-locked pixel silhouettes are one visual asset boundary.
 
 function fill(context, color, x, y, width, height) {
   const left = Math.max(0, x);
@@ -13,10 +14,23 @@ function fill(context, color, x, y, width, height) {
 
 export function drawSign(context, palette, point) {
   const { x, y } = point;
-  fill(context, palette[0], x + 7, y + 6, 3, 14);
-  fill(context, palette[0], x, y, 18, 9);
-  fill(context, palette[2], x + 3, y + 2, 12, 5);
-  fill(context, palette[3], x + 11, y + 2, 3, 3);
+  const [darkest, dark, mid, light] = palette;
+  fill(context, darkest, x, y + 2, 28, 16);
+  fill(context, darkest, x + 22, y, 8, 20);
+  fill(context, darkest, x + 30, y + 4, 8, 12);
+  fill(context, darkest, x + 38, y + 8, 5, 4);
+  fill(context, dark, x + 3, y + 5, 22, 10);
+  fill(context, dark, x + 25, y + 3, 5, 14);
+  fill(context, dark, x + 31, y + 7, 6, 6);
+  fill(context, mid, x + 6, y + 8, 14, 4);
+  fill(context, light, x + 19, y + 8, 8, 4);
+  fill(context, light, x + 27, y + 6, 4, 8);
+  fill(context, darkest, x + 14, y + 18, 7, 15);
+  fill(context, dark, x + 17, y + 19, 2, 14);
+  fill(context, light, x + 12, y + 20, 3, 3);
+  fill(context, darkest, x + 4, y + 33, 25, 4);
+  fill(context, mid, x + 9, y + 34, 15, 2);
+  fill(context, darkest, x + 4, y + 24, 4, 5);
 }
 
 export function drawLandmark(context, region, point) {
@@ -42,6 +56,11 @@ export function drawLandmark(context, region, point) {
       fill(context, light, x + 33, y - 42, 7, 29);
       fill(context, darkest, x + 37, y - 51, 31, 8);
       fill(context, dark, x + 55, y - 47, 9, 15);
+      fill(context, darkest, x + 27, y - 44, 9, 5);
+      fill(context, mid, x + 32, y - 46, 12, 4);
+      fill(context, light, x + 40, y - 45, 6, 3);
+      fill(context, darkest, x + 35, y - 37, 4, 14);
+      fill(context, dark, x + 28, y - 29, 16, 3);
       fill(context, darkest, x - 40, y + 16, 96, 6);
       break;
     case "tower":
@@ -61,6 +80,11 @@ export function drawLandmark(context, region, point) {
       fill(context, darkest, x + 37, y - 24, 10, 35);
       fill(context, light, x + 40, y - 18, 4, 16);
       fill(context, darkest, x - 16, y - 46, 48, 6);
+      fill(context, darkest, x + 4, y - 61, 8, 15);
+      fill(context, mid, x + 6, y - 60, 4, 6);
+      fill(context, light, x + 5, y - 54, 6, 3);
+      fill(context, darkest, x - 21, y - 54, 58, 5);
+      fill(context, light, x - 15, y - 34, 7, 4);
       break;
     case "workshop":
       fill(context, darkest, x - 42, y - 12, 104, 38);
@@ -80,6 +104,12 @@ export function drawLandmark(context, region, point) {
       fill(context, light, x - 29, y, 5, 6);
       fill(context, darkest, x + 24, y - 4, 12, 13);
       fill(context, light, x + 28, y, 5, 6);
+      fill(context, darkest, x + 51, y - 4, 14, 16);
+      fill(context, mid, x + 54, y - 1, 8, 10);
+      fill(context, light, x + 56, y + 3, 4, 3);
+      fill(context, darkest, x + 47, y + 1, 4, 5);
+      fill(context, darkest, x + 61, y + 1, 4, 5);
+      fill(context, darkest, x + 55, y - 8, 5, 4);
       fill(context, darkest, x - 37, y + 21, 94, 5);
       break;
     case "relay":
@@ -100,6 +130,12 @@ export function drawLandmark(context, region, point) {
       fill(context, light, x - 25, y + 8, 5, 5);
       fill(context, darkest, x + 30, y + 5, 12, 11);
       fill(context, light, x + 34, y + 8, 5, 5);
+      fill(context, darkest, x - 2, y - 57, 16, 5);
+      fill(context, mid, x + 3, y - 62, 6, 9);
+      fill(context, light, x + 4, y - 61, 4, 4);
+      fill(context, darkest, x - 17, y - 51, 12, 4);
+      fill(context, darkest, x + 20, y - 51, 12, 4);
+      fill(context, light, x - 14, y - 50, 6, 2);
       fill(context, darkest, x - 35, y + 20, 82, 6);
       break;
     case "lighthouse":
@@ -122,6 +158,11 @@ export function drawLandmark(context, region, point) {
       fill(context, mid, x - 35, y + 5, 7, 5);
       fill(context, darkest, x + 24, y + 2, 14, 10);
       fill(context, mid, x + 28, y + 5, 6, 5);
+      fill(context, darkest, x - 21, y - 30, 44, 5);
+      fill(context, mid, x - 14, y - 29, 30, 3);
+      fill(context, light, x - 4, y - 34, 10, 4);
+      fill(context, darkest, x - 12, y - 7, 26, 4);
+      fill(context, light, x - 43, y + 9, 10, 3);
       break;
   }
 }
@@ -129,45 +170,69 @@ export function drawLandmark(context, region, point) {
 export function drawResident(context, region, point, resident = region.resident) {
   const [darkest, dark, mid, light] = region.palette;
   const { x, y } = point;
-  fill(context, darkest, x, y + 25, 26, 4);
-  fill(context, darkest, x + 2, y - 9, 22, 12);
-  fill(context, dark, x + 3, y - 14, 18, 12);
-  fill(context, mid, x + 6, y - 10, 12, 5);
-  fill(context, light, x + 6, y - 3, 12, 8);
-  fill(context, darkest, x + 8, y, 3, 3);
-  fill(context, dark, x + 2, y + 5, 22, 16);
-  fill(context, mid, x + 7, y + 8, 12, 8);
-  fill(context, darkest, x + 3, y + 20, 7, 7);
-  fill(context, darkest, x + 16, y + 20, 7, 7);
-  fill(context, light, x + 21, y + 7, 4, 8);
+  fill(context, darkest, x + 2, y + 39, 31, 4);
+  fill(context, darkest, x + 6, y + 31, 9, 10);
+  fill(context, darkest, x + 22, y + 33, 9, 8);
+  fill(context, mid, x + 8, y + 34, 5, 4);
+  fill(context, mid, x + 24, y + 35, 5, 3);
+  fill(context, darkest, x + 3, y + 12, 29, 21);
+  fill(context, dark, x + 7, y + 15, 21, 15);
+  fill(context, mid, x + 10, y + 19, 15, 9);
+  fill(context, light, x + 8, y + 14, 19, 4);
+  fill(context, darkest, x + 5, y + 18, 5, 13);
+  fill(context, darkest, x + 27, y + 18, 5, 13);
+  fill(context, light, x + 4, y + 29, 4, 4);
+  fill(context, light, x + 28, y + 27, 4, 4);
+  fill(context, darkest, x + 6, y - 6, 22, 20);
+  fill(context, dark, x + 8, y - 9, 18, 7);
+  fill(context, mid, x + 11, y - 11, 12, 4);
+  fill(context, light, x + 10, y - 2, 14, 10);
+  fill(context, darkest, x + 12, y + 1, 3, 3);
+  fill(context, darkest, x + 20, y + 1, 3, 3);
+  fill(context, mid, x + 16, y + 5, 4, 2);
 
   switch (resident.sprite) {
     case "researcher":
-      fill(context, light, x + 17, y + 6, 11, 15);
-      fill(context, darkest, x + 25, y + 4, 3, 20);
-      fill(context, mid, x + 19, y + 9, 6, 4);
+      fill(context, darkest, x + 28, y + 10, 7, 23);
+      fill(context, light, x + 25, y + 14, 8, 15);
+      fill(context, mid, x + 27, y + 18, 5, 5);
+      fill(context, darkest, x + 10, y, 6, 2);
+      fill(context, darkest, x + 19, y, 6, 2);
+      fill(context, light, x + 25, y + 28, 5, 4);
       break;
     case "engineer":
-      fill(context, mid, x + 1, y - 16, 23, 5);
-      fill(context, light, x + 5, y + 8, 7, 11);
-      fill(context, darkest, x + 22, y + 5, 6, 19);
+      fill(context, darkest, x + 5, y - 14, 24, 7);
+      fill(context, mid, x + 8, y - 17, 18, 5);
+      fill(context, light, x + 11, y + 18, 8, 12);
+      fill(context, darkest, x + 28, y + 13, 6, 18);
+      fill(context, mid, x + 30, y + 10, 8, 5);
+      fill(context, light, x + 31, y + 11, 5, 2);
       break;
     case "maker":
-      fill(context, mid, x + 5, y + 8, 12, 11);
-      fill(context, darkest, x + 22, y + 2, 5, 22);
-      fill(context, light, x + 19, y, 9, 7);
+      fill(context, darkest, x + 34, y + 13, 4, 25);
+      fill(context, darkest, x + 28, y + 8, 14, 7);
+      fill(context, light, x + 31, y + 10, 8, 3);
+      fill(context, light, x + 28, y + 25, 5, 4);
+      fill(context, mid, x + 12, y + 20, 12, 10);
+      fill(context, light, x + 6, y + 22, 7, 5);
       break;
     case "controller":
-      fill(context, darkest, x + 1, y - 16, 4, 13);
-      fill(context, darkest, x + 20, y - 16, 6, 13);
-      fill(context, mid, x + 6, y + 8, 12, 9);
-      fill(context, light, x + 23, y + 4, 5, 7);
+      fill(context, darkest, x + 6, y - 20, 4, 17);
+      fill(context, darkest, x + 24, y - 20, 4, 17);
+      fill(context, light, x + 4, y - 22, 8, 4);
+      fill(context, light, x + 22, y - 22, 8, 4);
+      fill(context, mid, x + 11, y + 19, 14, 11);
+      fill(context, light, x + 28, y + 16, 5, 8);
       break;
     case "guide":
-      fill(context, darkest, x, y - 11, 28, 5);
-      fill(context, mid, x + 10, y + 7, 12, 14);
-      fill(context, darkest, x, y + 1, 4, 23);
-      fill(context, light, x, y - 5, 10, 9);
+      fill(context, darkest, x + 1, y - 10, 32, 6);
+      fill(context, mid, x + 7, y - 15, 20, 7);
+      fill(context, darkest, x + 39, y + 4, 4, 32);
+      fill(context, darkest, x + 33, y + 5, 16, 14);
+      fill(context, light, x + 36, y + 8, 10, 7);
+      fill(context, mid, x + 34, y + 18, 14, 3);
+      fill(context, light, x + 29, y + 27, 5, 4);
+      fill(context, mid, x + 13, y + 18, 12, 13);
       break;
   }
 }
@@ -176,70 +241,80 @@ export function drawPlayer(context, palette, player, point) {
   const { x, y } = point;
   const [darkest, dark, mid, light] = palette;
   const alternateStep = (player.x + player.y) % 2 === 1;
-  const leftBootY = y + (alternateStep ? 14 : 15);
-  const rightBootY = y + (alternateStep ? 15 : 14);
+  const bob = alternateStep ? -1 : 0;
+  const bodyY = y + 13 + bob;
+  const headY = y - 7 + bob;
+  const leftBootX = alternateStep ? x + 5 : x + 8;
+  const rightBootX = alternateStep ? x + 22 : x + 19;
+  const leftBootY = y + (alternateStep ? 34 : 37);
+  const rightBootY = y + (alternateStep ? 37 : 34);
+  const leftArmY = bodyY + (alternateStep ? 8 : 6);
+  const rightArmY = bodyY + (alternateStep ? 6 : 8);
 
-  fill(context, darkest, x - 4, y + 14, 24, 3);
-  fill(context, darkest, x - 1, y + 8, 8, 8);
-  fill(context, darkest, x + 9, y + 8, 8, 8);
-  fill(context, mid, x + 1, y + 8, 5, 5);
-  fill(context, mid, x + 11, y + 8, 5, 5);
-  fill(context, darkest, x - 1, leftBootY, 8, 2);
-  fill(context, darkest, x + 9, rightBootY, 8, 2);
-  fill(context, darkest, x - 3, y - 2, 22, 12);
-  fill(context, dark, x - 1, y, 18, 10);
-  fill(context, mid, x + 2, y + 1, 12, 7);
-  fill(context, darkest, x - 4, y, 4, 10);
-  fill(context, darkest, x + 17, y, 4, 10);
-  fill(context, light, x - 4, y + 8, 3, 3);
-  fill(context, light, x + 18, y + 8, 3, 3);
-  fill(context, darkest, x - 2, y - 13, 20, 13);
+  fill(context, darkest, x + 2, y + 42, 31, 3);
+  fill(context, darkest, leftBootX, leftBootY, 10, 8);
+  fill(context, darkest, rightBootX, rightBootY, 10, 8);
+  fill(context, mid, leftBootX + 2, leftBootY + 2, 6, 3);
+  fill(context, mid, rightBootX + 2, rightBootY + 2, 6, 3);
+  fill(context, darkest, x + 6, bodyY + 18, 10, 13);
+  fill(context, darkest, x + 20, bodyY + 18, 10, 13);
+  fill(context, dark, x + 8, bodyY + 19, 6, 10);
+  fill(context, dark, x + 22, bodyY + 19, 6, 10);
+  fill(context, darkest, x, leftArmY, 7, 14);
+  fill(context, darkest, x + 28, rightArmY, 7, 14);
+  fill(context, light, x + 1, leftArmY + 10, 5, 4);
+  fill(context, light, x + 29, rightArmY + 10, 5, 4);
+  fill(context, darkest, x + 3, bodyY, 29, 23);
+  fill(context, dark, x + 7, bodyY + 3, 21, 17);
+  fill(context, mid, x + 10, bodyY + 7, 15, 10);
+  fill(context, light, x + 8, bodyY + 2, 19, 4);
+  fill(context, darkest, x + 6, headY, 23, 22);
 
   if (player.facing === "down") {
-    fill(context, light, x, y - 10, 16, 8);
-    fill(context, dark, x, y - 12, 16, 4);
-    fill(context, dark, x, y - 9, 4, 3);
-    fill(context, darkest, x + 3, y - 7, 2, 2);
-    fill(context, darkest, x + 11, y - 7, 2, 2);
-    fill(context, mid, x + 7, y - 5, 2, 2);
-    fill(context, light, x + 2, y - 2, 12, 3);
-    fill(context, darkest, x + 12, y - 1, 3, 4);
-    fill(context, darkest, x + 2, y + 1, 3, 8);
-    fill(context, dark, x + 10, y + 4, 7, 6);
-    fill(context, light, x + 11, y + 5, 4, 3);
+    fill(context, light, x + 9, headY + 5, 17, 12);
+    fill(context, dark, x + 9, headY + 2, 17, 5);
+    fill(context, dark, x + 9, headY + 6, 5, 5);
+    fill(context, darkest, x + 12, headY + 9, 3, 3);
+    fill(context, darkest, x + 21, headY + 9, 3, 3);
+    fill(context, mid, x + 17, headY + 13, 3, 2);
+    fill(context, light, x + 11, headY + 18, 13, 3);
+    fill(context, darkest, x + 22, bodyY - 1, 5, 5);
+    fill(context, darkest, x + 9, bodyY, 4, 10);
+    fill(context, dark, x + 22, bodyY + 6, 8, 8);
+    fill(context, light, x + 23, bodyY + 7, 5, 4);
     return;
   }
 
   if (player.facing === "up") {
-    fill(context, dark, x, y - 11, 16, 9);
-    fill(context, mid, x + 2, y - 12, 12, 4);
-    fill(context, darkest, x, y - 5, 16, 3);
-    fill(context, light, x + 2, y - 2, 12, 3);
-    fill(context, darkest, x + 1, y, 14, 10);
-    fill(context, dark, x + 3, y + 1, 10, 8);
-    fill(context, mid, x + 5, y + 3, 6, 4);
-    fill(context, light, x + 6, y + 4, 4, 2);
-    fill(context, darkest, x + 1, y - 1, 3, 6);
-    fill(context, darkest, x + 12, y - 1, 3, 6);
+    fill(context, dark, x + 9, headY + 3, 17, 13);
+    fill(context, mid, x + 11, headY, 13, 5);
+    fill(context, darkest, x + 9, headY + 13, 17, 4);
+    fill(context, light, x + 11, bodyY - 2, 13, 3);
+    fill(context, darkest, x + 11, bodyY + 2, 13, 12);
+    fill(context, dark, x + 14, bodyY + 4, 8, 8);
+    fill(context, mid, x + 16, bodyY + 7, 5, 4);
+    fill(context, light, x + 17, bodyY + 8, 3, 2);
+    fill(context, darkest, x + 10, bodyY, 4, 10);
+    fill(context, darkest, x + 23, bodyY, 4, 10);
     return;
   }
 
   const facesLeft = player.facing === "left";
-  const faceX = facesLeft ? x - 1 : x + 5;
-  const eyeX = facesLeft ? x + 1 : x + 13;
-  const packX = facesLeft ? x + 11 : x - 2;
-  const deviceX = facesLeft ? x - 3 : x + 17;
-  fill(context, light, faceX, y - 10, 12, 8);
-  fill(context, dark, x, y - 12, 16, 4);
-  fill(context, dark, facesLeft ? x + 10 : x, y - 9, 6, 7);
-  fill(context, darkest, eyeX, y - 7, 2, 2);
-  fill(context, mid, facesLeft ? x - 2 : x + 16, y - 6, 3, 3);
-  fill(context, light, x + 2, y - 2, 12, 3);
-  fill(context, darkest, packX, y + 1, 7, 9);
-  fill(context, dark, packX + 1, y + 3, 5, 6);
-  fill(context, darkest, deviceX, y + 3, 5, 6);
-  fill(context, light, deviceX + 1, y + 4, 3, 3);
-  fill(context, mid, facesLeft ? x - 3 : x + 18, y + 7, 3, 2);
+  const faceX = facesLeft ? x + 7 : x + 14;
+  const eyeX = facesLeft ? x + 10 : x + 24;
+  const packX = facesLeft ? x + 24 : x + 1;
+  const deviceX = facesLeft ? x + 1 : x + 29;
+  fill(context, light, faceX, headY + 5, 14, 11);
+  fill(context, dark, x + 9, headY + 2, 17, 5);
+  fill(context, dark, facesLeft ? x + 20 : x + 9, headY + 6, 6, 8);
+  fill(context, darkest, eyeX, headY + 9, 3, 3);
+  fill(context, mid, facesLeft ? x + 5 : x + 27, headY + 8, 4, 4);
+  fill(context, light, x + 11, bodyY - 2, 13, 3);
+  fill(context, darkest, packX, bodyY + 1, 8, 12);
+  fill(context, dark, packX + 2, bodyY + 3, 5, 8);
+  fill(context, darkest, deviceX, bodyY + 5, 6, 8);
+  fill(context, light, deviceX + 1, bodyY + 6, 4, 4);
+  fill(context, mid, facesLeft ? x : x + 31, bodyY + 15, 4, 3);
 }
 
 export function drawMarker(context, palette, point) {

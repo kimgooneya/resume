@@ -9,6 +9,123 @@ function fill(context, color, x, y, width, height) {
   context.fillRect(x, y, width, height);
 }
 
+const LANDMARK_BUFFER_PROFILE = Object.freeze([
+  [-3, 3], [-5, 5], [-6, 6], [-6, 6], [-6, 6], [-6, 6], [-6, 6],
+  [-5, 5], [-5, 5], [-4, 4], [-4, 4], [-3, 3], [-2, 2],
+]);
+
+function fillWorld(context, color, camera, worldX, worldY, width, height) {
+  const x = (worldX - camera.x) * TILE_SIZE;
+  const y = (worldY - camera.y) * TILE_SIZE;
+  const right = x + width;
+  const bottom = y + height;
+  const left = Math.max(0, x);
+  const top = Math.max(0, y);
+  const clippedRight = Math.min(VIEWPORT_WIDTH * TILE_SIZE, right);
+  const clippedBottom = Math.min(VIEWPORT_HEIGHT * TILE_SIZE, bottom);
+  if (left >= clippedRight || top >= clippedBottom) return;
+  fill(context, color, left, top, clippedRight - left, clippedBottom - top);
+}
+
+function fillLandmarkRow(context, color, camera, landmark, row, left, right) {
+  fillWorld(
+    context,
+    color,
+    camera,
+    landmark.x + left,
+    landmark.y + row,
+    (right - left + 1) * TILE_SIZE,
+    TILE_SIZE,
+  );
+}
+
+function paintForestApproach(context, palette, camera, landmark) {
+  const [, dark, , light] = palette;
+  fillWorld(context, light, camera, landmark.x - 2, landmark.y + 2, TILE_SIZE * 5, TILE_SIZE * 6);
+  fillWorld(context, dark, camera, landmark.x - 3, landmark.y + 2, 3, TILE_SIZE * 6);
+  fillWorld(context, dark, camera, landmark.x + 3, landmark.y + 2, 3, TILE_SIZE * 6);
+  fillWorld(context, dark, camera, landmark.x - 1, landmark.y + 3, 4, 3);
+  fillWorld(context, dark, camera, landmark.x + 1, landmark.y + 5, 5, 3);
+  fillWorld(context, dark, camera, landmark.x - 2, landmark.y + 7, 5, 3);
+}
+
+function paintCityApproach(context, palette, camera, landmark) {
+  const [, dark, , light] = palette;
+  fillWorld(context, light, camera, landmark.x - 3, landmark.y + 2, TILE_SIZE * 7, TILE_SIZE * 6);
+  for (let row = 0; row < 6; row += 1) {
+    fillWorld(context, dark, camera, landmark.x - 3, landmark.y + 2 + row, TILE_SIZE * 7, 2);
+  }
+  for (const column of [-1, 1]) {
+    fillWorld(context, dark, camera, landmark.x + column, landmark.y + 2, 2, TILE_SIZE * 6);
+  }
+  fillWorld(context, palette[0], camera, landmark.x - 4, landmark.y + 2, 3, TILE_SIZE * 6);
+  fillWorld(context, palette[0], camera, landmark.x + 4, landmark.y + 2, 3, TILE_SIZE * 6);
+}
+
+function paintDesertApproach(context, palette, camera, landmark) {
+  const [, dark, , light] = palette;
+  fillWorld(context, light, camera, landmark.x - 3, landmark.y + 2, TILE_SIZE * 7, TILE_SIZE * 6);
+  for (const column of [-2, 2]) {
+    for (let row = 0; row < 6; row += 2) {
+      fillWorld(context, dark, camera, landmark.x + column, landmark.y + 2 + row, 4, TILE_SIZE);
+    }
+  }
+  fillWorld(context, dark, camera, landmark.x - 4, landmark.y + 7, TILE_SIZE * 2, 3);
+  fillWorld(context, dark, camera, landmark.x + 3, landmark.y + 6, TILE_SIZE, 3);
+}
+
+function paintSnowApproach(context, palette, camera, landmark) {
+  const [, dark, , light] = palette;
+  fillWorld(context, light, camera, landmark.x - 3, landmark.y + 2, TILE_SIZE * 7, TILE_SIZE * 6);
+  fillWorld(context, dark, camera, landmark.x - 4, landmark.y + 2, 3, TILE_SIZE * 6);
+  fillWorld(context, dark, camera, landmark.x + 4, landmark.y + 2, 3, TILE_SIZE * 6);
+  fillWorld(context, dark, camera, landmark.x - 2, landmark.y + 3, TILE_SIZE * 2, 3);
+  fillWorld(context, dark, camera, landmark.x + 1, landmark.y + 5, TILE_SIZE * 2, 3);
+  fillWorld(context, palette[0], camera, landmark.x - 3, landmark.y + 7, TILE_SIZE * 7, 2);
+}
+
+function paintCoastApproach(context, palette, camera, landmark) {
+  const [, dark, , light] = palette;
+  fillWorld(context, light, camera, landmark.x - 3, landmark.y + 2, TILE_SIZE * 7, TILE_SIZE * 6);
+  for (let row = 0; row < 6; row += 1) {
+    fillWorld(context, dark, camera, landmark.x - 2, landmark.y + 2 + row, TILE_SIZE * 5, 2);
+  }
+  fillWorld(context, dark, camera, landmark.x, landmark.y + 2, 3, TILE_SIZE * 6);
+  fillWorld(context, dark, camera, landmark.x - 4, landmark.y + 6, TILE_SIZE, 3);
+  fillWorld(context, dark, camera, landmark.x + 3, landmark.y + 7, TILE_SIZE, 3);
+}
+
+export function renderLandmarkTerrain(context, region, camera) {
+  const { landmark, palette } = region;
+  const [darkest, dark, mid] = palette;
+
+  for (let index = 0; index < LANDMARK_BUFFER_PROFILE.length; index += 1) {
+    const [left, right] = LANDMARK_BUFFER_PROFILE[index];
+    fillLandmarkRow(context, mid, camera, landmark, index - 6, left, right);
+  }
+
+  fillWorld(context, darkest, camera, landmark.x - 5, landmark.y + 1, TILE_SIZE * 11, 12);
+  fillWorld(context, dark, camera, landmark.x - 4, landmark.y + 1, TILE_SIZE * 9, 3);
+
+  switch (region.id) {
+    case "forest":
+      paintForestApproach(context, palette, camera, landmark);
+      break;
+    case "city":
+      paintCityApproach(context, palette, camera, landmark);
+      break;
+    case "desert":
+      paintDesertApproach(context, palette, camera, landmark);
+      break;
+    case "snow":
+      paintSnowApproach(context, palette, camera, landmark);
+      break;
+    case "coast":
+      paintCoastApproach(context, palette, camera, landmark);
+      break;
+  }
+}
+
 function paintCell(context, palette, kind, cell) {
   const { x, y, localX, localY, edge } = cell;
   const phase = (localX * 2 + localY) % 4;

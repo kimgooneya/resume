@@ -20,6 +20,8 @@ export const CAMERA_ORIGIN_BOUNDS = Object.freeze({
   maxY: MAP_HEIGHT - VIEWPORT_HEIGHT,
 });
 
+const LANDMARK_TOP_MARGIN = 5;
+
 const DIRECTION_STEPS = Object.freeze({
   up: Object.freeze({ x: 0, y: -1 }),
   right: Object.freeze({ x: 1, y: 0 }),
@@ -67,6 +69,17 @@ function trackAxis(position, origin, safeMinimum, safeMaximum, originMaximum) {
   return origin;
 }
 
+function frameLandmarkCamera(camera, player, landmark) {
+  if (!isMapPoint(landmark) || landmark.y - camera.y >= LANDMARK_TOP_MARGIN) return camera;
+  const framedOrigin = clamp(
+    landmark.y - LANDMARK_TOP_MARGIN,
+    CAMERA_ORIGIN_BOUNDS.minY,
+    CAMERA_ORIGIN_BOUNDS.maxY,
+  );
+  if (player.y - framedOrigin > SAFE_SCREEN_BOUNDS.maxY) return camera;
+  return { ...camera, y: Math.min(camera.y, framedOrigin) };
+}
+
 function isUsableState(state) {
   return typeof state?.regionId === "string" &&
     isMapPoint(state.player) &&
@@ -76,17 +89,16 @@ function isUsableState(state) {
 
 export function createTileState(region) {
   if (!isRegion(region)) {
-    throw new TypeError("region must provide a valid ID, start, and 48 by 40 tile map");
+    throw new TypeError("region must provide a valid ID, start, and expanded tile map");
   }
-  const cameraTargetX = Number.isInteger(region.landmark?.x) ? region.landmark.x : region.start.x;
   const camera = {
     x: clamp(
-      cameraTargetX - Math.floor(VIEWPORT_WIDTH / 2),
+      region.start.x - Math.floor((SAFE_SCREEN_BOUNDS.minX + SAFE_SCREEN_BOUNDS.maxX) / 2),
       CAMERA_ORIGIN_BOUNDS.minX,
       CAMERA_ORIGIN_BOUNDS.maxX,
     ),
     y: clamp(
-      region.start.y - (VIEWPORT_HEIGHT - 3),
+      region.start.y - SAFE_SCREEN_BOUNDS.maxY,
       CAMERA_ORIGIN_BOUNDS.minY,
       CAMERA_ORIGIN_BOUNDS.maxY,
     ),
@@ -132,10 +144,11 @@ export function reduceTileState(state, action, region) {
       CAMERA_ORIGIN_BOUNDS.maxY,
     ),
   };
+  const framedCamera = frameLandmarkCamera(camera, { x: nextX, y: nextY }, region.landmark);
   return freezeState(
     state.regionId,
     { x: nextX, y: nextY, facing: action },
-    camera,
+    framedCamera,
   );
 }
 

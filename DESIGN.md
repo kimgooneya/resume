@@ -7,6 +7,7 @@
 - Generated studies:
   - `assets/concepts/classic-portfolio-ui-reference.png` (1586×992): 타일·대화창·D-pad 문법 참고.
   - `assets/concepts/classic-portfolio-wide-regions-reference.png` (1672×941): 넓은 맵 비중과 마을별 색상 참고. 여러 지역이 한 지도에 이어진 구조는 이후 사용자 피드백으로 폐기했으므로 지리 구조의 기준으로 사용하지 않는다.
+- Character-study research (2026-08-01): 제한된 해상도에서는 얼굴 장식보다 검은 실루엣과 분리된 팔다리가 우선이며, 두 보행 포즈에서 다리·팔을 반대로 흔들고 몸통을 1px 상하 이동해 무게감을 만든다. 공개 튜토리얼의 일반 원리만 참고하며, 특정 게임의 캐릭터·스프라이트·색 배치를 복제하지 않는다.
 - Final layout contract: 상단 플레이 영역에서 현재 지역의 로컬 맵 74%, 지역 목록 22%, 외곽 여백 4%. 전체 화면 하단 18–22%는 상시 보이는 조작 덱으로 사용한다. 4px 잉크 테두리, 밝은 내부 하이라이트, 오른쪽/아래 단차 그림자를 구현 기준으로 삼는다.
 - Signature moment: 방문자가 작은 개발자 캐릭터를 직접 움직여 다섯 작업소 앞 표지판을 읽고, 하단 대화창에서 실제 프로젝트 소개를 발견한다.
 - Interaction reference: beui.dev `center-morph-modal`의 포커스 복귀와 reduced-motion 계약만 가져오고, 시각 전환은 고전 게임의 즉시 나타나는 대화창 문법으로 재해석한다.
@@ -118,16 +119,23 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 > **Current contract:** the interior is an open field. Only the outer border, landmark body, and resident cells block movement; scenery is a decorative overlay and never creates a maze wall.
 
-- **Structure**: 지역마다 독립된 48×40 타일 가로형 마을 맵, 열린 바닥·환경물·중앙 랜드마크·주민·캐릭터. 화면에는 한 번에 24×18 타일만 보인다.
+- **Structure**: 지역마다 독립된 60×50 타일 가로형 마을 맵, 열린 바닥·환경물·중앙 랜드마크·주민·캐릭터. 화면에는 한 번에 24×18 타일만 보인다. 첫 확장 샘플은 지도보다 크게 읽히는 인물의 실루엣·소품·직업별 자세를 중심으로 한다.
 - **States**: free, resident-near, landmark-near, discovered
 - **Rendering**: `imageSmoothingEnabled = false`, `image-rendering: pixelated`
+- **Landmark terrain strata**: 중앙 랜드마크의 바닥은 기존 환경물 위에만 겹쳐 그리는 장식 계층이다. 건물 뒤쪽은 넓고 조용한 `mid` 완충 지대로 반복 무늬를 낮추고, 본체 바로 아래에는 `darkest` 기단을 둔다. 그 앞에는 `light` 진입로·작업 구역을 두어 멀리서도 건물, 바닥, 배경이 분리돼 읽혀야 한다. 숲은 다져진 흙과 돌 가장자리, 도시는 큰 포장 판·배수선, 사막은 압축 모래·바퀴 자국, 설원은 눌린 눈·얼음 경계, 해안은 젖은 모래·판자 진입로로 변형한다. 이 지형은 충돌·길찾기·이동 가능한 타일을 절대 바꾸지 않는다.
 - **Accessibility**: 캔버스 주변에 현재 위치, 목적지, 상호작용 가능 상태를 텍스트로 제공
 - **Motion**: 한 칸 이동은 즉시 갱신한다. 자동 장식 애니메이션은 없다.
 - **Boundary**: 캐릭터는 현재 지역 경계를 넘을 수 없고 다른 지역으로 이어지는 출구·도로를 두지 않는다.
 
+### Landmark & Signpost Objects
+
+- **Structure**: 중앙 랜드마크는 넓은 바닥 실루엣, 밝은 작동부, 한 단계 더 높은 기능 소품으로 읽힌다. 관측소의 망원경, 시안 타워의 단말, 공방의 공구·배기구, 릴레이 기지의 안테나·경고등, 등대의 등화·광선은 서로 바꿔 쓸 수 없는 형태로 유지한다.
+- **Signposts**: 열린 필드의 표지판은 두꺼운 판, 분리된 기둥, 밝은 방향 표식, 작은 받침을 갖춘 32px 이상 실루엣으로 그린다. 길을 막지 않으며, 표지판 자체가 현대적 HUD 화살표를 대체하는 유일한 현장 방향 단서다.
+- **Art boundary**: 랜드마크와 표지판도 지역의 네 단계 팔레트와 정수 사각 픽셀만 사용한다. 둥근 모서리·그라데이션·안티앨리어싱·상용 게임 오브젝트 복제는 금지한다.
+
 ### Scrolling Camera
 
-- **Viewport**: 논리 화면 `384×288`, 24×18 타일. 지역 전체 48×40 타일 중 현재 위치 주변만 보여준다.
+- **Viewport**: 논리 화면 `384×288`, 24×18 타일. 지역 전체 60×50 타일 중 현재 위치 주변만 보여준다.
 - **Primary axis**: 시작점은 남쪽, 랜드마크와 첫 주민은 마을 중앙 광장에 둔다. 북·남·동·서 가장자리에 산개한 주민과 생태별 환경 실루엣이 열린 필드의 방향감을 만든다.
 - **Follow**: 캐릭터가 화면 중앙의 8×6 타일 안전 영역을 벗어날 때 카메라가 한 타일 단위로 따라간다.
 - **Edge clamp**: 지역 가장자리에서는 카메라를 맵 경계에 고정해 빈 바깥 영역이 보이지 않게 한다.
@@ -139,8 +147,8 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 > **Current input contract:** ArrowUp, ArrowDown, ArrowLeft, and ArrowRight are the only movement keys. WASD and pointer movement are intentionally unsupported.
 
-- **Structure**: 최대 24×30px의 오리지널 필드 카토그래퍼. 얼굴·머리/캡·스카프·재킷·지도 장치가 달린 숄더백·분리된 팔과 부츠를 짙은 외곽선으로 묶어 한눈에 사람으로 읽히게 한다.
-- **States**: up/right/down/left 네 방향마다 얼굴, 머리, 가방, 팔의 실루엣을 다르게 그리고, 타일 좌표 홀짝으로 step-a/step-b 보폭을 교대한다.
+- **Structure**: 약 32×44px의 오리지널 필드 카토그래퍼. 얼굴·머리/캡·스카프·재킷·지도 장치가 달린 숄더백·분리된 팔과 부츠를 짙은 외곽선으로 묶어 한눈에 사람으로 읽히게 한다. 주민도 같은 확대 비율을 쓰되, 연구원의 기록판·기술자의 장비·장인의 도구·관제사의 안테나·안내원의 표식을 서로 다르게 드러낸다.
+- **States**: up/right/down/left 네 방향마다 얼굴, 머리, 가방, 팔의 실루엣을 다르게 그리고, 타일 좌표 홀짝으로 step-a/step-b 보폭을 교대한다. 두 포즈는 앞·뒤 부츠를 명확히 벌리고, 다리와 반대 방향으로 팔을 흔들며, 몸통·머리를 1px 상하 이동한다.
 - **Art boundary**: 네 단계 지역 팔레트와 정수 사각 픽셀만 사용한다. 특정 상용 게임의 캐릭터, 의상, 색 배치, 실루엣은 복제하지 않는다.
 - **Input**: 방향키만 이동에 사용한다. WASD와 터치 방향 입력은 이동을 발생시키지 않는다.
 - **Collision**: 지도 경계·랜드마크 본체·주민을 통과하지 않는다. 환경물은 열린 바닥 위 장식으로 그린다.

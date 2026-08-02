@@ -8,13 +8,14 @@ import {
   VIEWPORT_HEIGHT,
   VIEWPORT_WIDTH,
 } from "../preview/region-data.js";
-import { renderRegionScenery } from "../preview/scenery-renderer.js";
+import { renderLandmarkTerrain, renderRegionScenery } from "../preview/scenery-renderer.js";
 import { renderTileWorld } from "../preview/tile-renderer.js";
 import {
   drawLandmark,
   drawMarker,
   drawPlayer,
   drawResident,
+  drawSign,
 } from "../preview/world-sprites.js";
 
 function recordingContext() {
@@ -80,16 +81,70 @@ describe("four-tone tile renderer", () => {
     const stepA = draw("down", 20, 20);
     const stepB = draw("down", 21, 20);
 
-    // Then: silhouette, face, outfit, pack, and stance remain readable in four tones
-    expect(recordings.every((commands) => commands.length >= 20)).toBe(true);
+    // Then: silhouette, face, outfit, pack, separated limbs, and stance remain readable in four tones
+    expect(recordings.every((commands) => commands.length >= 28)).toBe(true);
     expect(recordings.every((commands) => {
       const size = bounds(commands);
-      return size.width >= 22 && size.height >= 28;
+      return size.width >= 30 && size.height >= 40;
     })).toBe(true);
     expect(recordings.every((commands) =>
       new Set(commands.map(([, color]) => color)).size === 4)).toBe(true);
     expect(new Set(facingSignatures).size).toBe(4);
     expect(stepA).not.toEqual(stepB);
+    expect(new Set(stepA.map(([, , x, y, width, height]) => `${x}:${y}:${width}:${height}`))
+      .difference(new Set(stepB.map(([, , x, y, width, height]) => `${x}:${y}:${width}:${height}`))).size).toBeGreaterThan(8);
+  });
+
+  test("keeps the maker tool and guide sign detached from their bodies", () => {
+    // Given: two role-specific residents rendered at the same interior anchor
+    const anchor = { x: 96, y: 96 };
+    const bounds = (region) => {
+      const context = recordingContext();
+      drawResident(context, region, anchor);
+      const draws = context.commands.filter(([name]) => name === "fillRect");
+      return {
+        right: Math.max(...draws.map(([, , x, , width]) => x + width)),
+        colors: new Set(draws.map(([, color]) => color)),
+      };
+    };
+
+    // When: each prop's exterior silhouette is measured
+    const maker = bounds(REGIONS_BY_ID.desert);
+    const guide = bounds(REGIONS_BY_ID.coast);
+
+    // Then: both props extend beyond the shared character body in the active four-tone ramp
+    expect(maker.right).toBeGreaterThanOrEqual(anchor.x + 42);
+    expect(guide.right).toBeGreaterThanOrEqual(anchor.x + 49);
+    expect([...maker.colors].every((color) => REGIONS_BY_ID.desert.palette.includes(color))).toBe(true);
+    expect([...guide.colors].every((color) => REGIONS_BY_ID.coast.palette.includes(color))).toBe(true);
+  });
+
+  test("renders field signposts as bold four-tone directional objects", () => {
+    // Given: one signpost at a fully visible interior anchor
+    const anchor = { x: 96, y: 96 };
+    const context = recordingContext();
+
+    // When: the shared wayfinding object is painted
+    drawSign(context, REGIONS_BY_ID.forest.palette, anchor);
+    const draws = context.commands.filter(([name]) => name === "fillRect");
+    const left = Math.min(...draws.map(([, , x]) => x));
+    const top = Math.min(...draws.map(([, , , y]) => y));
+    const right = Math.max(...draws.map(([, , x, , width]) => x + width));
+    const bottom = Math.max(...draws.map(([, , , y, , height]) => y + height));
+
+    const rightArrowTip = anchor.x + 43;
+    const hasArrowTip = draws.some(([, , x, y, width, height]) =>
+      x + width === rightArrowTip && y === anchor.y + 8 && height === 4);
+    const hasUpperHeadStep = draws.some(([, , x, y, width, height]) =>
+      x === anchor.x + 30 && y === anchor.y + 4 && width >= 8 && height >= 4);
+    const hasLowerHeadStep = draws.some(([, , x, y, width, height]) =>
+      x === anchor.x + 30 && y + height === anchor.y + 16 && width >= 8 && height >= 4);
+
+    // Then: a wide shaft, stepped arrowhead, post, and footing read as a four-tone wayfinding object
+    expect(draws.length).toBeGreaterThanOrEqual(14);
+    expect({ width: right - left, height: bottom - top }).toEqual({ width: 43, height: 37 });
+    expect(hasArrowTip && hasUpperHeadStep && hasLowerHeadStep).toBe(true);
+    expect(new Set(draws.map(([, color]) => color))).toEqual(new Set(REGIONS_BY_ID.forest.palette));
   });
 
   test("iterates exactly the current 24 by 18 camera slice in row-major order", () => {
@@ -183,6 +238,62 @@ describe("four-tone tile renderer", () => {
       [x, y, width, height].every(Number.isInteger) &&
       x >= 0 && y >= 0 && width > 0 && height > 0 &&
       x + width <= 384 && y + height <= 288))).toBe(true);
+  });
+
+  test("gives every landmark a quiet backdrop, firm plinth, and bright biome-specific approach", () => {
+    // Given: every central landmark framed in its normal arrival camera
+    const recordings = Object.values(REGIONS_BY_ID).map((region) => {
+      const camera = { x: region.landmark.x - 12, y: region.landmark.y - 8 };
+      const context = recordingContext();
+
+      // When: the visual-only terrain treatment is painted beneath the landmark
+      renderLandmarkTerrain(context, region, camera);
+      const draws = context.commands.filter(([name]) => name === "fillRect");
+      const approachTop = (region.landmark.y + 2 - camera.y) * TILE_SIZE;
+
+      return {
+        signature: JSON.stringify(draws.map(([, color, x, y, width, height]) =>
+          [region.palette.indexOf(color), x, y, width, height])),
+        quietBackdrop: draws.some(([, color, , , width, height]) =>
+          color === region.palette[2] && width >= TILE_SIZE * 11 && height === TILE_SIZE),
+        plinth: draws.some(([, color, , y, width, height]) =>
+          color === region.palette[0] &&
+          y === (region.landmark.y + 1 - camera.y) * TILE_SIZE &&
+          width >= TILE_SIZE * 9 &&
+          height >= 8),
+        approach: draws.some(([, color, , y, width, height]) =>
+          color === region.palette[3] && y >= approachTop && width >= TILE_SIZE * 5 && height >= 8),
+        bounded: draws.every(([, color, x, y, width, height]) =>
+          region.palette.includes(color) &&
+          x >= 0 && y >= 0 && width > 0 && height > 0 &&
+          x + width <= 384 && y + height <= 288),
+      };
+    });
+
+    // Then: ground layers establish a readable destination without a fifth tone or tile mutation
+    expect(recordings.every(({ quietBackdrop, plinth, approach, bounded }) =>
+      quietBackdrop && plinth && approach && bounded)).toBe(true);
+    expect(new Set(recordings.map(({ signature }) => signature)).size).toBe(5);
+  });
+
+  test("keeps the coast boardwalk light between its narrow dark plank seams", () => {
+    // Given: the coast landmark framed at its normal arrival camera
+    const coast = REGIONS_BY_ID.coast;
+    const camera = { x: coast.landmark.x - 12, y: coast.landmark.y - 8 };
+    const context = recordingContext();
+    const deckX = (coast.landmark.x - 1 - camera.x) * TILE_SIZE + 8;
+    const deckTop = (coast.landmark.y + 2 - camera.y) * TILE_SIZE;
+
+    // When: the visual terrain is composited in draw order
+    renderLandmarkTerrain(context, coast, camera);
+    const colorAt = (x, y) => context.commands.reduce((color, [name, nextColor, left, top, width, height]) =>
+      name === "fillRect" && x >= left && x < left + width && y >= top && y < top + height
+        ? nextColor
+        : color, null);
+
+    // Then: the wet boardwalk remains bright, with only two-pixel dark plank seams
+    expect(colorAt(deckX, deckTop + 6)).toBe(coast.palette[3]);
+    expect(colorAt(deckX, deckTop + 1)).toBe(coast.palette[1]);
   });
 
   test("honors authored mask cutouts instead of painting rectangular feature bounds", () => {
@@ -290,18 +401,22 @@ describe("four-tone tile renderer", () => {
     // Then: destination silhouettes dominate the precinct while preserving safe margins
     expect(measurements.every(({ landmark }) =>
       landmark.top >= 2 && landmark.width >= 80 && landmark.height >= 58)).toBe(true);
-    expect(measurements.every(({ landmarkParts }) => landmarkParts >= 15)).toBe(true);
+    expect(measurements.every(({ landmarkParts }) => landmarkParts >= 24)).toBe(true);
     expect(measurements.every(({ resident, residentAnchor }) =>
-      resident.left >= residentAnchor && resident.width >= 24 && resident.height >= 34)).toBe(true);
-    expect(measurements.every(({ residentParts }) => residentParts >= 11)).toBe(true);
+      resident.left >= residentAnchor && resident.width >= 30 && resident.height >= 40)).toBe(true);
+    expect(measurements.every(({ residentParts }) => residentParts >= 20)).toBe(true);
   });
 
   test("draws global layers in ground, decor, landmark, resident, player, marker order", () => {
     // Given: a camera containing every special forest object
     const context = recordingContext();
     const forest = REGIONS_BY_ID.forest;
-    const camera = { x: 12, y: 14 };
-    const player = { x: 23, y: 22, facing: "right" };
+    const camera = { x: forest.landmark.x - 12, y: forest.landmark.y - 8 };
+    const player = { ...forest.interaction, facing: "right" };
+    const screenPoint = (point) => ({
+      x: (point.x - camera.x) * TILE_SIZE,
+      y: (point.y - camera.y) * TILE_SIZE,
+    });
 
     // When: the marked interaction state is rendered
     renderTileWorld(context, forest, state(camera, player), { interactionAvailable: true });
@@ -314,10 +429,10 @@ describe("four-tone tile renderer", () => {
       return standaloneContext.commands;
     };
     const groups = [
-      standalone((target) => drawLandmark(target, forest, { x: 192, y: 80 })),
-      standalone((target) => drawResident(target, forest, { x: 192, y: 128 })),
-      standalone((target) => drawPlayer(target, forest.palette, player, { x: 176, y: 128 })),
-      standalone((target) => drawMarker(target, forest.palette, { x: 176, y: 128 })),
+      standalone((target) => drawLandmark(target, forest, screenPoint(forest.landmark))),
+      standalone((target) => drawResident(target, forest, screenPoint(forest.resident))),
+      standalone((target) => drawPlayer(target, forest.palette, player, screenPoint(player))),
+      standalone((target) => drawMarker(target, forest.palette, screenPoint(player))),
     ];
     const findGroup = (group, from) => {
       for (let index = from; index <= commands.length - group.length; index += 1) {

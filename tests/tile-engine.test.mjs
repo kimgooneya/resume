@@ -66,12 +66,35 @@ describe("pure tile engine", () => {
     // Then: player and camera reset immediately without persisted position
     expect(state).toEqual({
       regionId: "forest",
-      player: { x: 24, y: 30, facing: "down" },
-      camera: { x: 12, y: 15 },
+      player: { x: 30, y: 40, facing: "down" },
+      camera: { x: 19, y: 29 },
     });
     expect(Object.isFrozen(state)).toBe(true);
     expect(Object.isFrozen(state.player)).toBe(true);
     expect(Object.isFrozen(state.camera)).toBe(true);
+  });
+
+  test("keeps every region start on-screen without a first-move camera jump", () => {
+    // Given: every region at its fresh southern-start entry state
+    const entries = Object.values(REGIONS_BY_ID).map((region) => ({
+      region,
+      before: createTileState(region),
+    }));
+
+    // When: the player takes the first walkable northward step
+    const observations = entries.map(({ region, before }) => ({
+      before,
+      after: reduceTileState(before, "up", region),
+    }));
+
+    // Then: the fresh camera already contains the player in the documented safe area
+    expect(observations.every(({ before }) => {
+      const screenX = before.player.x - before.camera.x;
+      const screenY = before.player.y - before.camera.y;
+      return screenX >= 8 && screenX <= 15 && screenY >= 6 && screenY <= 11;
+    })).toBe(true);
+    expect(observations.every(({ before, after }) =>
+      after.camera.x === before.camera.x && after.camera.y === before.camera.y)).toBe(true);
   });
 
   test("moves exactly one walkable tile for one accepted action", () => {
@@ -83,8 +106,8 @@ describe("pure tile engine", () => {
     const after = reduceTileState(before, "left", forest);
 
     // Then: only one tile is traversed and the prior state stays unchanged
-    expect(after.player).toEqual({ x: 23, y: 30, facing: "left" });
-    expect(before.player).toEqual({ x: 24, y: 30, facing: "down" });
+    expect(after.player).toEqual({ x: 29, y: 40, facing: "left" });
+    expect(before.player).toEqual({ x: 30, y: 40, facing: "down" });
   });
 
   test("changes facing but not position for blocked and out-of-bounds steps", () => {
@@ -147,11 +170,28 @@ describe("pure tile engine", () => {
 
     // Then: interaction is exposed only for Manhattan distance one plus facing
     expect(route.length).toBeGreaterThanOrEqual(8);
-    expect(nonFacing.player).toEqual({ x: 23, y: 22, facing: "up" });
+    expect(nonFacing.player).toEqual({ x: 29, y: 28, facing: "up" });
     expect(canInteract(nonFacing, forest)).toBe(false);
-    expect(facing.player).toEqual({ x: 23, y: 22, facing: "right" });
+    expect(facing.player).toEqual({ x: 29, y: 28, facing: "right" });
     expect(canInteract(facing, forest)).toBe(true);
     expect(reduceTileState(facing, "A", forest)).toBe(facing);
+  });
+
+  test("keeps every central landmark fully below the top canvas edge during an approach", () => {
+    // Given: each region's walkable route from the southern start to its central interaction point
+    const observations = Object.values(REGIONS_BY_ID).map((region) => {
+      let state = createTileState(region);
+      for (const action of shortestRoute(region)) state = reduceTileState(state, action, region);
+      return { region, state };
+    });
+
+    // When: the explorer enters the close-range landmark precinct
+    const landmarkRows = observations.map(({ region, state }) => region.landmark.y - state.camera.y);
+    const playerRows = observations.map(({ state }) => state.player.y - state.camera.y);
+
+    // Then: all tall landmark tops have five tile rows of headroom without losing the player safe zone
+    expect(landmarkRows.every((row) => row >= 5)).toBe(true);
+    expect(playerRows.every((row) => row >= 6 && row <= 11)).toBe(true);
   });
 
   test("finds any resident in the open map, not only the landmark resident", () => {
@@ -236,9 +276,9 @@ describe("pure tile engine", () => {
     const region = openRegion();
     const cases = [
       [{ x: 8, y: 20, facing: "right" }, { x: 0, y: 11 }, "left", { x: 0, y: 11 }],
-      [{ x: 31, y: 20, facing: "left" }, { x: 24, y: 11 }, "right", { x: 24, y: 11 }],
+      [{ x: 43, y: 20, facing: "left" }, { x: 36, y: 11 }, "right", { x: 36, y: 11 }],
       [{ x: 20, y: 6, facing: "down" }, { x: 8, y: 0 }, "up", { x: 8, y: 0 }],
-      [{ x: 20, y: 37, facing: "up" }, { x: 8, y: 22 }, "down", { x: 8, y: 22 }],
+      [{ x: 20, y: 37, facing: "up" }, { x: 8, y: 32 }, "down", { x: 8, y: 32 }],
     ];
 
     // When: each action attempts to track beyond an origin limit
@@ -249,7 +289,7 @@ describe("pure tile engine", () => {
         camera: Object.freeze(camera),
       }, action, region).camera);
 
-    // Then: x remains within 0..24 and y remains within 0..22
+    // Then: x remains within 0..36 and y remains within 0..32
     expect(cameras).toEqual(cases.map((entry) => entry[3]));
   });
 
