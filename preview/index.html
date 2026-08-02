@@ -2,204 +2,217 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="다섯 작업 지역을 골라 주민의 이야기를 발견하는 클래식 휴대용 RPG 포트폴리오"
+      content="AI와 데이터 서비스를 제품으로 연결하는 개발자 김수현의 전문 포트폴리오"
     />
-    <title>작은 작업의 마을</title>
+    <meta name="theme-color" content="#f6f4ee" />
+    <title>김수현 — AI · Data Services</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet" href="./responsive.css" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+      crossorigin
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="./portfolio.css" />
   </head>
   <body>
-    <a class="skip-link" href="#field-guide">탐험 수첩으로 건너뛰기</a>
-
-    <main class="game-shell" aria-labelledby="site-title">
-      <header id="site-masthead" class="masthead">
-        <div>
-          <p class="masthead-kicker">POCKET FIELD GUIDE / 01</p>
-          <h1 id="site-title">작은 작업의 마을</h1>
-        </div>
-        <div class="masthead-status">
-          <p>현재 지역 <strong id="current-region">선택 전</strong></p>
-          <p>발견 <strong id="completion-count">00/05</strong></p>
-        </div>
+    <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
+    <div class="archive-page">
+      <header class="archive-header page-frame">
+        <a class="wordmark" href="./index.html" aria-label="김수현 홈">김수현</a>
+        <nav class="archive-nav" aria-label="주요 메뉴">
+          <a href="#work">사례</a>
+          <a href="#about">역량</a>
+          <a href="./resume/developer-resume.html">이력서</a>
+          <a href="./explore.html">Explore</a>
+        </nav>
+        <p class="header-index mono">ARCHIVE / 26</p>
       </header>
 
-      <section class="play-grid" aria-label="탐험 화면과 탐험 수첩">
-        <section class="map-panel" aria-labelledby="map-title">
-          <h2 id="map-title" class="sr-only">현재 지역 지도</h2>
-          <div class="map-screen">
-            <canvas
-              id="map-canvas"
-              width="384"
-              height="288"
-              tabindex="-1"
-              aria-label="선택한 지역의 24 곱하기 18 타일 지도"
-            ></canvas>
-            <section
-              id="initial-region-selection"
-              class="initial-selection"
-              aria-labelledby="selection-title"
-            >
-              <ul class="region-stamps" aria-label="선택 가능한 다섯 작업 지역">
-                <li data-region-preview="forest" aria-label="숲 마을 실루엣"><span aria-hidden="true"></span></li>
-                <li data-region-preview="city" aria-label="도시 마을 실루엣"><span aria-hidden="true"></span></li>
-                <li data-region-preview="desert" aria-label="사막 마을 실루엣"><span aria-hidden="true"></span></li>
-                <li data-region-preview="snow" aria-label="설원 마을 실루엣"><span aria-hidden="true"></span></li>
-                <li data-region-preview="coast" aria-label="항구 마을 실루엣"><span aria-hidden="true"></span></li>
-              </ul>
-              <h2 id="selection-title">탐험할 지역을 선택하세요</h2>
-              <p>탐험 수첩에서 관심 있는 작업 지역을 고르면 남쪽 시작점에서 출발합니다.</p>
-              <p class="selection-key">TAB 이동 · ENTER 선택</p>
-            </section>
-            <section id="dialogue-box" class="dialogue-box" aria-live="polite" hidden>
-              <header>
-                <strong id="dialogue-speaker">주민</strong>
-                <span id="dialogue-progress">01/03</span>
-              </header>
-              <ol class="dialogue-stages" aria-label="대화 진행">
-                <li data-dialogue-stage="problem" aria-current="step">문제</li>
-                <li data-dialogue-stage="approach">과정</li>
-                <li data-dialogue-stage="result">결과</li>
-              </ol>
-              <p id="dialogue-copy">주민의 이야기가 여기에 표시됩니다.</p>
-              <p class="dialogue-actions">Space 다음 · Esc 닫기</p>
-            </section>
+      <main id="main-content">
+        <section class="hero page-frame" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="eyebrow" data-profile-eyebrow>B2B AI · DATA SERVICES</p>
+            <h1 id="hero-title" class="hero-title" data-profile-title>복잡한 AI 흐름을<br />제품으로 연결합니다</h1>
+            <p class="hero-summary" data-profile-summary></p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#work">대표 사례 보기 <span aria-hidden="true">↘</span></a>
+              <a class="text-link" href="./resume/developer-resume.html">이력서 <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="hero-proof">
+              <span>AI 실행 흐름</span>
+              <span>데이터 신뢰성</span>
+              <span>제품 운영</span>
+            </div>
           </div>
 
-          <section class="map-status" aria-labelledby="map-status-title">
-            <h2 id="map-status-title" class="sr-only">현재 탐험 상태</h2>
-            <p>
-              <span class="status-label">위치</span>
-              <strong id="position-status" aria-live="polite">지역을 선택하지 않았습니다</strong>
-            </p>
-            <p>
-              <span class="status-label">행동</span>
-              <strong id="interaction-status" aria-live="polite">탐험 수첩을 확인하세요</strong>
-            </p>
-          </section>
+          <div class="hero-diagram" aria-labelledby="diagram-caption" aria-describedby="diagram-description" role="img">
+            <p id="diagram-caption" class="diagram-caption mono">INPUT → DECISION → DELIVERY</p>
+            <p id="diagram-description" class="diagram-visually-hidden">질의 입력이 NLU와 Text-to-SQL을 거쳐 SQL 검증과 데이터 저장소로 이어집니다. 스키마 조회와 쿼리 실행 결과는 관측성과 알림으로 연결됩니다.</p>
+            <svg viewBox="0 0 640 500" aria-hidden="true" focusable="false">
+              <defs>
+                <pattern id="diagram-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+                  <path class="diagram-grid-line" d="M24 0H0V24" />
+                </pattern>
+                <marker id="diagram-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+                  <path class="diagram-arrow-fill" d="M0 0L8 4L0 8Z" />
+                </marker>
+                <marker id="diagram-arrow-soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+                  <path class="diagram-arrow-fill-soft" d="M0 0L8 4L0 8Z" />
+                </marker>
+              </defs>
+              <rect class="diagram-grid-bg" x="0" y="0" width="640" height="500" />
+              <path class="diagram-frame" d="M14 42H626V462H14Z" />
+              <path class="diagram-crosshair" d="M14 34V50M6 42H22M626 34V50M618 42H634M14 454V470M6 462H22M626 454V470M618 462H634" />
+              <text class="diagram-meta" x="28" y="28">REQUEST / AUTH / DATA</text>
+              <text class="diagram-meta" x="498" y="28">AI FLOW DIAGRAM v1.2</text>
+              <text class="diagram-annotation" x="26" y="82">REQUEST</text>
+              <text class="diagram-annotation" x="26" y="96">Natural Language</text>
+              <text class="diagram-annotation" x="492" y="82">AUTH</text>
+              <text class="diagram-annotation" x="492" y="96">SSO / OAuth2</text>
+
+              <path class="diagram-flow" d="M134 140H160" />
+              <path class="diagram-flow diagram-flow-focus" d="M260 140H284" />
+              <path class="diagram-flow" d="M400 140H428" />
+              <path class="diagram-flow" d="M540 140H566" />
+              <path class="diagram-flow" d="M484 168V216H420V250" />
+              <path class="diagram-flow" d="M340 275H364" />
+              <path class="diagram-flow" d="M476 275H504" />
+              <path class="diagram-flow diagram-flow-soft" d="M592 176V216H554V250" />
+              <path class="diagram-flow-meta" d="M282 250V216H342V168" />
+              <path class="diagram-flow-meta" d="M338 300V374H304" />
+              <path class="diagram-flow-meta" d="M460 300V374H450" />
+              <path class="diagram-flow-meta" d="M552 300V374H510" />
+              <path class="diagram-flow-soft" d="M364 399H390" />
+
+              <g class="diagram-box diagram-box-start">
+                <rect x="24" y="112" width="110" height="56" rx="2" />
+                <text class="diagram-box-label" x="79" y="135" text-anchor="middle">REQUEST</text>
+                <text class="diagram-box-copy" x="79" y="153" text-anchor="middle">질문 입력</text>
+              </g>
+              <g class="diagram-box">
+                <rect x="160" y="112" width="100" height="56" rx="2" />
+                <text class="diagram-box-label" x="210" y="135" text-anchor="middle">NLU</text>
+                <text class="diagram-box-copy" x="210" y="153" text-anchor="middle">Intent Parsing</text>
+              </g>
+              <g class="diagram-box diagram-box-main">
+                <rect x="284" y="112" width="116" height="56" rx="2" />
+                <text class="diagram-box-label" x="342" y="135" text-anchor="middle">TEXT-TO-SQL</text>
+                <text class="diagram-box-copy" x="342" y="153" text-anchor="middle">Query Generation</text>
+              </g>
+              <g class="diagram-box">
+                <rect x="428" y="112" width="112" height="56" rx="2" />
+                <text class="diagram-box-label" x="484" y="135" text-anchor="middle">SQL VALIDATOR</text>
+                <text class="diagram-box-copy" x="484" y="153" text-anchor="middle">Safety &amp; Policy</text>
+              </g>
+              <g class="diagram-warehouse">
+                <ellipse cx="592" cy="118" rx="26" ry="8" />
+                <path d="M566 118V166C566 176 618 176 618 166V118" />
+                <ellipse cx="592" cy="166" rx="26" ry="8" />
+                <text class="diagram-box-label" x="592" y="140" text-anchor="middle">DATA</text>
+                <text class="diagram-box-copy" x="592" y="153" text-anchor="middle">WAREHOUSE</text>
+              </g>
+              <g class="diagram-box">
+                <rect x="224" y="250" width="116" height="50" rx="2" />
+                <text class="diagram-box-label" x="282" y="271" text-anchor="middle">SCHEMA RETRIEVAL</text>
+                <text class="diagram-box-copy" x="282" y="287" text-anchor="middle">Metadata</text>
+              </g>
+              <g class="diagram-box">
+                <rect x="364" y="250" width="112" height="50" rx="2" />
+                <text class="diagram-box-label" x="420" y="271" text-anchor="middle">QUERY EXECUTOR</text>
+                <text class="diagram-box-copy" x="420" y="287" text-anchor="middle">Trino / Spark</text>
+              </g>
+              <g class="diagram-box">
+                <rect x="504" y="250" width="100" height="50" rx="2" />
+                <text class="diagram-box-label" x="554" y="271" text-anchor="middle">RESULT</text>
+                <text class="diagram-box-copy" x="554" y="287" text-anchor="middle">Post-processing</text>
+              </g>
+              <g class="diagram-box diagram-box-observe">
+                <rect x="184" y="374" width="180" height="50" rx="2" />
+                <text class="diagram-box-label" x="274" y="395" text-anchor="middle">OBSERVABILITY</text>
+                <text class="diagram-box-copy" x="274" y="411" text-anchor="middle">Logs / Metrics / Traces</text>
+              </g>
+              <g class="diagram-box diagram-box-alert">
+                <rect x="390" y="374" width="120" height="50" rx="2" />
+                <text class="diagram-box-label" x="450" y="395" text-anchor="middle">ALERT</text>
+                <text class="diagram-box-copy" x="450" y="411" text-anchor="middle">Anomaly Detection</text>
+              </g>
+              <text class="diagram-legend" x="28" y="446">→ DATA FLOW</text>
+              <text class="diagram-legend diagram-legend-soft" x="28" y="460">→ CONTROL FLOW</text>
+              <text class="diagram-legend diagram-legend-meta" x="28" y="474">- - METADATA</text>
+              <text class="diagram-status" x="534" y="444">DRAWN&nbsp;&nbsp;&nbsp;K. SH</text>
+              <text class="diagram-status" x="534" y="458">DATE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026.08</text>
+            </svg>
+            <p class="diagram-mobile-summary mono">REQUEST → NLU → TEXT-TO-SQL → VALIDATOR → DATA<br />SCHEMA → EXECUTOR → RESULT → OBSERVE → ALERT</p>
+            <p class="diagram-note">작은 책임 단위가 모여<br />운영 가능한 흐름이 됩니다.</p>
+          </div>
         </section>
 
-        <aside id="field-guide" class="field-guide" aria-labelledby="guide-title">
-          <header class="guide-header">
-            <p>FIELD GUIDE</p>
-            <h2 id="guide-title">탐험 수첩</h2>
-          </header>
-          <nav class="region-list" aria-label="작업 지역">
-            <button type="button" data-region-id="forest" aria-pressed="false">
-              <span class="region-cursor" aria-hidden="true">▶</span>
-              <span><strong>숲 연구소</strong><small>데이터와 AI</small></span>
-              <span class="completion-box" aria-hidden="true"></span><span class="sr-only">미완료</span>
-            </button>
-            <button type="button" data-region-id="city" aria-pressed="false">
-              <span class="region-cursor" aria-hidden="true">▶</span>
-              <span><strong>도시 공방</strong><small>제품 엔지니어링</small></span>
-              <span class="completion-box" aria-hidden="true"></span><span class="sr-only">미완료</span>
-            </button>
-            <button type="button" data-region-id="desert" aria-pressed="false">
-              <span class="region-cursor" aria-hidden="true">▶</span>
-              <span><strong>사막 자동화실</strong><small>자동화</small></span>
-              <span class="completion-box" aria-hidden="true"></span><span class="sr-only">미완료</span>
-            </button>
-            <button type="button" data-region-id="snow" aria-pressed="false">
-              <span class="region-cursor" aria-hidden="true">▶</span>
-              <span><strong>설원 기지</strong><small>인프라</small></span>
-              <span class="completion-box" aria-hidden="true"></span><span class="sr-only">미완료</span>
-            </button>
-            <button type="button" data-region-id="coast" aria-pressed="false">
-              <span class="region-cursor" aria-hidden="true">▶</span>
-              <span><strong>해안 등대</strong><small>협업</small></span>
-              <span class="completion-box" aria-hidden="true"></span><span class="sr-only">미완료</span>
-            </button>
-          </nav>
-          <footer class="guide-footer">
-            <p>완료 <strong id="guide-completion">00/05</strong></p>
-            <button id="reset-trigger" class="text-button" type="button">진행 초기화</button>
-            <fieldset id="reset-confirmation" class="reset-confirmation" hidden>
-              <legend>완료 기록을 지울까요?</legend>
-              <button type="button" data-reset-confirm>예, 초기화</button>
-              <button type="button" data-reset-cancel>아니요</button>
-            </fieldset>
-          </footer>
+        <aside class="archive-rail" aria-label="페이지 기록">
+          <span>SELECTED WORK</span>
+          <span class="rail-line" aria-hidden="true"></span>
+          <span>2026</span>
         </aside>
-      </section>
 
-      <button
-        id="mobile-regions-trigger"
-        class="mobile-regions-trigger"
-        type="button"
-        aria-controls="mobile-region-panel"
-        aria-expanded="false"
-      >
-        지역 메뉴 열기
-      </button>
-      <section id="mobile-region-panel" class="mobile-region-panel" aria-labelledby="mobile-region-title" hidden>
-        <header>
-          <h2 id="mobile-region-title">지역 선택</h2>
-          <button type="button" data-mobile-menu-close>닫기</button>
-        </header>
-        <div class="region-list" data-mobile-region-list></div>
-      </section>
-
-      <section class="control-deck" aria-label="탐험 조작">
-        <div class="dpad-group">
-          <div class="dpad" role="img" aria-label="방향키로 이동">
-            <kbd class="dpad-key dpad-up" aria-hidden="true">▲</kbd>
-            <kbd class="dpad-key dpad-left" aria-hidden="true">◀</kbd>
-            <span class="dpad-center" aria-hidden="true"></span>
-            <kbd class="dpad-key dpad-right" aria-hidden="true">▶</kbd>
-            <kbd class="dpad-key dpad-down" aria-hidden="true">▼</kbd>
+        <section id="work" class="section-block page-frame" aria-labelledby="work-title">
+          <div class="section-heading">
+            <p class="eyebrow">01 / SELECTED WORK</p>
+            <h2 id="work-title">판단이 남는<br />사례를 기록합니다.</h2>
           </div>
-          <strong>방향키 이동</strong>
-        </div>
-        <p class="keyboard-help">
-          <span>↑ ↓ ← → 이동</span>
-          <span>ENTER · SPACE 확인</span>
-          <span>ESC 닫기</span>
-        </p>
-        <fieldset class="action-buttons">
-          <legend class="sr-only">행동 버튼</legend>
-          <div>
-            <button id="action-b" type="button" data-action="b" aria-label="B 닫기 또는 뒤로">B</button>
-            <strong>B 닫기</strong>
-          </div>
-          <div>
-            <button id="action-a" type="button" data-action="a" aria-label="A 대화 또는 확인">A</button>
-            <strong>A 대화</strong>
-          </div>
-        </fieldset>
-      </section>
-
-      <section class="system-messages" aria-label="데이터 상태">
-        <p id="app-status" role="status" aria-live="polite">지역 데이터를 불러오는 중입니다.</p>
-        <div id="load-error" role="alert" hidden>
-          <p>지역 기록을 불러오지 못했습니다. 다시 시도해 주세요.</p>
-          <button id="reload-data" type="button">다시 불러오기</button>
-        </div>
-      </section>
-    </main>
-
-    <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-title">
-      <article>
-        <header>
-          <p id="project-meta">ROLE · YEAR</p>
-          <button type="button" data-dialog-close>기록 닫기</button>
-        </header>
-        <h2 id="project-title">작업 기록</h2>
-        <p id="project-summary"></p>
-        <section aria-labelledby="project-highlights-title">
-          <h3 id="project-highlights-title">핵심 결과</h3>
-          <ul id="project-highlights"></ul>
+          <div id="case-study-list" class="case-study-list"></div>
         </section>
-        <section aria-labelledby="project-stack-title">
-          <h3 id="project-stack-title">사용 기술</h3>
-          <ul id="project-stack"></ul>
-        </section>
-      </article>
-    </dialog>
 
-    <script type="module" src="./main.js"></script>
+        <section id="about" class="section-block section-about page-frame" aria-labelledby="about-title">
+          <div class="section-heading">
+            <p class="eyebrow">02 / CAPABILITIES</p>
+            <h2 id="about-title">기능보다<br />경계를 설계합니다.</h2>
+          </div>
+          <div id="capability-list" class="capability-list"></div>
+          <div class="about-note">
+            <p class="eyebrow">WORKING PRINCIPLE</p>
+            <p>불확실한 입력을 숨기지 않고, 팀이 다음 결정을 내릴 수 있는 구조와 기록으로 바꿉니다.</p>
+          </div>
+        </section>
+
+        <section id="archive" class="section-block section-archive page-frame" aria-labelledby="archive-title">
+          <div class="section-heading">
+            <p class="eyebrow">03 / WIDER CONTEXT</p>
+            <h2 id="archive-title">한 장면 밖의<br />경험들.</h2>
+          </div>
+          <div class="supporting-content">
+            <p class="supporting-lead">도메인이 바뀌어도 같은 질문을 반복합니다. 어디서 실패하는가, 누가 다음 상태를 책임지는가, 그리고 그 이유를 어떻게 남길 것인가.</p>
+            <ul id="supporting-list" class="supporting-list"></ul>
+          </div>
+        </section>
+
+        <section class="closing-band page-frame" aria-label="마무리 문장">
+          <p class="eyebrow">A SMALL NOTE</p>
+          <p class="closing-copy">좋은 구현은 복잡함을 없애는 대신,<br /><em>복잡함이 읽히는 형태</em>를 만듭니다.</p>
+        </section>
+      </main>
+
+      <footer id="contact" class="archive-footer page-frame">
+        <div>
+          <p class="eyebrow">LET'S CONNECT</p>
+          <h2>다음 문제를<br />함께 구조화해요.</h2>
+        </div>
+        <div class="footer-links">
+          <a data-contact-github href="https://github.com/kimgooneya" rel="noreferrer">github.com/kimgooneya</a>
+          <a data-contact-resume href="./resume/developer-resume.html">printable resume ↗</a>
+          <a href="./explore.html">pixel field guide ↗</a>
+          <p class="footer-meta mono" data-profile-as-of>자료 기준일 2026.08</p>
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="./portfolio.js"></script>
   </body>
 </html>

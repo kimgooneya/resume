@@ -10,7 +10,7 @@
 - Character-study research (2026-08-01): 제한된 해상도에서는 얼굴 장식보다 검은 실루엣과 분리된 팔다리가 우선이며, 두 보행 포즈에서 다리·팔을 반대로 흔들고 몸통을 1px 상하 이동해 무게감을 만든다. 공개 튜토리얼의 일반 원리만 참고하며, 특정 게임의 캐릭터·스프라이트·색 배치를 복제하지 않는다.
 - Final layout contract: 상단 플레이 영역에서 현재 지역의 로컬 맵 74%, 지역 목록 22%, 외곽 여백 4%. 전체 화면 하단 18–22%는 상시 보이는 조작 덱으로 사용한다. 4px 잉크 테두리, 밝은 내부 하이라이트, 오른쪽/아래 단차 그림자를 구현 기준으로 삼는다.
 - Signature moment: 방문자가 작은 개발자 캐릭터를 직접 움직여 다섯 작업소 앞 표지판을 읽고, 하단 대화창에서 실제 프로젝트 소개를 발견한다.
-- Interaction reference: beui.dev `center-morph-modal`의 포커스 복귀와 reduced-motion 계약만 가져오고, 시각 전환은 고전 게임의 즉시 나타나는 대화창 문법으로 재해석한다.
+- Interaction reference: beui.dev `center-morph-modal`의 포커스 복귀·중앙 확장·reduced-motion 계약을 가져오되, 시각 전환은 이 archive의 절제된 종이 편집실 문법으로 재해석한다.
 
 ## 1. Atmosphere & Identity
 
@@ -260,3 +260,106 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 |---|---|---|---|
 | 실제 경력/프로젝트 원문 대신 역할별 예시 데이터 사용 | `preview/projects.json` | 사용자 원문이 아직 없음 | 원문 제공 시 JSON만 교체 |
 | 외부 픽셀 폰트를 내려받지 않음 | typography tokens | 오프라인·정적 배포와 성능 우선 | 로컬 라이선스 폰트가 제공되면 WOFF2 서브셋 추가 |
+
+## Professional archive surface
+
+이 절은 기존 픽셀 탐험 화면과 분리된 전문 개발자 아카이브 화면(`preview/index.html`)에만 적용한다. 기존 게임 화면은 `preview/explore.html`에서 같은 게임 계약을 유지한다.
+
+### 0. Research Log
+
+- User-approved reference: 생성된 1440px 포트폴리오 히어로 시안. 종이색 바탕, 얇은 상단 내비게이션, 오른쪽 세로 아카이브 레일, 큰 한국어 헤드라인, 옅은 DAG 선화, 외곽선 CTA를 구현 기준으로 삼는다.
+- Embedded reference shortlist: Notion/editorial의 여백과 정보 밀도, Swiss grid의 정렬 규칙, 기술 문서의 모노스페이스 근거 라벨을 검토하고 개인 개발자 아카이브에 맞게 재조합했다.
+- Typography research (2026-08-02): Hahmlet Variable은 한글 디스플레이 제목의 문학적 대비를, Pretendard Variable은 긴 사례 설명과 UI의 안정적인 줄맞춤을 담당한다. 두 서체 모두 OFL 배포 경로를 사용한다.
+- Design decision: 사진이나 캡처를 배경으로 붙이지 않고, 실제 DOM 텍스트·SVG 선화·dialog 사례 컴포넌트로 이력 근거를 읽게 한다.
+
+### 1. Atmosphere & Identity
+
+조용한 기술 편집실과 개인 연구 노트의 결을 결합한다. 첫 화면은 넓은 여백과 짧은 선언으로 방문자를 맞이하고, 아래로 갈수록 사례의 판단·근거·결과를 펼친다. 둥근 SaaS 카드, 그라데이션, 유리 효과, 장식용 통계 배지는 사용하지 않는다.
+
+### 2. Color Tokens
+
+| Role | Token | Value | Usage |
+|---|---|---|---|
+| Paper | `--archive-paper` | `#f6f4ee` | 전체 배경 |
+| Warm paper | `--archive-paper-warm` | `#efece2` | 보조 섹션과 다이어그램 바탕 |
+| Ink | `--archive-ink` | `#1f231f` | 제목, 본문, 주요 선 |
+| Muted ink | `--archive-ink-muted` | `#6f6e67` | 설명, 메타, 보조 라벨; paper 대비 본문 4.5:1 이상 |
+| Hairline | `--archive-line` | `#d7d2c5` | 구획선, 사례 테두리 |
+| Blue accent | `--archive-accent` | `#2b5cae` | CTA, 링크, 선택된 근거 |
+| Deep accent | `--archive-accent-deep` | `#1b3d76` | hover/focus 전경 |
+| Soft accent | `--archive-accent-soft` | `#dfe8f5` | 다이어그램 하이라이트 |
+| Overlay | `--archive-overlay` | `rgb(31 35 31 / 48%)` | 사례 상세 dialog backdrop |
+
+색상은 의미별로만 사용한다. blue accent는 행동과 연결 가능한 근거에만 쓰고, 상태를 색상만으로 전달하지 않는다.
+
+### 3. Typography Tokens
+
+| Token | Value | Usage |
+|---|---|---|
+| `--archive-font-display` | `"Hahmlet", "Noto Serif KR", serif` | hero와 주요 섹션 제목 |
+| `--archive-font-sans` | `"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", sans-serif` | 본문, 내비게이션, 버튼 |
+| `--archive-font-mono` | `ui-monospace, SFMono-Regular, Menlo, monospace` | 근거 라벨, 연도, 기술명 |
+| `--archive-type-hero` | `clamp(2.8rem, 6vw, 5.2rem)` | 첫 화면 선언 |
+| `--archive-type-hero-mobile` | `clamp(2.55rem, 13vw, 4.2rem)` | 560px 이하 첫 화면 선언 |
+| `--archive-type-section` | `clamp(1.8rem, 3vw, 3.2rem)` | 섹션 제목 |
+| `--archive-type-card` | `clamp(1.2rem, 2vw, 1.65rem)` | 사례 제목 |
+| `--archive-type-body` | `1rem` | 기본 본문 |
+| `--archive-type-detail` | `0.8125rem` | 사례 개요 값 |
+| `--archive-type-meta` | `0.75rem` | 메타와 근거 라벨 |
+| `--archive-leading-display` | `0.98` | 대형 제목 |
+| `--archive-leading-copy` | `1.7` | 한국어 본문 |
+| `--archive-leading-detail` | `1.55` | 사례 개요와 상세 본문 |
+| `--archive-leading-meta` | `1.4` | 기술 스택 칩 |
+
+한국어 문장은 `word-break: keep-all`과 `overflow-wrap: anywhere`를 함께 사용한다. 긴 제목은 컨테이너를 줄이지 않고 의미 단위로 감싼다.
+
+### 4. Spacing & Layout Tokens
+
+기본 단위는 4px이다. 콘텐츠 최대 폭은 `--archive-max: 1440px`, 양옆 여백은 `--archive-gutter: clamp(24px, 6vw, 96px)`로 둔다. hero는 12열 그리드에서 카피 7열·선화 5열을 사용하고, 사례는 번호/메타 3열·본문 9열로 전환한다.
+
+| Token | Value | Usage |
+|---|---|---|
+| `--archive-space-1` | `4px` | 아이콘과 작은 간격 |
+| `--archive-space-2` | `8px` | 메타 내부 |
+| `--archive-space-3` | `12px` | 버튼 내부 |
+| `--archive-space-4` | `16px` | 소형 구획 |
+| `--archive-space-6` | `24px` | 카드 내부 |
+| `--archive-space-8` | `32px` | 섹션 내부 |
+| `--archive-space-12` | `48px` | 큰 구획 |
+| `--archive-space-20` | `80px` | hero와 섹션 사이 |
+| `--archive-max` | `1440px` | 전체 콘텐츠 |
+| `--archive-gutter` | `clamp(24px, 6vw, 96px)` | responsive gutter |
+| `--archive-line-width` | `1px` | hairline |
+| `--archive-focus` | `3px` | focus-visible |
+
+### 5. Components & States
+
+- **Archive masthead**: 브랜드, `사례`, `이력서`, `Explore` 링크. `default`, `hover`, `focus-visible` 상태를 underline과 전경색 변화로 표현한다.
+- **Hero statement**: kicker, Hahmlet 선언, 짧은 설명, primary outline CTA와 secondary text link. 첫 화면에서만 사용한다.
+- **Technical diagram**: inline SVG 선과 노드로 AI 흐름을 설명하며, 장식 배경 이미지가 아니다. 모바일에서는 같은 흐름을 짧은 선형 요약으로 보강한다. `rest`, `prefers-reduced-motion` 상태만 가진다.
+- **Case study**: 프로젝트 단위로 번호·프로젝트명·역할·범위·기간·제목·요약을 먼저 보여주고, native `dialog` 안에서 `MY ROLE`·`PROBLEM`·`CONTRIBUTIONS`·`DECISIONS`·`STACK`·`OUTCOME` 순서로 상세 정보를 제공하는 재사용 article. 상세 버튼은 focus를 복원하고, dialog 바깥 클릭과 Escape로 닫힌다.
+- **Capability list**: AI 실행 흐름, 데이터 신뢰성, 제품 운영 세 줄의 반복 가능한 역량 프리미티브. `default`, `hover`, `focus-visible`을 지원한다.
+- **Archive rail**: 데스크톱 오른쪽에만 보이는 세로 기록선. 모바일에서는 숨기고 동일한 기준일을 footer 텍스트로 제공한다.
+
+### 6. Motion & Interaction
+
+| Token | Value | Usage |
+|---|---|---|
+| `--archive-dialog-duration` | `640ms` | 사례 dialog 진입 |
+| `--archive-dialog-ease` | `cubic-bezier(0.22, 1, 0.36, 1)` | 사례 dialog 중심 확장 |
+
+모션은 링크/사례 dialog 열림 같은 실제 상태 변화에만 사용한다. 링크는 `transform` 없이 underline과 색을 120ms에 전환하고, dialog는 `--archive-dialog-duration`과 `--archive-dialog-ease`를 사용해 중앙에서 94% 크기와 24px 아래 위치로 시작해 원위치로 펼쳐진다. backdrop은 같은 시간 동안 opacity만 올린다. 페이지는 hero·역량·사례·마무리 같은 주요 섹션 경계에서만 세로 scroll snap으로 멈춘다. case 카드는 한 화면을 독점하지 않고 연속 목록으로 읽힌다. decorative SVG에는 자동 반복 애니메이션을 넣지 않는다. `prefers-reduced-motion: reduce`에서는 dialog animation, transition과 scroll snap을 해제한다.
+
+### 7. Depth & Surface
+
+경계선과 배경 톤 차이만으로 깊이를 만든다. box-shadow, blur, glassmorphism, gradients는 사용하지 않는다. 다이어그램의 선 두께도 `--archive-line-width`를 기준으로 하고, blue accent는 핵심 Text-to-SQL 노드와 진입 경로 한 곳에만 제한한다.
+
+### 8. Accessibility & Accepted Debt
+
+- `main`, `nav`, `header`, `footer`, `article`, `dialog`를 사용해 문서 순서를 보존한다.
+- 모든 CTA는 키보드로 접근할 수 있고 `focus-visible` 외곽선이 있다. 44px 미만의 클릭 타깃은 만들지 않는다.
+- 대형 한글 제목은 375px에서 3줄 이내, 본문은 고아 한 글자 줄을 피하도록 확인한다.
+- 외부 폰트 CDN은 GitHub Pages의 정적 배포 제약에 맞춘 선택이다. 장기적으로는 한글 사용 범위에 맞춘 로컬 WOFF2 서브셋으로 교체할 수 있다.
+- 원문 프로젝트 명칭과 비공개 저장소 식별자는 공개 전 검토 대상이므로, 페이지에는 역할 중심 사례 제목과 근거 공개 상태만 표시한다.
+- 채용 담당자의 빠른 스캔을 위해 프로젝트명·역할·기여 범위를 접힌 상태에서도 표시하고, 문제·기여·기술·성과는 상세 보기 버튼으로 확인하도록 한다.
+- case 수가 많아져도 본문을 길게 펼치지 않고, 각 case의 상세는 dialog로 읽게 하며 닫을 때 호출한 버튼으로 focus를 복원한다.
