@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 
-const html = readFileSync(new URL("../preview/index.html", import.meta.url), "utf8");
+const html = readFileSync(new URL("../preview/explore.html", import.meta.url), "utf8");
 const styles = readFileSync(new URL("../preview/styles.css", import.meta.url), "utf8");
 const responsive = readFileSync(
   new URL("../preview/responsive.css", import.meta.url),
