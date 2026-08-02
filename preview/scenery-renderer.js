@@ -87,9 +87,8 @@ function paintSnowApproach(context, palette, camera, landmark) {
 function paintCoastApproach(context, palette, camera, landmark) {
   const [, dark, , light] = palette;
   fillWorld(context, light, camera, landmark.x - 3, landmark.y + 2, TILE_SIZE * 7, TILE_SIZE * 6);
-  fillWorld(context, palette[0], camera, landmark.x - 2, landmark.y + 2, TILE_SIZE * 5, TILE_SIZE * 6);
   for (let row = 0; row < 6; row += 1) {
-    fillWorld(context, light, camera, landmark.x - 2, landmark.y + 2 + row, TILE_SIZE * 5, 2);
+    fillWorld(context, dark, camera, landmark.x - 2, landmark.y + 2 + row, TILE_SIZE * 5, 2);
   }
   fillWorld(context, dark, camera, landmark.x, landmark.y + 2, 3, TILE_SIZE * 6);
   fillWorld(context, dark, camera, landmark.x - 4, landmark.y + 6, TILE_SIZE, 3);
