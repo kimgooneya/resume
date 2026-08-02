@@ -8,7 +8,7 @@ import {
   VIEWPORT_HEIGHT,
   VIEWPORT_WIDTH,
 } from "../preview/region-data.js";
-import { renderRegionScenery } from "../preview/scenery-renderer.js";
+import { renderLandmarkTerrain, renderRegionScenery } from "../preview/scenery-renderer.js";
 import { renderTileWorld } from "../preview/tile-renderer.js";
 import {
   drawLandmark,
@@ -238,6 +238,42 @@ describe("four-tone tile renderer", () => {
       [x, y, width, height].every(Number.isInteger) &&
       x >= 0 && y >= 0 && width > 0 && height > 0 &&
       x + width <= 384 && y + height <= 288))).toBe(true);
+  });
+
+  test("gives every landmark a quiet backdrop, firm plinth, and bright biome-specific approach", () => {
+    // Given: every central landmark framed in its normal arrival camera
+    const recordings = Object.values(REGIONS_BY_ID).map((region) => {
+      const camera = { x: region.landmark.x - 12, y: region.landmark.y - 8 };
+      const context = recordingContext();
+
+      // When: the visual-only terrain treatment is painted beneath the landmark
+      renderLandmarkTerrain(context, region, camera);
+      const draws = context.commands.filter(([name]) => name === "fillRect");
+      const approachTop = (region.landmark.y + 2 - camera.y) * TILE_SIZE;
+
+      return {
+        signature: JSON.stringify(draws.map(([, color, x, y, width, height]) =>
+          [region.palette.indexOf(color), x, y, width, height])),
+        quietBackdrop: draws.some(([, color, , , width, height]) =>
+          color === region.palette[2] && width >= TILE_SIZE * 11 && height === TILE_SIZE),
+        plinth: draws.some(([, color, , y, width, height]) =>
+          color === region.palette[0] &&
+          y === (region.landmark.y + 1 - camera.y) * TILE_SIZE &&
+          width >= TILE_SIZE * 9 &&
+          height >= 8),
+        approach: draws.some(([, color, , y, width, height]) =>
+          color === region.palette[3] && y >= approachTop && width >= TILE_SIZE * 5 && height >= 8),
+        bounded: draws.every(([, color, x, y, width, height]) =>
+          region.palette.includes(color) &&
+          x >= 0 && y >= 0 && width > 0 && height > 0 &&
+          x + width <= 384 && y + height <= 288),
+      };
+    });
+
+    // Then: ground layers establish a readable destination without a fifth tone or tile mutation
+    expect(recordings.every(({ quietBackdrop, plinth, approach, bounded }) =>
+      quietBackdrop && plinth && approach && bounded)).toBe(true);
+    expect(new Set(recordings.map(({ signature }) => signature)).size).toBe(5);
   });
 
   test("honors authored mask cutouts instead of painting rectangular feature bounds", () => {

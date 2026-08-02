@@ -6,7 +6,7 @@ import {
   VIEWPORT_HEIGHT,
   VIEWPORT_WIDTH,
 } from "./region-data.js";
-import { renderRegionScenery } from "./scenery-renderer.js";
+import { renderLandmarkTerrain, renderRegionScenery } from "./scenery-renderer.js";
 import {
   drawLandmark,
   drawMarker,
@@ -112,6 +112,7 @@ export function renderTileWorld(context, region, state, { interactionAvailable =
   }
 
   renderRegionScenery(context, region, camera);
+  renderLandmarkTerrain(context, region, camera);
   for (let screenY = 0; screenY < VIEWPORT_HEIGHT; screenY += 1) {
     for (let screenX = 0; screenX < VIEWPORT_WIDTH; screenX += 1) {
       const worldX = camera.x + screenX;
