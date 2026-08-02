@@ -28,25 +28,35 @@ describe("professional archive entry", () => {
     expect(html).toContain('M340 275H364');
     expect(html).toContain('M484 168V216H420V250');
     expect(script).toContain('document.createElement("details")');
-    expect(script).toContain("판단과 결과 접기");
+    expect(script).toContain("역할·판단·결과 접기");
   });
 
   test("renders evidence-driven case data without shipping the raw audit", () => {
-    expect(data.match(/number: /g)).toHaveLength(3);
+    expect(data.match(/number: /g)).toHaveLength(5);
     expect(data).toContain("Text-to-SQL DAG");
+    expect(data).toContain("NHBank");
     expect(data).toContain("비정형 Excel");
     expect(data).toContain("인증·BFF");
+    expect(data).toContain("dcai-onpremise");
+    expect(data).toContain("role:");
+    expect(data).toContain("problem:");
+    expect(data).toContain("contributions:");
+    expect(data).toContain("stack:");
     expect(data).toContain("https://github.com/kimgooneya");
     expect(data).not.toContain("https://github.com/shkim");
     expect(data).not.toContain("GITHUB_CONTRIBUTION_AUDIT");
     expect(script).toContain("textContent");
     expect(script).toContain("document.createElement(\"details\")");
+    expect(script).toContain("MY ROLE");
+    expect(script).toContain("CONTRIBUTIONS");
   });
 
   test("keeps the archive visual system token-driven and responsive", () => {
     expect(css).toContain("--archive-paper: #f6f4ee");
     expect(css).toContain("--archive-font-display: \"Hahmlet\"");
     expect(css).toContain("--archive-type-hero-mobile");
+    expect(css).toContain(".case-overview");
+    expect(css).toContain(".case-stack");
     expect(css).toContain("word-break: keep-all");
     expect(css).toContain("@media (max-width: 560px)");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");

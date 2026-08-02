@@ -14,6 +14,13 @@ const appendList = (parent, items, className = "") => {
   return list;
 };
 
+const createDetailBlock = (label, value, className = "") => {
+  const block = create("div", `case-detail-block ${className}`.trim());
+  block.append(create("h4", "eyebrow", label));
+  block.append(create("p", "outcome-copy", value));
+  return block;
+};
+
 const renderProfile = () => {
   const profile = portfolioData.profile;
   document.querySelectorAll("[data-profile-eyebrow]").forEach((element) => {
@@ -68,30 +75,53 @@ const renderCases = () => {
     body.append(create("h3", "case-title", caseStudy.title));
     body.append(create("p", "case-summary", caseStudy.summary));
 
+    const overview = create("dl", "case-overview");
+    [
+      ["PROJECT", caseStudy.project],
+      ["ROLE", caseStudy.role],
+      ["SCOPE", caseStudy.scope],
+    ].forEach(([label, value]) => {
+      const item = create("div", "case-overview-item");
+      item.append(create("dt", "eyebrow", label));
+      item.append(create("dd", "case-overview-value", value));
+      overview.append(item);
+    });
+    body.append(overview);
+
     const details = document.createElement("details");
     details.className = "case-details";
     const summary = document.createElement("summary");
-    const detailsLabel = create("span", "details-label", "판단과 결과 펼치기");
+    const detailsLabel = create("span", "details-label", "역할·판단·결과 펼치기");
     const detailsMark = create("span", "details-mark", "+");
     summary.append(
       detailsLabel,
       detailsMark,
     );
     details.addEventListener("toggle", () => {
-      detailsLabel.textContent = details.open ? "판단과 결과 접기" : "판단과 결과 펼치기";
+      detailsLabel.textContent = details.open ? "역할·판단·결과 접기" : "역할·판단·결과 펼치기";
       detailsMark.textContent = details.open ? "−" : "+";
     });
     details.append(summary);
 
     const detailGrid = create("div", "case-detail-grid");
+    detailGrid.append(
+      createDetailBlock("MY ROLE", caseStudy.role),
+      createDetailBlock("PROBLEM", caseStudy.problem),
+    );
+    const contributions = create("div", "case-detail-block");
+    contributions.append(create("h4", "eyebrow", "CONTRIBUTIONS"));
+    appendList(contributions, caseStudy.contributions);
     const decisions = create("div", "case-detail-block");
     decisions.append(create("h4", "eyebrow", "DECISIONS"));
     appendList(decisions, caseStudy.decisions);
+    const stack = create("div", "case-detail-block");
+    stack.append(create("h4", "eyebrow", "STACK"));
+    appendList(stack, caseStudy.stack, "case-stack");
     const outcome = create("div", "case-detail-block");
     outcome.append(create("h4", "eyebrow", "OUTCOME"));
     outcome.append(create("p", "outcome-copy", caseStudy.outcome));
     outcome.append(create("p", "evidence-copy", caseStudy.evidence));
-    detailGrid.append(decisions, outcome);
+    detailGrid.append(contributions, decisions, stack, outcome);
     details.append(detailGrid);
     body.append(details);
     article.append(index, body);

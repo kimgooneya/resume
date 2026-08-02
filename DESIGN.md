@@ -303,9 +303,12 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 | `--archive-type-section` | `clamp(1.8rem, 3vw, 3.2rem)` | 섹션 제목 |
 | `--archive-type-card` | `clamp(1.2rem, 2vw, 1.65rem)` | 사례 제목 |
 | `--archive-type-body` | `1rem` | 기본 본문 |
+| `--archive-type-detail` | `0.8125rem` | 사례 개요 값 |
 | `--archive-type-meta` | `0.75rem` | 메타와 근거 라벨 |
 | `--archive-leading-display` | `0.98` | 대형 제목 |
 | `--archive-leading-copy` | `1.7` | 한국어 본문 |
+| `--archive-leading-detail` | `1.55` | 사례 개요와 상세 본문 |
+| `--archive-leading-meta` | `1.4` | 기술 스택 칩 |
 
 한국어 문장은 `word-break: keep-all`과 `overflow-wrap: anywhere`를 함께 사용한다. 긴 제목은 컨테이너를 줄이지 않고 의미 단위로 감싼다.
 
@@ -333,7 +336,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 - **Archive masthead**: 브랜드, `사례`, `이력서`, `Explore` 링크. `default`, `hover`, `focus-visible` 상태를 underline과 전경색 변화로 표현한다.
 - **Hero statement**: kicker, Hahmlet 선언, 짧은 설명, primary outline CTA와 secondary text link. 첫 화면에서만 사용한다.
 - **Technical diagram**: inline SVG 선과 노드로 AI 흐름을 설명하며, 장식 배경 이미지가 아니다. 모바일에서는 같은 흐름을 짧은 선형 요약으로 보강한다. `rest`, `prefers-reduced-motion` 상태만 가진다.
-- **Case study**: 번호·역할·기간·제목·요약·판단 목록·결과를 포함하는 재사용 article. native `details`로 `closed`/`open`을 제공하고 열림 상태는 배경색과 chevron 텍스트로 구분한다.
+- **Case study**: 프로젝트 단위로 번호·프로젝트명·역할·범위·기간·제목·요약을 먼저 보여주고, native `details` 안에서 `MY ROLE`·`PROBLEM`·`CONTRIBUTIONS`·`DECISIONS`·`STACK`·`OUTCOME` 순서로 상세 정보를 제공하는 재사용 article. `closed`/`open` 상태는 접기 라벨과 기호 텍스트로 구분한다.
 - **Capability list**: AI 실행 흐름, 데이터 신뢰성, 제품 운영 세 줄의 반복 가능한 역량 프리미티브. `default`, `hover`, `focus-visible`을 지원한다.
 - **Archive rail**: 데스크톱 오른쪽에만 보이는 세로 기록선. 모바일에서는 숨기고 동일한 기준일을 footer 텍스트로 제공한다.
 
@@ -352,3 +355,4 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 - 대형 한글 제목은 375px에서 3줄 이내, 본문은 고아 한 글자 줄을 피하도록 확인한다.
 - 외부 폰트 CDN은 GitHub Pages의 정적 배포 제약에 맞춘 선택이다. 장기적으로는 한글 사용 범위에 맞춘 로컬 WOFF2 서브셋으로 교체할 수 있다.
 - 원문 프로젝트 명칭과 비공개 저장소 식별자는 공개 전 검토 대상이므로, 페이지에는 역할 중심 사례 제목과 근거 공개 상태만 표시한다.
+- 채용 담당자의 빠른 스캔을 위해 프로젝트명·역할·기여 범위를 접힌 상태에서도 표시하고, 문제·기여·기술·성과는 사용자가 직접 펼쳐 확인하도록 한다.

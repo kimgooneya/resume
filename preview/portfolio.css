@@ -15,9 +15,12 @@
   --archive-type-section: clamp(1.8rem, 3vw, 3.2rem);
   --archive-type-card: clamp(1.2rem, 2vw, 1.65rem);
   --archive-type-body: 1rem;
+  --archive-type-detail: 0.8125rem;
   --archive-type-meta: 0.75rem;
   --archive-leading-display: 0.98;
   --archive-leading-copy: 1.7;
+  --archive-leading-detail: 1.55;
+  --archive-leading-meta: 1.4;
   --archive-space-1: 4px;
   --archive-space-2: 8px;
   --archive-space-3: 12px;
@@ -534,6 +537,38 @@ summary {
   word-break: keep-all;
 }
 
+.case-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 1.8fr);
+  gap: var(--archive-space-4);
+  max-width: 44rem;
+  margin: var(--archive-space-6) 0 0;
+  padding: var(--archive-space-4) 0;
+  border-top: var(--archive-line-width) solid var(--archive-line);
+  border-bottom: var(--archive-line-width) solid var(--archive-line);
+}
+
+.case-overview-item {
+  min-width: 0;
+}
+
+.case-overview-item dt,
+.case-overview-item dd {
+  margin: 0;
+}
+
+.case-overview-value {
+  margin-top: var(--archive-space-2) !important;
+  color: var(--archive-ink);
+  font-size: var(--archive-type-detail);
+  line-height: var(--archive-leading-detail);
+  word-break: keep-all;
+}
+
+.case-overview-item:last-child .case-overview-value {
+  white-space: nowrap;
+}
+
 .case-details {
   max-width: 38rem;
   margin-top: var(--archive-space-8);
@@ -571,6 +606,10 @@ summary {
   padding: var(--archive-space-6) 0 var(--archive-space-2);
 }
 
+.case-detail-block {
+  min-width: 0;
+}
+
 .case-detail-block h4 {
   margin: 0 0 var(--archive-space-3);
   font-weight: 500;
@@ -580,10 +619,31 @@ summary {
   margin: 0;
   padding-left: var(--archive-space-4);
   color: var(--archive-ink-muted);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 .case-detail-block li + li {
   margin-top: var(--archive-space-3);
+}
+
+.case-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--archive-space-2);
+  padding: 0 !important;
+  list-style: none;
+}
+
+.case-detail-block .case-stack li,
+.case-stack li + li {
+  margin: 0;
+  padding: var(--archive-space-2) var(--archive-space-3);
+  border: var(--archive-line-width) solid var(--archive-line);
+  color: var(--archive-accent-deep);
+  font-family: var(--archive-font-mono);
+  font-size: var(--archive-type-meta);
+  line-height: var(--archive-leading-meta);
 }
 
 .outcome-copy,
@@ -904,6 +964,11 @@ summary {
   .case-detail-grid {
     grid-template-columns: 1fr;
     gap: var(--archive-space-6);
+  }
+
+  .case-overview {
+    grid-template-columns: 1fr;
+    gap: var(--archive-space-3);
   }
 
   .capability-item {
