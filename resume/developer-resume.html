@@ -15,6 +15,7 @@
         --rule: #d9d5ce;
         --accent: #24546a;
         --accent-soft: #e7eff1;
+        --font-primary: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
         --type-name: 30px;
         --type-title: 11px;
         --type-section: 11px;
@@ -50,7 +51,7 @@
         margin: 0;
         color: var(--ink);
         background: var(--paper-surround);
-        font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+        font-family: var(--font-primary);
         font-size: var(--type-body);
         line-height: 1.48;
         -webkit-print-color-adjust: exact;
@@ -108,7 +109,6 @@
       .contact-label,
       .evidence-label {
         color: var(--accent);
-        font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", monospace;
         font-size: var(--type-meta);
         font-weight: 700;
         letter-spacing: 0.08em;
@@ -127,7 +127,6 @@
       }
 
       h1 {
-        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Noto Serif KR", serif;
         font-size: var(--type-name);
         font-weight: 700;
         letter-spacing: -0.04em;
@@ -258,7 +257,6 @@
 
       .experience-meta strong {
         color: var(--accent);
-        font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", monospace;
         font-size: var(--type-meta);
         font-weight: 600;
       }
@@ -337,7 +335,6 @@
       }
 
       .page-context strong {
-        font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", monospace;
         font-size: var(--type-meta);
         font-weight: 600;
         letter-spacing: 0.05em;
@@ -444,7 +441,6 @@
         margin-top: auto;
         padding-top: var(--space-4);
         color: var(--ink-muted);
-        font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", monospace;
         font-size: var(--type-footer);
         letter-spacing: 0.03em;
       }
