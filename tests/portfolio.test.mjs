@@ -32,12 +32,11 @@ describe("professional archive entry", () => {
   });
 
   test("renders evidence-driven case data without shipping the raw audit", () => {
-    expect(data.match(/number: /g)).toHaveLength(23);
+    expect(data.match(/number: /g)).toHaveLength(22);
     expect(data).toContain("Text-to-SQL DAG");
     expect(data).toContain("NHBank");
     expect(data).toContain("인증·BFF");
     expect(data).toContain("dcai-onpremise");
-    expect(data).toContain("wezen-rfid-scanner");
     expect(data).toContain("CelltrionPowerBIWebApp");
     expect(data).toContain("LangcodeApp");
     expect(data).toContain("role:");
@@ -47,6 +46,8 @@ describe("professional archive entry", () => {
     expect(data).toContain("https://github.com/kimgooneya");
     expect(data).not.toContain("https://github.com/shkim");
     expect(data).not.toContain("GITHUB_CONTRIBUTION_AUDIT");
+    expect(data).not.toContain('number: "07"');
+    expect(data).not.toContain("RFID 제품 유지보수");
     expect(data).not.toContain("Excel");
     expect(script).toContain("textContent");
     expect(script).toContain("document.createElement(\"dialog\")");
@@ -60,6 +61,11 @@ describe("professional archive entry", () => {
     expect(css).toContain("--archive-overlay: rgb(31 35 31 / 48%)");
     expect(css).toContain("--archive-font-display: \"Hahmlet\"");
     expect(css).toContain("--archive-type-hero-mobile");
+    expect(css).toContain("--archive-dialog-duration: 640ms");
+    expect(css).toContain("--archive-dialog-ease: cubic-bezier(0.22, 1, 0.36, 1)");
+    expect(css).toContain("@keyframes archive-dialog-enter");
+    expect(css).toContain(".case-dialog[open]::backdrop");
+    expect(css).toContain("html:has(.case-dialog[open])");
     expect(css).toContain(".case-overview");
     expect(css).toContain(".case-stack");
     expect(css).toContain("scroll-snap-type: y mandatory");

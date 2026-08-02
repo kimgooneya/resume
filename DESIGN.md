@@ -10,7 +10,7 @@
 - Character-study research (2026-08-01): 제한된 해상도에서는 얼굴 장식보다 검은 실루엣과 분리된 팔다리가 우선이며, 두 보행 포즈에서 다리·팔을 반대로 흔들고 몸통을 1px 상하 이동해 무게감을 만든다. 공개 튜토리얼의 일반 원리만 참고하며, 특정 게임의 캐릭터·스프라이트·색 배치를 복제하지 않는다.
 - Final layout contract: 상단 플레이 영역에서 현재 지역의 로컬 맵 74%, 지역 목록 22%, 외곽 여백 4%. 전체 화면 하단 18–22%는 상시 보이는 조작 덱으로 사용한다. 4px 잉크 테두리, 밝은 내부 하이라이트, 오른쪽/아래 단차 그림자를 구현 기준으로 삼는다.
 - Signature moment: 방문자가 작은 개발자 캐릭터를 직접 움직여 다섯 작업소 앞 표지판을 읽고, 하단 대화창에서 실제 프로젝트 소개를 발견한다.
-- Interaction reference: beui.dev `center-morph-modal`의 포커스 복귀와 reduced-motion 계약만 가져오고, 시각 전환은 고전 게임의 즉시 나타나는 대화창 문법으로 재해석한다.
+- Interaction reference: beui.dev `center-morph-modal`의 포커스 복귀·중앙 확장·reduced-motion 계약을 가져오되, 시각 전환은 이 archive의 절제된 종이 편집실 문법으로 재해석한다.
 
 ## 1. Atmosphere & Identity
 
@@ -343,7 +343,12 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 ### 6. Motion & Interaction
 
-모션은 링크/사례 dialog 열림 같은 실제 상태 변화에만 사용한다. 링크는 `transform` 없이 underline과 색을 120ms에 전환하고, 페이지는 hero·역량·사례·마무리 같은 주요 섹션 경계에서만 세로 scroll snap으로 멈춘다. case 카드는 한 화면을 독점하지 않고 연속 목록으로 읽힌다. decorative SVG에는 자동 반복 애니메이션을 넣지 않는다. `prefers-reduced-motion: reduce`에서는 transition과 scroll snap을 해제한다.
+| Token | Value | Usage |
+|---|---|---|
+| `--archive-dialog-duration` | `640ms` | 사례 dialog 진입 |
+| `--archive-dialog-ease` | `cubic-bezier(0.22, 1, 0.36, 1)` | 사례 dialog 중심 확장 |
+
+모션은 링크/사례 dialog 열림 같은 실제 상태 변화에만 사용한다. 링크는 `transform` 없이 underline과 색을 120ms에 전환하고, dialog는 `--archive-dialog-duration`과 `--archive-dialog-ease`를 사용해 중앙에서 94% 크기와 24px 아래 위치로 시작해 원위치로 펼쳐진다. backdrop은 같은 시간 동안 opacity만 올린다. 페이지는 hero·역량·사례·마무리 같은 주요 섹션 경계에서만 세로 scroll snap으로 멈춘다. case 카드는 한 화면을 독점하지 않고 연속 목록으로 읽힌다. decorative SVG에는 자동 반복 애니메이션을 넣지 않는다. `prefers-reduced-motion: reduce`에서는 dialog animation, transition과 scroll snap을 해제한다.
 
 ### 7. Depth & Surface
 

@@ -34,6 +34,8 @@
   --archive-gutter: clamp(24px, 6vw, 96px);
   --archive-line-width: 1px;
   --archive-focus: 3px;
+  --archive-dialog-duration: 640ms;
+  --archive-dialog-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -55,6 +57,11 @@ body {
   font-size: var(--archive-type-body);
   line-height: var(--archive-leading-copy);
   -webkit-font-smoothing: antialiased;
+}
+
+html:has(.case-dialog[open]),
+body:has(.case-dialog[open]) {
+  overflow: hidden;
 }
 
 a {
@@ -617,8 +624,39 @@ summary {
   color: var(--archive-ink);
 }
 
+@keyframes archive-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--archive-space-6)) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes archive-dialog-backdrop-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.case-dialog[open] {
+  animation: archive-dialog-enter var(--archive-dialog-duration) var(--archive-dialog-ease) both;
+  transform-origin: center;
+}
+
 .case-dialog::backdrop {
   background: var(--archive-overlay);
+}
+
+.case-dialog[open]::backdrop {
+  animation: archive-dialog-backdrop-enter var(--archive-dialog-duration) ease-out both;
 }
 
 .case-dialog-shell {
@@ -1124,6 +1162,13 @@ summary {
   *,
   *::before,
   *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .case-dialog[open],
+  .case-dialog[open]::backdrop {
+    animation: none !important;
   }
 }
