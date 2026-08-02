@@ -21,6 +21,88 @@ const createDetailBlock = (label, value, className = "") => {
   return block;
 };
 
+const createCaseOverview = (caseStudy) => {
+  const overview = create("dl", "case-overview");
+  [
+    ["PROJECT", caseStudy.project],
+    ["ROLE", caseStudy.role],
+    ["SCOPE", caseStudy.scope],
+  ].forEach(([label, value]) => {
+    const item = create("div", "case-overview-item");
+    item.append(create("dt", "eyebrow", label));
+    item.append(create("dd", "case-overview-value", value));
+    overview.append(item);
+  });
+  return overview;
+};
+
+const createCaseDetailGrid = (caseStudy) => {
+  const detailGrid = create("div", "case-detail-grid");
+  detailGrid.append(
+    createDetailBlock("MY ROLE", caseStudy.role),
+    createDetailBlock("PROBLEM", caseStudy.problem),
+  );
+  const contributions = create("div", "case-detail-block");
+  contributions.append(create("h4", "eyebrow", "CONTRIBUTIONS"));
+  appendList(contributions, caseStudy.contributions);
+  const decisions = create("div", "case-detail-block");
+  decisions.append(create("h4", "eyebrow", "DECISIONS"));
+  appendList(decisions, caseStudy.decisions);
+  const stack = create("div", "case-detail-block");
+  stack.append(create("h4", "eyebrow", "STACK"));
+  appendList(stack, caseStudy.stack, "case-stack");
+  const outcome = create("div", "case-detail-block");
+  outcome.append(create("h4", "eyebrow", "OUTCOME"));
+  outcome.append(create("p", "outcome-copy", caseStudy.outcome));
+  outcome.append(create("p", "evidence-copy", caseStudy.evidence));
+  detailGrid.append(contributions, decisions, stack, outcome);
+  return detailGrid;
+};
+
+const createCaseDialog = (caseStudy, trigger) => {
+  const dialog = document.createElement("dialog");
+  const dialogId = `case-dialog-${caseStudy.number}`;
+  const titleId = `${dialogId}-title`;
+  dialog.id = dialogId;
+  dialog.className = "case-dialog";
+  dialog.setAttribute("aria-labelledby", titleId);
+
+  const shell = create("div", "case-dialog-shell");
+  const header = create("header", "case-dialog-header");
+  const headingGroup = create("div", "case-dialog-heading");
+  headingGroup.append(
+    create("p", "eyebrow", `CASE ${caseStudy.number} · ${caseStudy.period}`),
+    create("p", "case-dialog-project", caseStudy.project),
+  );
+  const title = create("h2", "case-dialog-title", caseStudy.title);
+  title.id = titleId;
+  headingGroup.append(title);
+  const summary = create("p", "case-dialog-summary", caseStudy.summary);
+  summary.id = `${dialogId}-summary`;
+  dialog.setAttribute("aria-describedby", summary.id);
+  const close = create("button", "case-dialog-close", "닫기");
+  close.type = "button";
+  close.setAttribute("aria-label", "상세 사례 닫기");
+  close.addEventListener("click", () => dialog.close());
+  header.append(headingGroup, close);
+
+  shell.append(header, summary);
+  shell.append(createCaseOverview(caseStudy), createCaseDetailGrid(caseStudy));
+  dialog.append(shell);
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+  dialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    dialog.close();
+  });
+  dialog.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") dialog.close();
+  });
+  dialog.addEventListener("close", () => trigger.focus());
+  return dialog;
+};
+
 const renderProfile = () => {
   const profile = portfolioData.profile;
   document.querySelectorAll("[data-profile-eyebrow]").forEach((element) => {
@@ -75,56 +157,24 @@ const renderCases = () => {
     body.append(create("h3", "case-title", caseStudy.title));
     body.append(create("p", "case-summary", caseStudy.summary));
 
-    const overview = create("dl", "case-overview");
-    [
-      ["PROJECT", caseStudy.project],
-      ["ROLE", caseStudy.role],
-      ["SCOPE", caseStudy.scope],
-    ].forEach(([label, value]) => {
-      const item = create("div", "case-overview-item");
-      item.append(create("dt", "eyebrow", label));
-      item.append(create("dd", "case-overview-value", value));
-      overview.append(item);
-    });
-    body.append(overview);
-
-    const details = document.createElement("details");
-    details.className = "case-details";
-    const summary = document.createElement("summary");
-    const detailsLabel = create("span", "details-label", "역할·판단·결과 펼치기");
-    const detailsMark = create("span", "details-mark", "+");
-    summary.append(
-      detailsLabel,
-      detailsMark,
+    body.append(createCaseOverview(caseStudy));
+    const openButton = create("button", "case-open");
+    openButton.type = "button";
+    openButton.setAttribute("aria-haspopup", "dialog");
+    openButton.setAttribute("aria-label", `${caseStudy.project} 상세 사례 열기`);
+    openButton.append(
+      create("span", "case-open-label", "역할·판단·결과 상세 보기"),
+      create("span", "case-open-mark", "↗"),
     );
-    details.addEventListener("toggle", () => {
-      detailsLabel.textContent = details.open ? "역할·판단·결과 접기" : "역할·판단·결과 펼치기";
-      detailsMark.textContent = details.open ? "−" : "+";
+    const dialog = createCaseDialog(caseStudy, openButton);
+    openButton.setAttribute("aria-controls", dialog.id);
+    openButton.addEventListener("click", () => {
+      dialog.showModal();
+      dialog.querySelector(".case-dialog-close").focus();
     });
-    details.append(summary);
-
-    const detailGrid = create("div", "case-detail-grid");
-    detailGrid.append(
-      createDetailBlock("MY ROLE", caseStudy.role),
-      createDetailBlock("PROBLEM", caseStudy.problem),
-    );
-    const contributions = create("div", "case-detail-block");
-    contributions.append(create("h4", "eyebrow", "CONTRIBUTIONS"));
-    appendList(contributions, caseStudy.contributions);
-    const decisions = create("div", "case-detail-block");
-    decisions.append(create("h4", "eyebrow", "DECISIONS"));
-    appendList(decisions, caseStudy.decisions);
-    const stack = create("div", "case-detail-block");
-    stack.append(create("h4", "eyebrow", "STACK"));
-    appendList(stack, caseStudy.stack, "case-stack");
-    const outcome = create("div", "case-detail-block");
-    outcome.append(create("h4", "eyebrow", "OUTCOME"));
-    outcome.append(create("p", "outcome-copy", caseStudy.outcome));
-    outcome.append(create("p", "evidence-copy", caseStudy.evidence));
-    detailGrid.append(contributions, decisions, stack, outcome);
-    details.append(detailGrid);
-    body.append(details);
+    body.append(openButton);
     article.append(index, body);
+    article.append(dialog);
     target.append(article);
   });
 };

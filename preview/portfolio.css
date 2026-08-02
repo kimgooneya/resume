@@ -2,11 +2,12 @@
   --archive-paper: #f6f4ee;
   --archive-paper-warm: #efece2;
   --archive-ink: #1f231f;
-  --archive-ink-muted: #77766e;
+  --archive-ink-muted: #6f6e67;
   --archive-line: #d7d2c5;
   --archive-accent: #2b5cae;
   --archive-accent-deep: #1b3d76;
   --archive-accent-soft: #dfe8f5;
+  --archive-overlay: rgb(31 35 31 / 48%);
   --archive-font-display: "Hahmlet", "Noto Serif KR", serif;
   --archive-font-sans: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", sans-serif;
   --archive-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -41,6 +42,8 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: var(--archive-space-4);
 }
 
 body {
@@ -569,34 +572,142 @@ summary {
   white-space: nowrap;
 }
 
-.case-details {
-  max-width: 38rem;
-  margin-top: var(--archive-space-8);
-  border-top: var(--archive-line-width) solid var(--archive-line);
-}
-
-.case-details summary {
+.case-open {
   display: flex;
+  width: 100%;
   min-height: 48px;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
-  list-style: none;
+  margin-top: var(--archive-space-8);
+  padding: 0;
+  border: 0;
+  border-top: var(--archive-line-width) solid var(--archive-line);
+  background: transparent;
   color: var(--archive-accent-deep);
+  cursor: pointer;
+  font: inherit;
   font-size: 0.875rem;
+  text-align: left;
 }
 
-.case-details summary::-webkit-details-marker {
-  display: none;
+.case-open:hover,
+.case-open:focus-visible {
+  color: var(--archive-accent);
 }
 
-.details-mark {
+.case-open:focus-visible,
+.case-dialog-close:focus-visible {
+  outline: var(--archive-focus) solid var(--archive-accent);
+  outline-offset: var(--archive-space-1);
+}
+
+.case-open-mark {
   font-family: var(--archive-font-mono);
   font-size: 1.25rem;
 }
 
-.case-details[open] .details-mark {
-  transform: rotate(45deg);
+.case-dialog {
+  width: min(720px, calc(100% - var(--archive-space-8)));
+  max-height: calc(100dvh - var(--archive-space-8));
+  margin: auto;
+  overflow: hidden;
+  padding: 0;
+  border: var(--archive-line-width) solid var(--archive-ink);
+  background: var(--archive-paper);
+  color: var(--archive-ink);
+}
+
+.case-dialog::backdrop {
+  background: var(--archive-overlay);
+}
+
+.case-dialog-shell {
+  max-height: calc(100dvh - var(--archive-space-8));
+  overflow-y: auto;
+  padding: var(--archive-space-8);
+}
+
+.case-dialog-header {
+  display: flex;
+  gap: var(--archive-space-8);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: var(--archive-space-6);
+  border-bottom: var(--archive-line-width) solid var(--archive-line);
+}
+
+.case-dialog-heading {
+  min-width: 0;
+}
+
+.case-dialog-project {
+  margin: var(--archive-space-3) 0 0;
+  color: var(--archive-ink-muted);
+  font-size: var(--archive-type-detail);
+  word-break: keep-all;
+}
+
+.case-dialog-title {
+  margin: var(--archive-space-4) 0 0;
+  font-family: var(--archive-font-display);
+  font-size: var(--archive-type-card);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+
+.case-dialog-close {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: var(--archive-space-2) var(--archive-space-3);
+  border: var(--archive-line-width) solid var(--archive-line);
+  background: transparent;
+  color: var(--archive-accent-deep);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--archive-type-meta);
+}
+
+.case-dialog-close:hover,
+.case-dialog-close:focus-visible {
+  border-color: var(--archive-accent);
+  color: var(--archive-accent);
+}
+
+.case-dialog-summary {
+  margin: var(--archive-space-6) 0 0;
+  color: var(--archive-ink-muted);
+  word-break: keep-all;
+}
+
+.case-dialog .case-overview {
+  max-width: none;
+  margin-top: var(--archive-space-6);
+}
+
+.case-dialog .case-overview-item:last-child .case-overview-value {
+  white-space: normal;
+}
+
+.case-dialog .case-detail-grid {
+  padding-top: var(--archive-space-8);
+}
+
+.case-dialog .case-detail-block {
+  min-width: 0;
+}
+
+.case-dialog .case-detail-block ul {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.hero,
+.section-block,
+.closing-band,
+.archive-footer {
+  scroll-snap-align: start;
 }
 
 .case-detail-grid {
@@ -878,6 +989,16 @@ summary {
     display: inline-block;
   }
 
+  .case-dialog {
+    width: calc(100% - var(--archive-space-6));
+    max-height: calc(100dvh - var(--archive-space-6));
+  }
+
+  .case-dialog-shell {
+    max-height: calc(100dvh - var(--archive-space-6));
+    padding: var(--archive-space-6);
+  }
+
   .archive-footer {
     flex-direction: column;
   }
@@ -997,6 +1118,7 @@ summary {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+    scroll-snap-type: none;
   }
 
   *,

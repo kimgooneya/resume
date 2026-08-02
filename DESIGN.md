@@ -270,7 +270,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 - User-approved reference: 생성된 1440px 포트폴리오 히어로 시안. 종이색 바탕, 얇은 상단 내비게이션, 오른쪽 세로 아카이브 레일, 큰 한국어 헤드라인, 옅은 DAG 선화, 외곽선 CTA를 구현 기준으로 삼는다.
 - Embedded reference shortlist: Notion/editorial의 여백과 정보 밀도, Swiss grid의 정렬 규칙, 기술 문서의 모노스페이스 근거 라벨을 검토하고 개인 개발자 아카이브에 맞게 재조합했다.
 - Typography research (2026-08-02): Hahmlet Variable은 한글 디스플레이 제목의 문학적 대비를, Pretendard Variable은 긴 사례 설명과 UI의 안정적인 줄맞춤을 담당한다. 두 서체 모두 OFL 배포 경로를 사용한다.
-- Design decision: 사진이나 캡처를 배경으로 붙이지 않고, 실제 DOM 텍스트·SVG 선화·details 사례 컴포넌트로 이력 근거를 읽게 한다.
+- Design decision: 사진이나 캡처를 배경으로 붙이지 않고, 실제 DOM 텍스트·SVG 선화·dialog 사례 컴포넌트로 이력 근거를 읽게 한다.
 
 ### 1. Atmosphere & Identity
 
@@ -283,11 +283,12 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 | Paper | `--archive-paper` | `#f6f4ee` | 전체 배경 |
 | Warm paper | `--archive-paper-warm` | `#efece2` | 보조 섹션과 다이어그램 바탕 |
 | Ink | `--archive-ink` | `#1f231f` | 제목, 본문, 주요 선 |
-| Muted ink | `--archive-ink-muted` | `#77766e` | 설명, 메타, 보조 라벨 |
+| Muted ink | `--archive-ink-muted` | `#6f6e67` | 설명, 메타, 보조 라벨; paper 대비 본문 4.5:1 이상 |
 | Hairline | `--archive-line` | `#d7d2c5` | 구획선, 사례 테두리 |
 | Blue accent | `--archive-accent` | `#2b5cae` | CTA, 링크, 선택된 근거 |
 | Deep accent | `--archive-accent-deep` | `#1b3d76` | hover/focus 전경 |
 | Soft accent | `--archive-accent-soft` | `#dfe8f5` | 다이어그램 하이라이트 |
+| Overlay | `--archive-overlay` | `rgb(31 35 31 / 48%)` | 사례 상세 dialog backdrop |
 
 색상은 의미별로만 사용한다. blue accent는 행동과 연결 가능한 근거에만 쓰고, 상태를 색상만으로 전달하지 않는다.
 
@@ -336,13 +337,13 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 - **Archive masthead**: 브랜드, `사례`, `이력서`, `Explore` 링크. `default`, `hover`, `focus-visible` 상태를 underline과 전경색 변화로 표현한다.
 - **Hero statement**: kicker, Hahmlet 선언, 짧은 설명, primary outline CTA와 secondary text link. 첫 화면에서만 사용한다.
 - **Technical diagram**: inline SVG 선과 노드로 AI 흐름을 설명하며, 장식 배경 이미지가 아니다. 모바일에서는 같은 흐름을 짧은 선형 요약으로 보강한다. `rest`, `prefers-reduced-motion` 상태만 가진다.
-- **Case study**: 프로젝트 단위로 번호·프로젝트명·역할·범위·기간·제목·요약을 먼저 보여주고, native `details` 안에서 `MY ROLE`·`PROBLEM`·`CONTRIBUTIONS`·`DECISIONS`·`STACK`·`OUTCOME` 순서로 상세 정보를 제공하는 재사용 article. `closed`/`open` 상태는 접기 라벨과 기호 텍스트로 구분한다.
+- **Case study**: 프로젝트 단위로 번호·프로젝트명·역할·범위·기간·제목·요약을 먼저 보여주고, native `dialog` 안에서 `MY ROLE`·`PROBLEM`·`CONTRIBUTIONS`·`DECISIONS`·`STACK`·`OUTCOME` 순서로 상세 정보를 제공하는 재사용 article. 상세 버튼은 focus를 복원하고, dialog 바깥 클릭과 Escape로 닫힌다.
 - **Capability list**: AI 실행 흐름, 데이터 신뢰성, 제품 운영 세 줄의 반복 가능한 역량 프리미티브. `default`, `hover`, `focus-visible`을 지원한다.
 - **Archive rail**: 데스크톱 오른쪽에만 보이는 세로 기록선. 모바일에서는 숨기고 동일한 기준일을 footer 텍스트로 제공한다.
 
 ### 6. Motion & Interaction
 
-모션은 링크/사례 열림 같은 실제 상태 변화에만 사용한다. 링크는 `transform` 없이 underline과 색을 120ms에 전환하고, details 요약은 브라우저 기본 열림을 존중한다. decorative SVG에는 자동 반복 애니메이션을 넣지 않는다. `prefers-reduced-motion: reduce`에서는 모든 transition을 즉시화한다.
+모션은 링크/사례 dialog 열림 같은 실제 상태 변화에만 사용한다. 링크는 `transform` 없이 underline과 색을 120ms에 전환하고, 페이지는 hero·역량·사례·마무리 같은 주요 섹션 경계에서만 세로 scroll snap으로 멈춘다. case 카드는 한 화면을 독점하지 않고 연속 목록으로 읽힌다. decorative SVG에는 자동 반복 애니메이션을 넣지 않는다. `prefers-reduced-motion: reduce`에서는 transition과 scroll snap을 해제한다.
 
 ### 7. Depth & Surface
 
@@ -350,9 +351,10 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 
 ### 8. Accessibility & Accepted Debt
 
-- `main`, `nav`, `header`, `footer`, `article`, `details`를 사용해 문서 순서를 보존한다.
+- `main`, `nav`, `header`, `footer`, `article`, `dialog`를 사용해 문서 순서를 보존한다.
 - 모든 CTA는 키보드로 접근할 수 있고 `focus-visible` 외곽선이 있다. 44px 미만의 클릭 타깃은 만들지 않는다.
 - 대형 한글 제목은 375px에서 3줄 이내, 본문은 고아 한 글자 줄을 피하도록 확인한다.
 - 외부 폰트 CDN은 GitHub Pages의 정적 배포 제약에 맞춘 선택이다. 장기적으로는 한글 사용 범위에 맞춘 로컬 WOFF2 서브셋으로 교체할 수 있다.
 - 원문 프로젝트 명칭과 비공개 저장소 식별자는 공개 전 검토 대상이므로, 페이지에는 역할 중심 사례 제목과 근거 공개 상태만 표시한다.
-- 채용 담당자의 빠른 스캔을 위해 프로젝트명·역할·기여 범위를 접힌 상태에서도 표시하고, 문제·기여·기술·성과는 사용자가 직접 펼쳐 확인하도록 한다.
+- 채용 담당자의 빠른 스캔을 위해 프로젝트명·역할·기여 범위를 접힌 상태에서도 표시하고, 문제·기여·기술·성과는 상세 보기 버튼으로 확인하도록 한다.
+- case 수가 많아져도 본문을 길게 펼치지 않고, 각 case의 상세는 dialog로 읽게 하며 닫을 때 호출한 버튼으로 focus를 복원한다.

@@ -27,16 +27,19 @@ describe("professional archive entry", () => {
     expect(html).toContain("SCHEMA RETRIEVAL");
     expect(html).toContain('M340 275H364');
     expect(html).toContain('M484 168V216H420V250');
-    expect(script).toContain('document.createElement("details")');
-    expect(script).toContain("역할·판단·결과 접기");
+    expect(script).toContain('document.createElement("dialog")');
+    expect(script).toContain("상세 사례 닫기");
   });
 
   test("renders evidence-driven case data without shipping the raw audit", () => {
-    expect(data.match(/number: /g)).toHaveLength(4);
+    expect(data.match(/number: /g)).toHaveLength(23);
     expect(data).toContain("Text-to-SQL DAG");
     expect(data).toContain("NHBank");
     expect(data).toContain("인증·BFF");
     expect(data).toContain("dcai-onpremise");
+    expect(data).toContain("wezen-rfid-scanner");
+    expect(data).toContain("CelltrionPowerBIWebApp");
+    expect(data).toContain("LangcodeApp");
     expect(data).toContain("role:");
     expect(data).toContain("problem:");
     expect(data).toContain("contributions:");
@@ -46,17 +49,24 @@ describe("professional archive entry", () => {
     expect(data).not.toContain("GITHUB_CONTRIBUTION_AUDIT");
     expect(data).not.toContain("Excel");
     expect(script).toContain("textContent");
-    expect(script).toContain("document.createElement(\"details\")");
+    expect(script).toContain("document.createElement(\"dialog\")");
     expect(script).toContain("MY ROLE");
     expect(script).toContain("CONTRIBUTIONS");
+    expect(script).toContain("aria-describedby");
   });
 
   test("keeps the archive visual system token-driven and responsive", () => {
     expect(css).toContain("--archive-paper: #f6f4ee");
+    expect(css).toContain("--archive-overlay: rgb(31 35 31 / 48%)");
     expect(css).toContain("--archive-font-display: \"Hahmlet\"");
     expect(css).toContain("--archive-type-hero-mobile");
     expect(css).toContain(".case-overview");
     expect(css).toContain(".case-stack");
+    expect(css).toContain("scroll-snap-type: y mandatory");
+    expect(css).not.toContain("scroll-snap-stop");
+    expect(css).toContain(".case-dialog");
+    expect(css).toContain("overflow: hidden");
+    expect(css).toContain(".case-dialog-close:focus-visible");
     expect(css).toContain("word-break: keep-all");
     expect(css).toContain("@media (max-width: 560px)");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
