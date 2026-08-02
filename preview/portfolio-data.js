@@ -17,7 +17,7 @@ export const portfolioData = {
     {
       index: "02",
       title: "데이터 신뢰성",
-      detail: "비정형 Excel 파싱, 시계열 변환, 스키마 검증과 오류 경계",
+      detail: "입력 정규화, 시계열 변환, 스키마 검증과 오류 경계",
       proof: "입력의 불확실성을 제품 안에서 설명합니다.",
     },
     {
@@ -84,33 +84,6 @@ export const portfolioData = {
     },
     {
       number: "03",
-      label: "데이터 처리 라이브러리",
-      period: "2025–2026",
-      project: "Excel 추출 라이브러리 · excel-parser",
-      role: "파싱·정규화 로직 담당",
-      scope: "헤더 탐지 · 희소 시계열 · 오류 경계",
-      title: "비정형 Excel을 분석 가능한 표로",
-      summary:
-        "사람이 작성한 Excel 파일은 표 하나의 모양으로 오지 않습니다. 병합 셀과 빈 구간을 보존하면서 후속 분석이 읽을 수 있는 구조로 변환했습니다.",
-      problem:
-        "다단 헤더, 병합 제목행, 희소 시계열, 빈 선행 컬럼이 섞인 파일에서 단순한 행·열 추출만으로는 의미와 오류 원인을 보존하기 어려웠습니다.",
-      contributions: [
-        "희소 시계열의 날짜 행과 빈 헤더 선행 키 컬럼을 보존",
-        "BIS Quarterly Series 헤더와 다단 헤더·병합 제목행 탐지",
-        "비표 데이터 휴리스틱과 notes 표면화로 원본 맥락을 유지",
-        "date dtype 실패 시 전체 파싱이 중단되지 않도록 오류 경계를 개선",
-      ],
-      stack: ["Excel parsing", "시계열 정규화", "헤더 탐지", "fixture tests"],
-      decisions: [
-        "입력 표의 헤더·병합·빈 행을 별도 단계로 인식해 변환 책임을 분리",
-        "희소 시계열을 분석 모델이 소비할 수 있는 형태로 정규화",
-        "파서의 경계 오류를 재현 가능한 fixture와 테스트로 고정",
-      ],
-      outcome: "데이터를 읽는 사람과 다음 시스템 모두가 변환 결과를 추적할 수 있게 했습니다.",
-      evidence: "GitHub 활동 감사에서 authored PR 12건 중 11건 병합이 확인됨",
-    },
-    {
-      number: "04",
       label: "플랫폼 엔지니어링",
       period: "2025–2026",
       project: "CXP 플랫폼 · cxp-light-fe / langcode.cxp.back",
@@ -137,7 +110,7 @@ export const portfolioData = {
       evidence: "GitHub 활동 감사에서 플랫폼 관련 authored PR 15건이 병합된 것으로 확인",
     },
     {
-      number: "05",
+      number: "04",
       label: "온프레미스 AI 에이전트",
       period: "2025.12",
       project: "온프레미스 에이전트 · dcai-onpremise",

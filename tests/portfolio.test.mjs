@@ -32,10 +32,9 @@ describe("professional archive entry", () => {
   });
 
   test("renders evidence-driven case data without shipping the raw audit", () => {
-    expect(data.match(/number: /g)).toHaveLength(5);
+    expect(data.match(/number: /g)).toHaveLength(4);
     expect(data).toContain("Text-to-SQL DAG");
     expect(data).toContain("NHBank");
-    expect(data).toContain("비정형 Excel");
     expect(data).toContain("인증·BFF");
     expect(data).toContain("dcai-onpremise");
     expect(data).toContain("role:");
@@ -45,6 +44,7 @@ describe("professional archive entry", () => {
     expect(data).toContain("https://github.com/kimgooneya");
     expect(data).not.toContain("https://github.com/shkim");
     expect(data).not.toContain("GITHUB_CONTRIBUTION_AUDIT");
+    expect(data).not.toContain("Excel");
     expect(script).toContain("textContent");
     expect(script).toContain("document.createElement(\"details\")");
     expect(script).toContain("MY ROLE");
