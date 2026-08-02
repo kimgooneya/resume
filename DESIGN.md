@@ -295,6 +295,8 @@ Professional Snapshot의 토큰은 `.professional-page` 범위에서만 사용�
 
 Font stack은 외부 다운로드 없이 `"Helvetica Neue", "Apple SD Gothic Neo", Arial, sans-serif`와 `"SFMono-Regular", Consolas, monospace`를 사용한다. 제목은 600, 본문은 400–500만 사용한다. 한국어 본문은 `word-break: keep-all`과 `overflow-wrap: break-word`를 적용한다.
 
+간격은 4px 기반 `--pro-space-1`(0.25rem), `--pro-space-2`(0.5rem), `--pro-space-3`(0.75rem), `--pro-space-4`(1rem), `--pro-space-6`(1.5rem), `--pro-space-8`(2rem), `--pro-space-12`(3rem), `--pro-space-16`(4rem), `--pro-space-24`(6rem), `--pro-space-32`(8rem)만 사용한다. 작은 tag와 focus surface의 반경은 `--pro-radius`(0.5rem)이며, 큰 카드 컨테이너는 만들지 않는다.
+
 ### Layout & Primitives
 
 - **Snapshot Header:** 이름/역할, 현재 가능 상태, 페이지 내 이동, RPG 상세 보기 링크. 768px 이하에서 2행으로 재배치한다.
