@@ -276,6 +276,26 @@ describe("four-tone tile renderer", () => {
     expect(new Set(recordings.map(({ signature }) => signature)).size).toBe(5);
   });
 
+  test("keeps the coast boardwalk light between its narrow dark plank seams", () => {
+    // Given: the coast landmark framed at its normal arrival camera
+    const coast = REGIONS_BY_ID.coast;
+    const camera = { x: coast.landmark.x - 12, y: coast.landmark.y - 8 };
+    const context = recordingContext();
+    const deckX = (coast.landmark.x - 1 - camera.x) * TILE_SIZE + 8;
+    const deckTop = (coast.landmark.y + 2 - camera.y) * TILE_SIZE;
+
+    // When: the visual terrain is composited in draw order
+    renderLandmarkTerrain(context, coast, camera);
+    const colorAt = (x, y) => context.commands.reduce((color, [name, nextColor, left, top, width, height]) =>
+      name === "fillRect" && x >= left && x < left + width && y >= top && y < top + height
+        ? nextColor
+        : color, null);
+
+    // Then: the wet boardwalk remains bright, with only two-pixel dark plank seams
+    expect(colorAt(deckX, deckTop + 6)).toBe(coast.palette[3]);
+    expect(colorAt(deckX, deckTop + 1)).toBe(coast.palette[1]);
+  });
+
   test("honors authored mask cutouts instead of painting rectangular feature bounds", () => {
     // Given: one isolated three-by-three clearing whose missing cells form visible corner cuts
     const forest = REGIONS_BY_ID.forest;
