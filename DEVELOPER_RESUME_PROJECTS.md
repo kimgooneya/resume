@@ -1,21 +1,21 @@
 # 개발자 이력서용 프로젝트 기여 정리
 
-- 기준일: 2026-08-01
-- 대상: 전체 조사 보고서에서 직접 PR·commit·review 근거가 확인된 프로젝트
+- 기준일: 2026-08-04
+- 대상: 전체 조사 보고서에서 직접 PR·commit·review 근거가 확인된 프로젝트와 사용자 확인 경력
 - 주 계정: kimgooneya / GitHub ID 26292512 / 프로필명 Soo Hyeon Kim
 - 문서 목적: 비공개 저장소의 작업을 프로젝트 단위 역할과 이력서 문장으로 재구성
 - 사용 전 확인: 비공개 프로젝트명·고객명·기능명은 NDA와 회사 정책에 따라 익명화하거나 제외해야 합니다.
 
 ## 이력서 상단 요약문
 
-C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험을 보유하고 있습니다. 고객사 PoC와 상용 서비스에서 LLM/Azure OpenAI 연동, 인증·Identity, CXP 백엔드/프론트엔드, 데이터 파싱·리포트, 업무 도메인 CRUD와 운영 안정화까지 담당했습니다. GitHub 근거상 authored PR 700건 이상이 관찰되며, 주요 저장소에서 병합된 기능·수정 PR을 반복적으로 납품했습니다. 단, 검색 상한과 rate limit 때문에 전체 합계는 하한으로만 사용해야 합니다.
+C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험을 보유하고 있습니다. 고객사 PoC와 상용 서비스에서 LLM/Azure OpenAI 연동, Kubernetes 배포, 인증·Identity, CXP 백엔드/프론트엔드, 데이터 파싱·리포트, 업무 도메인 CRUD와 운영 안정화까지 담당했습니다. 개인 학습 프로젝트에서는 FastAPI·Pydantic 기반 API와 입력 검증 라우트를 구현했습니다. GitHub 근거상 authored PR 700건 이상이 관찰되며, 주요 저장소에서 병합된 기능·수정 PR을 반복적으로 납품했습니다. 단, 검색 상한과 rate limit 때문에 전체 합계는 하한으로만 사용해야 합니다.
 
 ## 핵심 역량 키워드
 
-- Backend: C#, .NET, ASP.NET Core, Azure Functions, REST API, CRUD, DI
+- Backend: C#, .NET, ASP.NET Core, Azure Functions, REST API, CRUD, DI, FastAPI·Pydantic(개인 학습 프로젝트)
 - AI/Data: Azure OpenAI, LLM SDK migration, Text-to-SQL, DAG orchestration, RAG/CXP, Cosmos DB, Form Recognizer, Excel/document parsing
 - Frontend: React, TypeScript, Next.js, Blazor, BFF, authentication cookie, model management UI
-- Platform: Keycloak, Identity, secrets import/export, cloud/keyless configuration, deployment configuration
+- Platform: Kubernetes deployment, Keycloak, Identity, secrets import/export, cloud/keyless configuration, deployment configuration
 - Delivery: PR 기반 개발, 기능 단위 릴리스, 운영 오류 수정, 고객 피드백 반영, PoC-to-product iteration
 
 ## 프로젝트별 이력서용 정리
@@ -42,9 +42,11 @@ C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험
 - 기여:
   - Azure OpenAI 토큰 사용량 안정화
   - LLM 환경변수화와 Azure.AI.OpenAI SDK v2 마이그레이션
+  - Kubernetes 환경에 애플리케이션 배포(사용자 확인 경력)
   - TCB 오류 수정, 서비스 최신화, 라이브 컨트롤러 기능 반영
-- 이력서 문장: 금융 AI 서비스에서 Azure OpenAI 운영 안정화와 SDK v2 마이그레이션을 수행하고, 환경변수 기반 배포와 오류 수정까지 5개 기능 PR로 반영했습니다.
+- 이력서 문장: 금융 AI 서비스에서 Azure OpenAI 운영 안정화와 SDK v2 마이그레이션을 수행하고, Kubernetes 환경 배포와 오류 수정까지 제품에 반영했습니다.
 - 근거: [PR #98](https://github.com/langcodestartup/NHBank/pull/98), [PR #97](https://github.com/langcodestartup/NHBank/pull/97), [PR #91](https://github.com/langcodestartup/NHBank/pull/91)
+- 근거 범위: GitHub 근거는 Azure OpenAI·SDK·오류 수정에 한정. Kubernetes 배포는 사용자 확인 경력이며 공개 저장소의 manifest·Helm·kubectl 근거는 확인되지 않음
 
 ### langcodestartup/excel-parser
 
@@ -332,9 +334,18 @@ C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험
 | langcodestartup/KtSCMpoc | 브랜치 기준 정리·코드 동기화 commit에 참여 |
 | langcodestartup/Nhtest | 브랜치 기준 정리·코드 동기화 commit에 참여 |
 
+## 사용자 확인 인프라 경험
+
+아래 항목은 사용자가 직접 확인한 경력입니다. 공개 GitHub에서는 Kubernetes manifest·Helm·kubectl 관련 직접 근거를 확인하지 못했으므로, GitHub 검증 결과와 구분해 사용합니다.
+
+| 프로젝트 | 이력서에 안전한 표현 | 근거 범위 |
+|---|---|---|
+| NHBank | 금융 AI 서비스의 Kubernetes 환경에 애플리케이션 배포 | 사용자 확인 경력; 공개 GitHub 직접 근거 미확인 |
+| SK AX | 고객 프로젝트의 Kubernetes 환경에 애플리케이션 배포 | 사용자 확인 경력; 공개 GitHub 직접 근거 미확인 |
+
 ## 개인 저장소 직접 기여 근거
 
-아래 항목은 private personal repository에서 직접 commit이 확인됐지만, 현재 감사 자료만으로는 기능 범위를 이력서 문장으로 강하게 확정하기 어렵습니다. README와 전체 diff를 추가 확인한 뒤 사용하십시오.
+아래 항목은 private personal repository에서 직접 commit이 확인된 프로젝트입니다. `fastapi-tutorial`은 코드 파일까지 확인했으며, 나머지는 README와 전체 diff를 추가 확인한 뒤 사용하십시오.
 
 | 프로젝트 | 이력서에 안전한 표현 | 근거 |
 |---|---|---|
@@ -343,7 +354,7 @@ C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험
 | kimgooneya/FrontEndTest | 프론트엔드 테스트·구현 프로젝트 | [commit](https://github.com/kimgooneya/FrontEndTest/commit/34258139c2587d2cb453e5f369f625c5e1800810) |
 | kimgooneya/TESTGIT | Git/개발 실험 프로젝트 구현 | [commit](https://github.com/kimgooneya/TESTGIT/commit/9b1028eaf260e08d3ac93f302706d4bc4c073530) |
 | kimgooneya/BlazorTester | Blazor 테스트·구현 프로젝트 | [commit](https://github.com/kimgooneya/BlazorTester/commit/8c657ed35b315ae3a8ecab058f82e3fa71ae9ef9) |
-| kimgooneya/fastapi-tutorial | FastAPI 학습·API 구현 프로젝트 | [commit](https://github.com/kimgooneya/fastapi-tutorial/commit/ae994c65880d27fdadb979398b18897310517436) |
+| kimgooneya/fastapi-tutorial | FastAPI 개인 학습 프로젝트에서 Pydantic 모델 기반 POST·PUT API와 Query·Path 입력 검증 라우트 구현 | [main.py](https://github.com/kimgooneya/fastapi-tutorial/blob/ae994c65880d27fdadb979398b18897310517436/main.py), [commit ae994c6](https://github.com/kimgooneya/fastapi-tutorial/commit/ae994c65880d27fdadb979398b18897310517436), [commit d4caf9b](https://github.com/kimgooneya/fastapi-tutorial/commit/d4caf9b4ba8f6ae385316561264c772fb28a590c) |
 | kimgooneya/react-study | React 학습·구현 프로젝트 | [commit](https://github.com/kimgooneya/react-study/commit/2fe82f424c58f18174abc6100e9ddeba35077342) |
 | kimgooneya/almott | 개인 서비스 기능 개발·병합 작업 | [commit](https://github.com/kimgooneya/almott/commit/2b21904e4994d0a2f24184edf90c6ed67c44704e) |
 | kimgooneya/Draftly | 개인 서비스 기능 개발·유지보수 | [commit](https://github.com/kimgooneya/Draftly/commit/410ddc3adef02acc5b6ffa895703bedab931dcfc) |
@@ -529,7 +540,7 @@ C#/.NET 및 TypeScript/React 기반의 B2B AI·데이터 서비스 개발 경험
 | langcodestartup/shi-legal | 현재 조사에서 직접 근거 미확인 | 이력서에 임의 기재하지 않음 |
 | langcodestartup/shiazureFunction | 현재 조사에서 직접 근거 미확인 | 이력서에 임의 기재하지 않음 |
 | langcodestartup/ShinhanPoC | 현재 조사에서 직접 근거 미확인 | 이력서에 임의 기재하지 않음 |
-| langcodestartup/skax-pub | 현재 조사에서 직접 근거 미확인 | 이력서에 임의 기재하지 않음 |
+| langcodestartup/skax-pub | 현재 조사에서 직접 근거 미확인 | 사용자 확인 Kubernetes 배포 경력은 GitHub 근거와 구분해 별도 기재 |
 | langcodestartup/SkinCafeineDemo | 현재 조사에서 직접 근거 미확인 | 이력서에 임의 기재하지 않음 |
 | langcodestartup/SlackTest | 현재 조사에서 직접 근거 미확인 | 이력서에 임의 기재하지 않음 |
 | langcodestartup/smtech-oracle-mcp-demo | 현재 조사에서 직접 근거 미확인 | 이력서에 임의 기재하지 않음 |

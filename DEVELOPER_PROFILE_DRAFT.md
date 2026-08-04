@@ -1,7 +1,7 @@
 # 김수현 개발자 이력 소개서 초안
 
-- 작성 기준일: 2026-08-01
-- 문서 성격: GitHub 프로젝트 기여 조사 결과를 바탕으로 작성한 개발자 소개서 초안
+- 작성 기준일: 2026-08-04
+- 문서 성격: GitHub 프로젝트 기여 조사와 사용자 확인 경력을 바탕으로 작성한 개발자 소개서 초안
 - 권장 용도: 이력서 상단 소개, 경력기술서 서문, 포트폴리오 프로필
 
 ## 한 줄 소개
@@ -12,14 +12,14 @@ Text-to-SQL DAG 아키텍처와 AI·데이터 서비스 백엔드를 중심으�
 
 김수현은 고객사 PoC와 상용 B2B 서비스에서 AI 질의, LLM 연동, 문서·Excel 데이터 처리, 인증·Identity, 업무 도메인 기능을 개발해 왔습니다. 특히 `kt-gsi`에서는 Text-to-SQL 처리 흐름을 DAG 구조로 설계하고 핵심 오케스트레이션 역할을 수행했으며, secrets 관리와 cloud/keyless 전환, SQL 오류 대응까지 연결해 AI 질의 서비스의 실행 기반을 정비했습니다.
 
-또한 금융권 AI 서비스의 Azure OpenAI 운영 안정화와 SDK 마이그레이션, 비정형 Excel 파서의 헤더·날짜·희소 데이터 처리, CXP 플랫폼의 인증·모델 관리·배포 구조, 온프레미스 AI 에이전트의 handoff·orchestration workflow를 구현했습니다. 기능을 단순히 추가하는 데 그치지 않고, 실제 운영에서 발생하는 오류와 고객 피드백을 PR 단위의 개선 작업으로 분해해 제품에 반영하는 데 강점이 있습니다.
+또한 금융권 AI 서비스의 Azure OpenAI 운영 안정화와 SDK 마이그레이션, NHBank·SK AX 프로젝트의 Kubernetes 배포, 비정형 Excel 파서의 헤더·날짜·희소 데이터 처리, CXP 플랫폼의 인증·모델 관리·배포 구조, 온프레미스 AI 에이전트의 handoff·orchestration workflow를 수행했습니다. 기능을 단순히 추가하는 데 그치지 않고, 실제 운영에서 발생하는 오류와 고객 피드백을 PR 단위의 개선 작업으로 분해해 제품에 반영하는 데 강점이 있습니다.
 
 ## 핵심 전문성
 
 - AI·데이터: Text-to-SQL, DAG orchestration, Azure OpenAI, LLM SDK migration, RAG/CXP, Cosmos DB, Azure Form Recognizer, 비정형 Excel·문서 파싱
-- 백엔드: C#/.NET, ASP.NET Core, Azure Functions, REST API, DI, CRUD, 업무 도메인 모델링
+- 백엔드: C#/.NET, ASP.NET Core, Azure Functions, REST API, DI, CRUD, 업무 도메인 모델링, FastAPI 개인 학습 프로젝트
 - 프론트엔드: TypeScript, React, Next.js, Blazor, BFF, 인증 쿠키, 모델·프로바이더 관리 UI
-- 인증·플랫폼: Keycloak, ASP.NET Identity, secrets import/export, cloud/keyless configuration, standalone 배포
+- 인증·플랫폼: Kubernetes 배포, Keycloak, ASP.NET Identity, secrets import/export, cloud/keyless configuration, standalone 배포
 - 개발 방식: PR 기반 기능 개발, 오류 재현·수정, 고객 피드백 반영, PoC-to-product iteration, 운영 안정화
 
 ## 대표 프로젝트 경험
@@ -43,9 +43,10 @@ Text-to-SQL DAG 아키텍처와 AI·데이터 서비스 백엔드를 중심으�
 - 주요 기여:
   - Azure OpenAI 토큰 사용량 안정화
   - LLM 환경변수화와 Azure.AI.OpenAI SDK v2 마이그레이션
+  - Kubernetes 환경에 애플리케이션 배포
   - TCB 오류 수정, 서비스 최신화, 라이브 컨트롤러 기능 반영
 - 성과: 기능 PR 5개 확인
-- 이력서 표현: `금융 AI 서비스의 Azure OpenAI 운영 안정화와 SDK v2 마이그레이션을 수행하고, 환경변수 기반 배포와 오류 수정까지 제품에 반영했습니다.`
+- 이력서 표현: `금융 AI 서비스의 Azure OpenAI 운영 안정화와 SDK v2 마이그레이션을 수행하고, Kubernetes 환경 배포와 오류 수정까지 제품에 반영했습니다.`
 
 ### 3. excel-parser | 비정형 Excel 데이터 처리
 
@@ -94,7 +95,15 @@ Text-to-SQL DAG 아키텍처와 AI·데이터 서비스 백엔드를 중심으�
 - 대상 프로젝트: `KyoboPrePoC`, `KyoboPrePoC-Function`
 - 이력서 표현: `금융 문서 처리 PoC에서 검증 결과와 오류 메시지 표시를 개선하고, 서버리스 Excel 출력 기능을 구현했습니다.`
 
-### 7. 제조·진단·업무 도메인 서비스
+### 7. SK AX | Kubernetes 배포
+
+- 역할: 고객 프로젝트의 Kubernetes 기반 애플리케이션 배포
+- 주요 기여:
+  - Kubernetes 환경에 애플리케이션 배포
+- 확인 범위: 사용자 확인 경력. 공개 GitHub에서는 Kubernetes manifest·Helm·kubectl 관련 직접 근거를 확인하지 못함
+- 이력서 표현: `SK AX 프로젝트에서 Kubernetes 기반 애플리케이션 배포를 수행했습니다.`
+
+### 8. 제조·진단·업무 도메인 서비스
 
 - `CelltrionPowerBIWebApp`: CPVR/APQR 리포트, LIMS 매핑, 차트·필터·다운로드·인쇄 기능 개발. authored PR 75개 중 72개 병합
 - `CelltrionPowerBIFunction`: LIMS 매핑 CRUD, 캠페인·수율 계산 서버리스 로직 개발. authored PR 17개 전부 병합
@@ -102,6 +111,17 @@ Text-to-SQL DAG 아키텍처와 AI·데이터 서비스 백엔드를 중심으�
 - `SpinInvoice`: 구독·청구 기능과 오류 수정. authored PR 54개 중 47개 병합
 - `KbhcCosmosEngine`: 누락 데이터 정규화, Journey 통계, 식이·음료·음주 기능 개선
 - 이력서 표현: `제조·진단·청구 도메인 서비스에서 업무 로직과 데이터 리포트 기능을 개발하고, 반복적인 오류 수정과 고객 요구사항을 제품에 반영했습니다.`
+
+### 9. fastapi-tutorial | 개인 학습 프로젝트
+
+- 최신 확인 활동: 2024-04-27
+- 역할: FastAPI 기반 API 구현 학습
+- 주요 기여:
+  - Pydantic 모델 기반 POST·PUT API 구현
+  - Query·Path 입력 검증 라우트 구현
+  - Uvicorn 실행 방법 문서화
+- 근거: [main.py](https://github.com/kimgooneya/fastapi-tutorial/blob/ae994c65880d27fdadb979398b18897310517436/main.py), [commit ae994c6](https://github.com/kimgooneya/fastapi-tutorial/commit/ae994c65880d27fdadb979398b18897310517436), [commit d4caf9b](https://github.com/kimgooneya/fastapi-tutorial/commit/d4caf9b4ba8f6ae385316561264c772fb28a590c)
+- 이력서 표현: `FastAPI 개인 학습 프로젝트에서 Pydantic 모델 기반 API와 Query·Path 입력 검증 라우트를 구현했습니다.`
 
 ## 업무 방식과 강점
 
@@ -128,19 +148,21 @@ API·도메인 모델·인증·배포 설정뿐 아니라 모델 관리 UI, 채�
 
 ### 짧은 버전
 
-`C#/.NET과 TypeScript/React를 기반으로 B2B AI·데이터 서비스를 개발해 왔으며, Text-to-SQL DAG 아키텍처, LLM 연동, 인증·Identity, 문서·Excel 파싱, 운영 안정화까지 수행했습니다.`
+`C#/.NET과 TypeScript/React를 기반으로 B2B AI·데이터 서비스를 개발해 왔으며, Text-to-SQL DAG 아키텍처, LLM 연동, Kubernetes 배포, 인증·Identity, 문서·Excel 파싱, 운영 안정화까지 수행했습니다.`
 
 ### 일반 버전
 
-`B2B AI·데이터 서비스 개발자로서 Text-to-SQL DAG 아키텍처와 AI 에이전트 orchestration을 설계하고, Azure OpenAI·Cosmos DB·Form Recognizer 기반 백엔드와 TypeScript/React 프론트엔드를 구현했습니다. 금융·제조·진단·헬스케어 도메인에서 인증, 데이터 파싱, 리포트, 업무 CRUD, 배포 설정과 운영 오류를 PR 단위로 개선해 제품에 반영했습니다.`
+`B2B AI·데이터 서비스 개발자로서 Text-to-SQL DAG 아키텍처와 AI 에이전트 orchestration을 설계하고, Azure OpenAI·Cosmos DB·Form Recognizer 기반 백엔드와 TypeScript/React 프론트엔드를 구현했습니다. 금융·제조·진단·헬스케어 도메인에서 Kubernetes 배포, 인증, 데이터 파싱, 리포트, 업무 CRUD와 운영 오류를 개선해 제품에 반영했습니다.`
 
 ### 경력기술서용 버전
 
-`Text-to-SQL DAG 설계를 중심으로 AI 질의 서비스의 실행 흐름을 구조화하고, secrets 관리·cloud/keyless 전환·SQL 오류 재시도까지 구현했습니다. 동시에 Azure OpenAI SDK 마이그레이션, 비정형 Excel 파싱, Keycloak·BFF 인증, CXP 모델 관리 UI, 온프레미스 AI 에이전트 workflow를 개발하며 백엔드와 프론트엔드를 연결하는 제품 개발을 수행했습니다.`
+`Text-to-SQL DAG 설계를 중심으로 AI 질의 서비스의 실행 흐름을 구조화하고, secrets 관리·cloud/keyless 전환·SQL 오류 재시도까지 구현했습니다. 동시에 Azure OpenAI SDK 마이그레이션, Kubernetes 배포, 비정형 Excel 파싱, Keycloak·BFF 인증, CXP 모델 관리 UI, 온프레미스 AI 에이전트 workflow를 개발하며 백엔드와 프론트엔드를 연결하는 제품 개발을 수행했습니다.`
 
 ## 제출 전 정리할 항목
 
 - 비공개 저장소명과 고객사·제품명은 NDA와 지원 기업의 공개 범위에 맞춰 익명화합니다.
+- NHBank·SK AX의 Kubernetes 배포 경험은 사용자 확인 경력이며 공개 GitHub에서 직접 근거가 확인되지 않았으므로, 제출 시 담당 범위와 공개 가능 수준을 다시 확인합니다.
+- FastAPI는 개인 학습 프로젝트 근거로만 사용하고 실무·프로덕션 경력으로 확대 표현하지 않습니다.
 - `shkim` 계정은 `kimgooneya`와 동일인 여부가 확인되지 않았으므로 본인 경력 합산에서 제외하거나 별도 검증 후 사용합니다.
 - `700건 이상`, `최소 100개`와 같은 수치는 검색 상한을 반영한 관찰 하한이므로, 공식 이력서에서는 “700건 이상 관찰” 또는 프로젝트별 병합 PR 수로 표현하는 편이 안전합니다.
 - 실제 지원 시에는 대표 프로젝트 3~5개를 남기고, 각 프로젝트에 기간·팀 규모·본인 책임 범위·성과 지표를 추가하면 완성도가 높아집니다.
