@@ -588,7 +588,7 @@
             <p class="section-kicker">프로필</p>
             <h2 id="profile-heading">프로필</h2>
           </div>
-          <p class="intro-copy">Text-to-SQL DAG 아키텍처와 AI·데이터 서비스 백엔드를 중심으로, C#/.NET 및 TypeScript/React 기반의 B2B 서비스 설계·구현·운영 안정화를 수행해 온 개발자입니다. LLM 연동, 문서·Excel 데이터 처리, 인증·Identity, 업무 도메인 기능을 제품의 사용자 흐름과 연결해 구현합니다.</p>
+          <p class="intro-copy">Text-to-SQL 질의를 추적 가능한 DAG 실행 흐름으로 전환하고, LLM SDK 변경과 Kubernetes 배포를 운영 경계까지 연결하는 AI·데이터 서비스 개발자입니다. C#/.NET 백엔드부터 인증·BFF·TypeScript/React UI까지 연결해 사용자가 실행할 수 있는 기능으로 전달합니다.</p>
         </section>
 
         <section class="section" aria-labelledby="competencies-heading">
@@ -626,9 +626,9 @@
               <div class="experience-meta"><strong>2026.07</strong><span>AI 질의 백엔드</span></div>
               <div>
                 <div class="project-header"><h3>kt-gsi</h3><span class="project-role">Text-to-SQL DAG 아키텍처 · AI 질의 백엔드</span></div>
-                <p class="project-summary">Text-to-SQL 처리 흐름을 DAG 구조로 설계하고 핵심 오케스트레이션 역할을 수행했습니다.</p>
-                <ul class="project-list"><li>비밀값 가져오기·내보내기와 Azure 리소스 기반 설정 경계 정리</li><li>클라우드·키리스 전환, 날짜 타입 오류 사전 차단·재시도, 상품 조회 조건 개선</li></ul>
-                <div class="evidence"><span class="evidence-item">DAG 설계</span><span class="evidence-item">SQL 안정성</span><span class="evidence-item">키리스 설정</span></div>
+                <p class="project-summary">자연어 질의를 계획·실행·검증 단계로 분리해 실패 지점과 재시도 경로를 추적할 수 있는 실행 흐름으로 전환했습니다.</p>
+                <ul class="project-list"><li>Text-to-SQL 흐름을 DAG로 설계하고 날짜 타입 사전 차단·재시도·상품 조회 조건을 단계 경계에 배치</li><li>비밀값 가져오기·내보내기와 Azure 설정을 분리하고 로컬 DB 의존성을 클라우드·키리스 기준으로 전환</li></ul>
+                <div class="evidence"><span class="evidence-item">작성 PR 9건 모두 병합</span><span class="evidence-item">DAG·재시도·키리스 변경 확인</span></div>
               </div>
             </article>
 
@@ -636,9 +636,9 @@
               <div class="experience-meta"><strong>2026.06</strong><span>LLM 통합</span></div>
               <div>
                 <div class="project-header"><h3>NHBank</h3><span class="project-role">금융권 AI 백엔드 · LLM 통합</span></div>
-                <p class="project-summary">Azure OpenAI 운영 안정화와 SDK v2 마이그레이션을 수행하고 Kubernetes 환경 배포·오류 대응까지 반영했습니다.</p>
-                <ul class="project-list"><li>토큰 사용량 안정화와 LLM 환경변수화</li><li>Kubernetes 환경 배포, TCB 오류 수정, 서비스 최신화</li></ul>
-                <div class="evidence"><span class="evidence-item">Azure OpenAI</span><span class="evidence-item">SDK v2</span><span class="evidence-item">Kubernetes 배포</span></div>
+                <p class="project-summary">Azure OpenAI 모델 연동을 SDK와 배포 환경 변화에서 분리해 업데이트 가능한 백엔드 경계를 정리했습니다.</p>
+                <ul class="project-list"><li>Azure.AI.OpenAI SDK v2 마이그레이션, 토큰 사용량 안정화, LLM 설정 환경변수화</li><li>Kubernetes 환경 배포와 TCB 오류 수정·서비스 최신화를 같은 변경 흐름에 반영</li></ul>
+                <div class="evidence"><span class="evidence-item">작성 PR 5건 모두 병합</span><span class="evidence-item">SDK v2·배포 설정 변경 확인</span></div>
               </div>
             </article>
 
@@ -646,9 +646,9 @@
               <div class="experience-meta"><strong>2025.06–2026.03</strong><span>CXP 플랫폼</span></div>
               <div>
                 <div class="project-header"><h3>CXP 플랫폼</h3><span class="project-role">인증 · 프론트엔드 · 공통 백엔드</span></div>
-                <p class="project-summary">Keycloak·Identity 인증, BFF 프록시, 모델 관리 UI와 독립 배포 구조를 연결했습니다.</p>
-                <ul class="project-list"><li>교차 출처 인증 쿠키 문제 해결과 리프레시 토큰 정책 정비</li><li>모델·프로바이더 관리, 고객·파트너 CRUD, Cosmos 대량 처리 서비스 구현</li></ul>
-                <div class="evidence"><span class="evidence-item">Keycloak</span><span class="evidence-item">BFF 인증</span></div>
+                <p class="project-summary">인증에서 모델 설정·채팅 선택까지 이어지는 사용자 흐름과 환경별 실행 설정을 하나의 배포 경계로 연결했습니다.</p>
+                <ul class="project-list"><li>Keycloak·Identity와 BFF를 연결하고 교차 출처 쿠키·리프레시 토큰 정책을 정비</li><li>모델·프로바이더 UI, 고객·파트너 CRUD, Cosmos 대량 처리와 standalone 런타임 설정 구현</li></ul>
+                <div class="evidence"><span class="evidence-item">제품 프론트 PR 15건 모두 병합</span><span class="evidence-item">백엔드 작성 PR 24건 확인</span></div>
               </div>
             </article>
 
@@ -656,9 +656,9 @@
               <div class="experience-meta"><strong>2025.12</strong><span>AI 에이전트 흐름</span></div>
               <div>
                 <div class="project-header"><h3>dcai-onpremise</h3><span class="project-role">온프레미스 AI 에이전트 · 오케스트레이션</span></div>
-                <p class="project-summary">AI 에이전트 간 인계와 오케스트레이션 흐름을 운영 화면과 함께 구현했습니다.</p>
-                <ul class="project-list"><li>AI Agents Phase 4와 에이전트 인계 흐름 구현</li><li>긴급 알림, 3단 대시보드, 다국어 회의록 기능 반영</li></ul>
-                <div class="evidence"><span class="evidence-item">에이전트 흐름</span><span class="evidence-item">온프레미스</span></div>
+                <p class="project-summary">운영자가 에이전트 결과·인계·긴급 경고·회의 맥락을 한 화면에서 추적할 수 있는 흐름을 구현했습니다.</p>
+                <ul class="project-list"><li>AI Agents Phase 4의 에이전트 인계와 오케스트레이션 워크플로 연결</li><li>긴급 알림·3단 대시보드·테마·다국어 회의록을 온프레미스 운영 화면에 반영</li></ul>
+                <div class="evidence"><span class="evidence-item">작성 PR 8건 모두 병합</span><span class="evidence-item">3단 화면·다국어 변경 확인</span></div>
               </div>
             </article>
           </div>
@@ -686,9 +686,9 @@
               <div class="experience-meta"><strong>2025.08</strong><span>검증 / 서버리스</span></div>
               <div>
                 <div class="project-header"><h3>KyoboPrePoC</h3><span class="project-role">금융·문서 처리 검증</span></div>
-                <p class="project-summary">검증 결과와 오류 메시지 표시를 개선하고 서버리스 Excel 출력 기능을 구현했습니다.</p>
-                <ul class="project-list"><li>F1 오류 메시지와 검증 조건·오차 항목 표시 개선</li><li>Excel 저장, 출력 경로, 범위 지정 스타일 구현</li></ul>
-                <div class="evidence"><span class="evidence-item">문서 처리 흐름</span><span class="evidence-item">Azure Functions</span></div>
+                <p class="project-summary">검증 실패를 단순 오류 문자열에서 원인·조건·수정 방향을 확인할 수 있는 피드백으로 전환했습니다.</p>
+                <ul class="project-list"><li>메시지 타입을 분리하고 F1 오류·검증 조건·오차 항목을 결과 화면에 함께 표시</li><li>Azure Functions 통합과 Excel 저장·출력 경로·범위 지정 스타일 구현</li></ul>
+                <div class="evidence"><span class="evidence-item">앱·Function 작성 PR 각 6건 모두 병합</span><span class="evidence-item">오류·검증·Excel 변경 확인</span></div>
               </div>
             </article>
           </div>
@@ -700,10 +700,10 @@
             <h2 id="domain-heading">도메인 프로젝트</h2>
           </div>
           <div class="grouped-projects">
-            <div class="grouped-project"><strong>CelltrionPowerBIWebApp / Function</strong><p>제조·품질 데이터의 CPVR/APQR 리포트, LIMS 매핑 CRUD, 차트·필터·다운로드·인쇄 기능을 개발했습니다.</p></div>
-            <div class="grouped-project"><strong>Seegene.V2</strong><p>진단·검사 업무 시스템의 SGAL 오류와 검사 업무 로직을 수정했습니다.</p></div>
-            <div class="grouped-project"><strong>SpinInvoice</strong><p>구독·청구 업무 기능과 오류 수정을 지속 반영했습니다.</p></div>
-            <div class="grouped-project"><strong>KbhcCosmosEngine</strong><p>누락 데이터 정규화, Journey 통계, 식이·음료·음주 기능을 개선했습니다.</p></div>
+            <div class="grouped-project"><strong>CelltrionPowerBIWebApp / Function</strong><p>CPVR/APQR·LIMS 리포트의 조회·비교·출력 흐름과 서버리스 업무 규칙을 분리했습니다. Web 72/75건·Function 17/17건 PR 병합 확인.</p></div>
+            <div class="grouped-project"><strong>Seegene.V2</strong><p>SGAL 오류를 재현 가능한 검사 업무 규칙 수정으로 전환했습니다. 작성 PR 44건 모두 병합 확인.</p></div>
+            <div class="grouped-project"><strong>SpinInvoice</strong><p>구독·청구 상태와 오류 수정의 영향 범위를 PR 단위로 관리했습니다. 작성 PR 54건 중 47건 병합 확인.</p></div>
+            <div class="grouped-project"><strong>KbhcCosmosEngine</strong><p>누락값을 통계와 식이·음료·음주 기능에서 일관되게 해석하는 기준을 적용했습니다. 작성 PR 32건 확인.</p></div>
             <div class="grouped-project"><strong>SK AX</strong><p>고객 프로젝트에서 Kubernetes 기반 애플리케이션 배포를 수행했습니다.</p></div>
             <div class="grouped-project"><strong>fastapi-tutorial · 개인 프로젝트</strong><p>FastAPI·Pydantic 기반 POST·PUT API와 Query·Path 입력 검증 라우트를 구현했습니다.</p></div>
           </div>
@@ -724,13 +724,14 @@
         <section class="section" aria-labelledby="outcomes-heading">
           <div class="section-heading">
             <span class="section-kicker">06</span>
-            <h2 id="outcomes-heading">주요 성과</h2>
+            <h2 id="outcomes-heading">주요 성과 · 검증 근거</h2>
           </div>
+          <p class="project-summary">2026.08 GitHub 활동 감사의 작성 PR 병합 상태와 해당 변경 내용을 기준으로 하며, 확인되지 않은 비용·시간·장애율 수치는 표기하지 않았습니다.</p>
           <div class="outcome-grid">
-            <div class="outcome"><h3><a href="#project-kt-gsi">kt-gsi · AI 흐름을 구조화</a></h3><p>Text-to-SQL 실행 단계를 DAG와 책임 단위로 나누고, 인계·재시도·SQL 안전성 경계를 설계했습니다.</p></div>
-            <div class="outcome"><h3><a href="#project-nhbank">NHBank · LLM 변경을 운영에 안착</a></h3><p>Azure OpenAI SDK v2 마이그레이션과 토큰·환경변수·TCB 오류를 정리해 배포 가능한 백엔드로 안정화했습니다.</p></div>
-            <div class="outcome"><h3><a href="#project-dcai-onpremise">dcai-onpremise · AI 에이전트 운영화</a></h3><p>AI Agents Phase 4의 인계·오케스트레이션 흐름과 긴급 알림·3단 대시보드·다국어 회의록을 구현했습니다.</p></div>
-            <div class="outcome"><h3><a href="#project-cxp-platform">CXP 플랫폼 · 전 계층을 한 흐름으로 출시</a></h3><p>Keycloak·BFF·도메인 API·모델 UI·CRUD·서버리스 배포를 연결해 사용자 기능으로 전달했습니다.</p></div>
+            <div class="outcome"><h3><a href="#project-kt-gsi">kt-gsi · 질의 실패 경로를 추적 가능하게</a></h3><p><strong>결과</strong> DAG 실행 경로와 회귀 기준 정립. <strong>근거</strong> 날짜 오류·재시도·키리스 전환을 포함한 작성 PR 9건 모두 병합.</p></div>
+            <div class="outcome"><h3><a href="#project-nhbank">NHBank · LLM 변경 경계를 분리</a></h3><p><strong>결과</strong> SDK 변경과 운영 환경 차이를 분리한 업데이트 경로 구축. <strong>근거</strong> SDK v2·환경변수·Kubernetes 변경을 포함한 작성 PR 5건 모두 병합.</p></div>
+            <div class="outcome"><h3><a href="#project-dcai-onpremise">dcai-onpremise · 에이전트 운영 가시성 확보</a></h3><p><strong>결과</strong> 인계·경고·회의 맥락을 3단 화면에서 추적. <strong>근거</strong> Phase 4·인계·다국어 변경 작성 PR 8건 모두 병합.</p></div>
+            <div class="outcome"><h3><a href="#project-cxp-platform">CXP 플랫폼 · 인증에서 모델 선택까지 연결</a></h3><p><strong>결과</strong> 인증·설정·채팅과 환경별 실행 흐름 통합. <strong>근거</strong> 제품 프론트 PR 15건 모두 병합, 백엔드 작성 PR 24건 확인.</p></div>
           </div>
         </section>
 
