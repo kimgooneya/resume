@@ -588,7 +588,7 @@
             <p class="section-kicker">프로필</p>
             <h2 id="profile-heading">프로필</h2>
           </div>
-          <p class="intro-copy">Text-to-SQL 질의를 추적 가능한 DAG 실행 흐름으로 전환하고, LLM SDK 변경과 Kubernetes 배포를 운영 경계까지 연결하는 AI·데이터 서비스 개발자입니다. C#/.NET 백엔드부터 인증·BFF·TypeScript/React UI까지 연결해 사용자가 실행할 수 있는 기능으로 전달합니다.</p>
+          <p class="intro-copy">Text-to-SQL 질의를 DAG 실행 경계로 분해하고, LLM 응답·문서 검증·데이터 집계를 코드와 테스트로 닫는 AI·데이터 서비스 개발자입니다. C#/.NET 백엔드와 TypeScript/React UI에서 인증·재시도·오류 계약·배포 경계까지 구현합니다.</p>
         </section>
 
         <section class="section" aria-labelledby="competencies-heading">
@@ -607,7 +607,7 @@
             </div>
             <div class="competency">
               <h3>프론트엔드</h3>
-              <p>TypeScript · React · Next.js · Blazor · BFF · 인증 쿠키 · 모델·프로바이더 관리 UI</p>
+              <p>TypeScript · React · Next.js · Blazor · OAuth cookie 세션 · API 재시도 · 모델·프로바이더 UI</p>
             </div>
             <div class="competency">
               <h3>플랫폼</h3>
@@ -626,9 +626,9 @@
               <div class="experience-meta"><strong>2026.07</strong><span>AI 질의 백엔드</span></div>
               <div>
                 <div class="project-header"><h3>kt-gsi</h3><span class="project-role">Text-to-SQL DAG 아키텍처 · AI 질의 백엔드</span></div>
-                <p class="project-summary">자연어 질의를 계획·실행·검증 단계로 분리해 실패 지점과 재시도 경로를 추적할 수 있는 실행 흐름으로 전환했습니다.</p>
-                <ul class="project-list"><li>Text-to-SQL 흐름을 DAG로 설계하고 날짜 타입 사전 차단·재시도·상품 조회 조건을 단계 경계에 배치</li><li>비밀값 가져오기·내보내기와 Azure 설정을 분리하고 로컬 DB 의존성을 클라우드·키리스 기준으로 전환</li></ul>
-                <div class="evidence"><span class="evidence-item">작성 PR 9건 모두 병합</span><span class="evidence-item">DAG·재시도·키리스 변경 확인</span></div>
+                <p class="project-summary">WorkflowOrchestrationService가 자연어 질의를 Synonym·Normalization·SQL·Answer DAG로 조합하고, Engine.RunAsync가 병렬 실행과 fan-in을 관리합니다.</p>
+                <ul class="project-list"><li>노드 결과·실패·토큰 사용량을 DAG context에 기록하고 실패를 후속 노드로 전파</li><li>SqlNode가 LLM 생성·날짜/채널 guard·SELECT-only 검사·COUNT+fetch를 수행하고 PostgreSQL 오류를 분류해 재시도</li></ul>
+                <div class="evidence"><span class="evidence-item">Engine.RunAsync · fan-in</span><span class="evidence-item">SqlNode · SELECT guard</span></div>
               </div>
             </article>
 
@@ -636,9 +636,9 @@
               <div class="experience-meta"><strong>2026.06</strong><span>LLM 통합</span></div>
               <div>
                 <div class="project-header"><h3>NHBank</h3><span class="project-role">금융권 AI 백엔드 · LLM 통합</span></div>
-                <p class="project-summary">Azure OpenAI 모델 연동을 SDK와 배포 환경 변화에서 분리해 업데이트 가능한 백엔드 경계를 정리했습니다.</p>
-                <ul class="project-list"><li>Azure.AI.OpenAI SDK v2 마이그레이션, 토큰 사용량 안정화, LLM 설정 환경변수화</li><li>Kubernetes 환경 배포와 TCB 오류 수정·서비스 최신화를 같은 변경 흐름에 반영</li></ul>
-                <div class="evidence"><span class="evidence-item">작성 PR 5건 모두 병합</span><span class="evidence-item">SDK v2·배포 설정 변경 확인</span></div>
+                <p class="project-summary">TCB 요청을 34개 typed module과 입력·출력 검증 파이프라인으로 정리하고 Azure OpenAI·Key Vault 경계를 운영 계약으로 묶었습니다.</p>
+                <ul class="project-list"><li>필수 필드를 LLM 호출 전에 확인하고 프롬프트별 출력 검증과 최대 5회 재시도를 수행</li><li>provider usage·streaming chunk·Tiktoken fallback을 합산하고 Azure 오류를 안전한 한국어 계약으로 변환</li></ul>
+                <div class="evidence"><span class="evidence-item">TCBService · 34 modules</span><span class="evidence-item">AzureOpenAIService · usage fallback</span></div>
               </div>
             </article>
 
@@ -646,9 +646,9 @@
               <div class="experience-meta"><strong>2025.06–2026.03</strong><span>CXP 플랫폼</span></div>
               <div>
                 <div class="project-header"><h3>CXP 플랫폼</h3><span class="project-role">인증 · 프론트엔드 · 공통 백엔드</span></div>
-                <p class="project-summary">인증에서 모델 설정·채팅 선택까지 이어지는 사용자 흐름과 환경별 실행 설정을 하나의 배포 경계로 연결했습니다.</p>
-                <ul class="project-list"><li>Keycloak·Identity와 BFF를 연결하고 교차 출처 쿠키·리프레시 토큰 정책을 정비</li><li>모델·프로바이더 UI, 고객·파트너 CRUD, Cosmos 대량 처리와 standalone 런타임 설정 구현</li></ul>
-                <div class="evidence"><span class="evidence-item">제품 프론트 PR 15건 모두 병합</span><span class="evidence-item">백엔드 작성 PR 24건 확인</span></div>
+                <p class="project-summary">OAuth code/refresh 흐름을 HttpOnly cookie 세션으로 변환하고, 401 재시도·업로드·모델 선택이 같은 실행 계약을 사용하도록 연결했습니다.</p>
+                <ul class="project-list"><li>auth/token route가 provider token을 브라우저 JSON에서 제거하고, api-client가 동시 refresh와 원 요청 1회 재시도를 처리</li><li>문서 upload progress·Idempotency-Key·standalone runtime rewrite와 Keycloak token flow·EF model paging을 구현</li></ul>
+                <div class="evidence"><span class="evidence-item">auth/token · HttpOnly cookie</span><span class="evidence-item">api-client · 401 retry</span></div>
               </div>
             </article>
 
@@ -656,9 +656,9 @@
               <div class="experience-meta"><strong>2025.12</strong><span>AI 에이전트 흐름</span></div>
               <div>
                 <div class="project-header"><h3>dcai-onpremise</h3><span class="project-role">온프레미스 AI 에이전트 · 오케스트레이션</span></div>
-                <p class="project-summary">운영자가 에이전트 결과·인계·긴급 경고·회의 맥락을 한 화면에서 추적할 수 있는 흐름을 구현했습니다.</p>
-                <ul class="project-list"><li>AI Agents Phase 4의 에이전트 인계와 오케스트레이션 워크플로 연결</li><li>긴급 알림·3단 대시보드·테마·다국어 회의록을 온프레미스 운영 화면에 반영</li></ul>
-                <div class="evidence"><span class="evidence-item">작성 PR 8건 모두 병합</span><span class="evidence-item">3단 화면·다국어 변경 확인</span></div>
+                <p class="project-summary">OrchestratorAgent가 Email·Jira·Meeting agent를 function tool로 묶고, ChatHub가 handoff 결과를 SignalR 스트림으로 전달합니다.</p>
+                <ul class="project-list"><li>HandOffWorkflow의 triage→math/history 전이와 context·응답 언어 전파를 BaseAgent 세션에 기록</li><li>Mongo thread 저장 실패 fallback, MessageComplete 이벤트, on-premise Mongo/JWT 배포와 다국어 대시보드 구성</li></ul>
+                <div class="evidence"><span class="evidence-item">OrchestratorAgent · handoff</span><span class="evidence-item">ChatHub · SignalR stream</span></div>
               </div>
             </article>
           </div>
@@ -686,9 +686,9 @@
               <div class="experience-meta"><strong>2025.08</strong><span>검증 / 서버리스</span></div>
               <div>
                 <div class="project-header"><h3>KyoboPrePoC</h3><span class="project-role">금융·문서 처리 검증</span></div>
-                <p class="project-summary">검증 실패를 단순 오류 문자열에서 원인·조건·수정 방향을 확인할 수 있는 피드백으로 전환했습니다.</p>
-                <ul class="project-list"><li>메시지 타입을 분리하고 F1 오류·검증 조건·오차 항목을 결과 화면에 함께 표시</li><li>Azure Functions 통합과 Excel 저장·출력 경로·범위 지정 스타일 구현</li></ul>
-                <div class="evidence"><span class="evidence-item">앱·Function 작성 PR 각 6건 모두 병합</span><span class="evidence-item">오류·검증·Excel 변경 확인</span></div>
+                <p class="project-summary">Excel 분석을 HTTP route·동적 validation·ValidationResult·CSV/XLSX 산출물로 연결해 검증 실패의 다음 행동을 설명할 수 있게 했습니다.</p>
+                <ul class="project-list"><li>f1_analyzer_service가 sheet/converter와 validation class를 로드하고 상태·행 수·오류 수·diff를 한 결과 계약으로 반환</li><li>F2/F3가 오류 CSV를 재분석하고, 앱은 5분 timeout의 Azure Function HTTP 경계로 결과를 전달</li></ul>
+                <div class="evidence"><span class="evidence-item">f1_analyzer · ValidationResult</span><span class="evidence-item">F2/F3 · CSV reanalysis</span></div>
               </div>
             </article>
           </div>
@@ -700,10 +700,10 @@
             <h2 id="domain-heading">도메인 프로젝트</h2>
           </div>
           <div class="grouped-projects">
-            <div class="grouped-project"><strong>CelltrionPowerBIWebApp / Function</strong><p>CPVR/APQR·LIMS 리포트의 조회·비교·출력 흐름과 서버리스 업무 규칙을 분리했습니다. Web 72/75건·Function 17/17건 PR 병합 확인.</p></div>
-            <div class="grouped-project"><strong>Seegene.V2</strong><p>SGAL 오류를 재현 가능한 검사 업무 규칙 수정으로 전환했습니다. 작성 PR 44건 모두 병합 확인.</p></div>
-            <div class="grouped-project"><strong>SpinInvoice</strong><p>구독·청구 상태와 오류 수정의 영향 범위를 PR 단위로 관리했습니다. 작성 PR 54건 중 47건 병합 확인.</p></div>
-            <div class="grouped-project"><strong>KbhcCosmosEngine</strong><p>누락값을 통계와 식이·음료·음주 기능에서 일관되게 해석하는 기준을 적용했습니다. 작성 PR 32건 확인.</p></div>
+            <div class="grouped-project"><strong>CelltrionPowerBIWebApp / Function</strong><p>CPVRReportTable의 ParaCode/ZCE_IDENTIFIER 그룹화·partial/full 표시와 LIMS RawFlag·취소 시점·Initial/Final 계산을 WebApp·Cosmos Function으로 분리했습니다.</p></div>
+            <div class="grouped-project"><strong>Seegene.V2</strong><p>ExcelFactory가 merged-cell rulebase를 검증·sanitize·계층화하고 CardRenderer가 다음 단계와 go-back을 검사 업무 흐름으로 렌더링합니다.</p></div>
+            <div class="grouped-project"><strong>SpinInvoice</strong><p>InvoiceService가 CSV 주문 라인을 subscriptionId별로 합산하고 누락 reseller MPN을 과거 레코드에서 보완한 뒤 Cosmos bulk write로 저장합니다.</p></div>
+            <div class="grouped-project"><strong>KbhcCosmosEngine</strong><p>Mongo CreateAt와 Cosmos checkpoint로 변경분만 읽고 mmol/L을 mg/dL로 정규화한 뒤 source/date별 혈당 통계를 bulk upsert합니다.</p></div>
             <div class="grouped-project"><strong>SK AX</strong><p>고객 프로젝트에서 Kubernetes 기반 애플리케이션 배포를 수행했습니다.</p></div>
             <div class="grouped-project"><strong>fastapi-tutorial · 개인 프로젝트</strong><p>FastAPI·Pydantic 기반 POST·PUT API와 Query·Path 입력 검증 라우트를 구현했습니다.</p></div>
           </div>
@@ -726,12 +726,12 @@
             <span class="section-kicker">06</span>
             <h2 id="outcomes-heading">주요 성과 · 검증 근거</h2>
           </div>
-          <p class="project-summary">2026.08 GitHub 활동 감사의 작성 PR 병합 상태와 해당 변경 내용을 기준으로 하며, 확인되지 않은 비용·시간·장애율 수치는 표기하지 않았습니다.</p>
+          <p class="project-summary">2026.08 대표 저장소 clone의 코드·테스트·배포 설정을 직접 확인한 결과를 기준으로 하며, 확인되지 않은 비용·시간·장애율 수치는 표기하지 않았습니다.</p>
           <div class="outcome-grid">
-            <div class="outcome"><h3><a href="#project-kt-gsi">kt-gsi · 질의 실패 경로를 추적 가능하게</a></h3><p><strong>결과</strong> DAG 실행 경로와 회귀 기준 정립. <strong>근거</strong> 날짜 오류·재시도·키리스 전환을 포함한 작성 PR 9건 모두 병합.</p></div>
-            <div class="outcome"><h3><a href="#project-nhbank">NHBank · LLM 변경 경계를 분리</a></h3><p><strong>결과</strong> SDK 변경과 운영 환경 차이를 분리한 업데이트 경로 구축. <strong>근거</strong> SDK v2·환경변수·Kubernetes 변경을 포함한 작성 PR 5건 모두 병합.</p></div>
-            <div class="outcome"><h3><a href="#project-dcai-onpremise">dcai-onpremise · 에이전트 운영 가시성 확보</a></h3><p><strong>결과</strong> 인계·경고·회의 맥락을 3단 화면에서 추적. <strong>근거</strong> Phase 4·인계·다국어 변경 작성 PR 8건 모두 병합.</p></div>
-            <div class="outcome"><h3><a href="#project-cxp-platform">CXP 플랫폼 · 인증에서 모델 선택까지 연결</a></h3><p><strong>결과</strong> 인증·설정·채팅과 환경별 실행 흐름 통합. <strong>근거</strong> 제품 프론트 PR 15건 모두 병합, 백엔드 작성 PR 24건 확인.</p></div>
+            <div class="outcome"><h3><a href="#project-kt-gsi">kt-gsi · SQL 실행을 안전한 DAG로</a></h3><p><strong>결과</strong> 병렬 DAG와 SQL 검증·재시도 경계를 한 실행 흐름으로 통합. <strong>근거</strong> Engine.RunAsync·SqlNode의 fan-in, SELECT guard, PostgreSQL 오류 분류 코드.</p></div>
+            <div class="outcome"><h3><a href="#project-nhbank">NHBank · LLM 응답 계약을 검증 가능하게</a></h3><p><strong>결과</strong> typed module·입출력 검증·usage accounting·안전한 오류 변환 연결. <strong>근거</strong> TCBService·AzureOpenAIService·TCBErrorSanitizer와 TCB 테스트.</p></div>
+            <div class="outcome"><h3><a href="#project-dcai-onpremise">dcai-onpremise · 에이전트 스트림을 운영 흐름으로</a></h3><p><strong>결과</strong> handoff·세션·스트리밍·완료 이벤트를 한 운영 경계로 연결. <strong>근거</strong> OrchestratorAgent·HandOffWorkflow·ChatHub·Mongo thread 코드.</p></div>
+            <div class="outcome"><h3><a href="#project-cxp-platform">CXP 플랫폼 · 인증 상태와 실행 환경을 분리</a></h3><p><strong>결과</strong> cookie 세션·401 retry·idempotent upload·standalone runtime을 실제 호출 경로로 연결. <strong>근거</strong> auth/token route·api-client·Next config·Keycloak service 코드.</p></div>
           </div>
         </section>
 
