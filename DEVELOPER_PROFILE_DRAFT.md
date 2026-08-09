@@ -1,5 +1,7 @@
 # 김수현 개발자 이력 소개서 초안
 
+> 보관용 초안입니다. 아래의 과거 PR·commit 수치와 BFF/SGAL 표현은 현재 공개 이력서의 근거가 아닙니다. 최신 code-grounded 문장은 clone 코드·테스트·배포 설정을 직접 확인한 `resume/CODE_LEVEL_PROJECT_AUDIT.md`와 `resume/developer-resume.html`을 기준으로 사용합니다.
+
 - 작성 기준일: 2026-08-04
 - 문서 성격: GitHub 프로젝트 기여 조사와 사용자 확인 경력을 바탕으로 작성한 개발자 소개서 초안
 - 권장 용도: 이력서 상단 소개, 경력기술서 서문, 포트폴리오 프로필

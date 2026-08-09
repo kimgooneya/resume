@@ -35,7 +35,7 @@ describe("professional archive entry", () => {
     expect(data.match(/number: /g)).toHaveLength(22);
     expect(data).toContain("Text-to-SQL DAG");
     expect(data).toContain("NHBank");
-    expect(data).toContain("인증·BFF");
+    expect(data).toContain("인증 쿠키·API 재시도");
     expect(data).toContain("dcai-onpremise");
     expect(data).toContain("CelltrionPowerBIWebApp");
     expect(data).toContain("LangcodeApp");
@@ -48,7 +48,7 @@ describe("professional archive entry", () => {
     expect(data).not.toContain("GITHUB_CONTRIBUTION_AUDIT");
     expect(data).not.toContain('number: "07"');
     expect(data).not.toContain("RFID 제품 유지보수");
-    expect(data).not.toContain("Excel");
+    expect(data).toContain("ExcelFactory");
     expect(script).toContain("textContent");
     expect(script).toContain("document.createElement(\"dialog\")");
     expect(script).toContain("MY ROLE");

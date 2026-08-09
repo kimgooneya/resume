@@ -1,5 +1,7 @@
 # 개발자 이력서용 프로젝트 기여 정리
 
+> 보관용 조사 메모입니다. 이 파일의 과거 PR·commit 수치는 코드 수준 성과 근거로 사용하지 않으며, 공개 portfolio와 이력서는 clone 코드·테스트·배포 설정을 직접 확인한 `resume/CODE_LEVEL_PROJECT_AUDIT.md` 기준으로 작성합니다. 고객·도메인 시스템명은 공개 권한이 있는 범위에서만 사용합니다.
+
 - 기준일: 2026-08-04
 - 대상: 전체 조사 보고서에서 직접 PR·commit·review 근거가 확인된 프로젝트와 사용자 확인 경력
 - 주 계정: kimgooneya / GitHub ID 26292512 / 프로필명 Soo Hyeon Kim
