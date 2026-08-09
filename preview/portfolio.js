@@ -21,11 +21,15 @@ const createDetailBlock = (label, value, className = "") => {
   return block;
 };
 
+const provenanceLabel = (caseStudy) =>
+  caseStudy.provenance === "code-observed" ? "CODE OBSERVED" : "USER CONFIRMED ONLY";
+
 const createCaseOverview = (caseStudy) => {
   const overview = create("dl", "case-overview");
   [
     ["PROJECT", caseStudy.project],
-    ["ROLE", caseStudy.role],
+    ["ROLE (USER-CONFIRMED)", caseStudy.role],
+    ["EVIDENCE SCOPE", provenanceLabel(caseStudy)],
     ["SCOPE", caseStudy.scope],
   ].forEach(([label, value]) => {
     const item = create("div", "case-overview-item");
@@ -39,7 +43,8 @@ const createCaseOverview = (caseStudy) => {
 const createCaseDetailGrid = (caseStudy) => {
   const detailGrid = create("div", "case-detail-grid");
   detailGrid.append(
-    createDetailBlock("MY ROLE", caseStudy.role),
+    createDetailBlock("MY ROLE (USER-CONFIRMED)", caseStudy.role),
+    createDetailBlock("EVIDENCE SCOPE", provenanceLabel(caseStudy)),
     createDetailBlock("PROBLEM", caseStudy.problem),
   );
   const contributions = create("div", "case-detail-block");

@@ -1,10 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
+import { portfolioData } from "../preview/portfolio-data.js";
 
 const html = readFileSync(new URL("../preview/index.html", import.meta.url), "utf8");
 const css = readFileSync(new URL("../preview/portfolio.css", import.meta.url), "utf8");
 const script = readFileSync(new URL("../preview/portfolio.js", import.meta.url), "utf8");
-const data = readFileSync(new URL("../preview/portfolio-data.js", import.meta.url), "utf8");
 
 describe("professional archive entry", () => {
   test("keeps the public page separate from the game shell", () => {
@@ -31,28 +31,37 @@ describe("professional archive entry", () => {
     expect(script).toContain("상세 사례 닫기");
   });
 
-  test("renders evidence-driven case data without shipping the raw audit", () => {
-    expect(data.match(/number: /g)).toHaveLength(22);
-    expect(data).toContain("Text-to-SQL DAG");
-    expect(data).toContain("NHBank");
-    expect(data).toContain("인증·BFF");
-    expect(data).toContain("dcai-onpremise");
-    expect(data).toContain("CelltrionPowerBIWebApp");
-    expect(data).toContain("LangcodeApp");
-    expect(data).toContain("role:");
-    expect(data).toContain("problem:");
-    expect(data).toContain("contributions:");
-    expect(data).toContain("stack:");
-    expect(data).toContain("https://github.com/kimgooneya");
-    expect(data).not.toContain("https://github.com/shkim");
-    expect(data).not.toContain("GITHUB_CONTRIBUTION_AUDIT");
-    expect(data).not.toContain('number: "07"');
-    expect(data).not.toContain("RFID 제품 유지보수");
-    expect(data).not.toContain("Excel");
+  test("exposes structured case provenance", () => {
+    expect(portfolioData.cases).toHaveLength(22);
+    expect(new Set(portfolioData.cases.map(({ number }) => number))).toHaveLength(22);
+    expect(
+      portfolioData.cases.every(
+        ({ number, role, problem, contributions, stack, evidence }) =>
+          Boolean(number && role && problem && contributions.length && stack.length && evidence),
+      ),
+    ).toBe(true);
+    expect(
+      portfolioData.cases.every(({ provenance }) => ["code-observed", "user-confirmed-only"].includes(provenance)),
+    ).toBe(true);
+    expect(portfolioData.cases.filter(({ evidence }) => evidence.startsWith("코드 감사:")).length).toBeGreaterThanOrEqual(10);
+    expect(portfolioData.cases.filter(({ evidence }) => evidence.includes("이번 clone 감사 범위 외")).length).toBeGreaterThanOrEqual(5);
+    expect(portfolioData.cases.filter(({ provenance }) => provenance === "code-observed").length).toBeGreaterThanOrEqual(10);
+    expect(portfolioData.cases.filter(({ provenance }) => provenance === "user-confirmed-only").length).toBeGreaterThanOrEqual(5);
+    expect(
+      portfolioData.cases
+        .filter(({ provenance }) => provenance === "code-observed")
+        .every(({ role, contributions }) => role.includes("사용자 확인") && contributions.every((item) => item.includes("코드 감사 관찰"))),
+    ).toBe(true);
+    expect(
+      portfolioData.cases
+        .filter(({ provenance }) => provenance === "user-confirmed-only")
+        .every(({ role, evidence }) => role.includes("사용자 확인만") && evidence.includes("감사 범위 외")),
+    ).toBe(true);
+    expect(portfolioData.capabilities).toHaveLength(3);
+    expect(portfolioData.capabilities.every(({ index, title, detail, proof }) => Boolean(index && title && detail && proof))).toBe(true);
+    expect(portfolioData.contact.github).toBe("https://github.com/kimgooneya");
     expect(script).toContain("textContent");
     expect(script).toContain("document.createElement(\"dialog\")");
-    expect(script).toContain("MY ROLE");
-    expect(script).toContain("CONTRIBUTIONS");
     expect(script).toContain("aria-describedby");
   });
 
