@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
+import { portfolioData } from "../preview/portfolio-data.js";
 
 const html = readFileSync(new URL("../preview/index.html", import.meta.url), "utf8");
 const css = readFileSync(new URL("../preview/portfolio.css", import.meta.url), "utf8");
@@ -32,26 +33,29 @@ describe("professional archive entry", () => {
   });
 
   test("renders evidence-driven case data without shipping the raw audit", () => {
-    expect(data.match(/number: /g)).toHaveLength(22);
-    expect(data).toContain("Text-to-SQL DAG");
-    expect(data).toContain("NHBank");
-    expect(data).toContain("인증 쿠키·API 재시도");
-    expect(data).toContain("dcai-onpremise");
-    expect(data).toContain("CelltrionPowerBIWebApp");
-    expect(data).toContain("LangcodeApp");
-    expect(data).toContain("role:");
-    expect(data).toContain("problem:");
-    expect(data).toContain("contributions:");
-    expect(data).toContain("stack:");
-    expect(data).toContain("https://github.com/kimgooneya");
-    expect(data).not.toContain("https://github.com/shkim");
+    expect(portfolioData.cases).toHaveLength(22);
+    expect(new Set(portfolioData.cases.map(({ number }) => number))).toHaveLength(22);
+    expect(
+      portfolioData.cases.every(
+        ({ number, role, problem, contributions, stack, evidence }) =>
+          Boolean(number && role && problem && contributions.length && stack.length && evidence),
+      ),
+    ).toBe(true);
+    expect(portfolioData.cases.filter(({ evidence }) => evidence.startsWith("코드 감사:")).length).toBeGreaterThanOrEqual(10);
+    expect(portfolioData.cases.filter(({ evidence }) => evidence.includes("이번 clone 감사 범위 외")).length).toBeGreaterThanOrEqual(5);
+    expect(portfolioData.capabilities).toHaveLength(3);
+    expect(portfolioData.capabilities.every(({ index, title, detail, proof }) => Boolean(index && title && detail && proof))).toBe(true);
+    expect(portfolioData.contact.github).toBe("https://github.com/kimgooneya");
+    expect((data.match(/https:\/\/github\.com\//g) ?? []).length).toBe(1);
     expect(data).not.toContain("GITHUB_CONTRIBUTION_AUDIT");
-    expect(data).not.toContain('number: "07"');
-    expect(data).not.toContain("RFID 제품 유지보수");
-    expect(data).toContain("ExcelFactory");
+    expect(data).not.toContain("GitHub 활동 감사");
+    expect(data).not.toContain("authored PR");
+    expect(data).not.toContain("BFF Auth Proxy");
+    expect(data).not.toContain("SGAL");
     expect(script).toContain("textContent");
     expect(script).toContain("document.createElement(\"dialog\")");
     expect(script).toContain("MY ROLE");
+    expect(script).toContain("USER-CONFIRMED");
     expect(script).toContain("CONTRIBUTIONS");
     expect(script).toContain("aria-describedby");
   });
