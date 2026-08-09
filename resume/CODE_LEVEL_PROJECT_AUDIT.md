@@ -2,27 +2,29 @@
 
 자료 기준일: 2026-08-05
 
-이 문서는 PR 개수나 커밋 수가 아니라, clone된 저장소의 실제 코드·테스트·배포 설정에서 확인한 기술 근거를 기록한다. 이력서의 짧은 문장은 이 문서의 관찰 결과를 압축한 것이며, 확인되지 않은 비용·시간·장애율은 추정하지 않는다.
+이 문서는 PR 개수나 커밋 수가 아니라, clone된 저장소의 실제 코드·테스트·배포 설정에서 확인한 기술 근거를 기록한다. 이력서의 짧은 문장은 이 문서의 관찰 결과를 압축한 것이며, 확인되지 않은 비용·시간·장애율은 추정하지 않는다. 공개 저장소에 포함되는 문서이므로 로컬 절대 경로·원격 조직명·커밋 식별자는 기록하지 않는다.
 
 ## 조사 범위
 
-| 프로젝트 | clone 경로 | origin | 확인한 HEAD |
-| --- | --- | --- | --- |
-| kt-gsi | `/Users/daniel/Documents/projects/kt-gsi` | `langcodestartup/kt-gsi` | `7f06542` |
-| NHBank | `/Users/daniel/Documents/projects/NHBank` | `langcodestartup/NHBank` | `b2f0b28` |
-| CXP light frontend | `/Users/daniel/Documents/projects/cxp-light-fe` | `langcodestartup/cxp-light-fe` | `557482d` |
-| CXP enterprise frontend | `/Users/daniel/Documents/projects/langcode.cxp.front` | `langcodestartup/langcode.cxp.front` | `2324191` |
-| CXP backend | `/Users/daniel/Documents/projects/langcode.cxp.back` | `langcodestartup/langcode.cxp.back` | `71c90c7` |
-| dcai-onpremise | `/Users/daniel/Documents/projects/dcai-onpremise` | `langcodestartup/dcai-onpremise` | `0791a9c` |
-| KyoboPrePoC | `/Users/daniel/Documents/projects/KyoboPrePoC` | `langcodestartup/KyoboPrePoC` | `77e2661` |
-| KyoboPrePoC-Function | `/Users/daniel/Documents/projects/KyoboPrePoC-Function` | `langcodestartup/KyoboPrePoC-Function` | `d59938d` |
-| Celltrion WebApp | `/Users/daniel/Documents/projects/CelltrionPowerBIWebApp` | `langcodestartup/CelltrionPowerBIWebApp` | `51172c2` |
-| Celltrion Function | `/Users/daniel/Documents/projects/CelltrionPowerBIFunction` | `langcodestartup/CelltrionPowerBIFunction` | `251198f` |
-| Seegene.V2 | `/Users/daniel/Documents/projects/Seegene.V2` | `langcodestartup/Seegene.V2` | `1fd55c8` |
-| SpinInvoice | `/Users/daniel/Documents/projects/SpinInvoice` | `langcodestartup/SpinInvoice` | `75e8bd0` |
-| KbhcCosmosEngine | `/Users/daniel/Documents/projects/KbhcCosmosEngine` | `langcodestartup/KbhcCosmosEngine` | `33c08a3` |
+| 프로젝트 | 조사한 clone 식별자 | 코드 근거 |
+| --- | --- | --- |
+| kt-gsi | `kt-gsi` | 확인 |
+| NHBank | `NHBank` | 확인 |
+| CXP light frontend | `cxp-light-fe` | 확인 |
+| CXP enterprise frontend | `langcode.cxp.front` | 확인 |
+| CXP backend | `langcode.cxp.back` | 확인 |
+| dcai-onpremise | `dcai-onpremise` | 확인 |
+| KyoboPrePoC | `KyoboPrePoC` | 확인 |
+| KyoboPrePoC-Function | `KyoboPrePoC-Function` | 확인 |
+| Celltrion WebApp | `CelltrionPowerBIWebApp` | 확인 |
+| Celltrion Function | `CelltrionPowerBIFunction` | 확인 |
+| Seegene.V2 | `Seegene.V2` | 확인 |
+| SpinInvoice | `SpinInvoice` | 확인 |
+| KbhcCosmosEngine | `KbhcCosmosEngine` | 확인 |
 
-`/Users/daniel/Documents/projects/skax`에는 소스·설정·테스트가 없었다. `/Users/daniel/Documents/projects/text-to-sql`은 원격이 연결된 git clone이 아니므로 이번 코드 근거에는 포함하지 않았고, Text-to-SQL 주장은 clone된 `kt-gsi`의 실행 경로로 한정했다.
+`skax` clone에는 소스·설정·테스트가 없었다. `text-to-sql`은 원격이 연결된 git clone이 아니므로 이번 코드 근거에는 포함하지 않았고, Text-to-SQL 주장은 clone된 `kt-gsi`의 실행 경로로 한정했다.
+
+SK AX는 사용자 확인 이력으로만 남기며, 로컬 clone에서 코드·설정·테스트를 확인하지 못했으므로 아래의 코드 근거 요약에는 포함하지 않는다. 고객·도메인 시스템명과 내부 구현 세부사항은 공개 권한이 있는 범위에서만 이력서에 사용해야 한다.
 
 ## 코드에서 확인한 기술 흐름
 

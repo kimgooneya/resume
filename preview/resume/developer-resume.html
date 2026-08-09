@@ -647,7 +647,7 @@
               <div>
                 <div class="project-header"><h3>CXP 플랫폼</h3><span class="project-role">인증 · 프론트엔드 · 공통 백엔드</span></div>
                 <p class="project-summary">OAuth code/refresh 흐름을 HttpOnly cookie 세션으로 변환하고, 401 재시도·업로드·모델 선택이 같은 실행 계약을 사용하도록 연결했습니다.</p>
-                <ul class="project-list"><li>auth/token route가 provider token을 브라우저 JSON에서 제거하고, api-client가 동시 refresh와 원 요청 1회 재시도를 처리</li><li>문서 upload progress·Idempotency-Key·standalone runtime rewrite와 Keycloak token flow·EF model paging을 구현</li></ul>
+                <ul class="project-list"><li>auth/token route가 provider token을 브라우저 JSON에서 제거하고, api-client가 동시 refresh와 원 요청 1회 재시도를 처리</li><li>문서 upload progress·변경 요청 Idempotency-Key·standalone runtime rewrite와 Keycloak token flow·EF model paging을 구현</li></ul>
                 <div class="evidence"><span class="evidence-item">auth/token · HttpOnly cookie</span><span class="evidence-item">api-client · 401 retry</span></div>
               </div>
             </article>
@@ -704,7 +704,7 @@
             <div class="grouped-project"><strong>Seegene.V2</strong><p>ExcelFactory가 merged-cell rulebase를 검증·sanitize·계층화하고 CardRenderer가 다음 단계와 go-back을 검사 업무 흐름으로 렌더링합니다.</p></div>
             <div class="grouped-project"><strong>SpinInvoice</strong><p>InvoiceService가 CSV 주문 라인을 subscriptionId별로 합산하고 누락 reseller MPN을 과거 레코드에서 보완한 뒤 Cosmos bulk write로 저장합니다.</p></div>
             <div class="grouped-project"><strong>KbhcCosmosEngine</strong><p>Mongo CreateAt와 Cosmos checkpoint로 변경분만 읽고 mmol/L을 mg/dL로 정규화한 뒤 source/date별 혈당 통계를 bulk upsert합니다.</p></div>
-            <div class="grouped-project"><strong>SK AX</strong><p>고객 프로젝트에서 Kubernetes 기반 애플리케이션 배포를 수행했습니다.</p></div>
+            <div class="grouped-project"><strong>SK AX · 사용자 확인 이력</strong><p>고객 프로젝트의 Kubernetes 기반 애플리케이션 배포 경험은 확인된 경력으로 남기되, 현재 조사한 clone에는 소스·설정·테스트가 없어 코드 수준 근거로는 산정하지 않았습니다.</p></div>
             <div class="grouped-project"><strong>fastapi-tutorial · 개인 프로젝트</strong><p>FastAPI·Pydantic 기반 POST·PUT API와 Query·Path 입력 검증 라우트를 구현했습니다.</p></div>
           </div>
         </section>
@@ -731,7 +731,7 @@
             <div class="outcome"><h3><a href="#project-kt-gsi">kt-gsi · SQL 실행을 안전한 DAG로</a></h3><p><strong>결과</strong> 병렬 DAG와 SQL 검증·재시도 경계를 한 실행 흐름으로 통합. <strong>근거</strong> Engine.RunAsync·SqlNode의 fan-in, SELECT guard, PostgreSQL 오류 분류 코드.</p></div>
             <div class="outcome"><h3><a href="#project-nhbank">NHBank · LLM 응답 계약을 검증 가능하게</a></h3><p><strong>결과</strong> typed module·입출력 검증·usage accounting·안전한 오류 변환 연결. <strong>근거</strong> TCBService·AzureOpenAIService·TCBErrorSanitizer와 TCB 테스트.</p></div>
             <div class="outcome"><h3><a href="#project-dcai-onpremise">dcai-onpremise · 에이전트 스트림을 운영 흐름으로</a></h3><p><strong>결과</strong> handoff·세션·스트리밍·완료 이벤트를 한 운영 경계로 연결. <strong>근거</strong> OrchestratorAgent·HandOffWorkflow·ChatHub·Mongo thread 코드.</p></div>
-            <div class="outcome"><h3><a href="#project-cxp-platform">CXP 플랫폼 · 인증 상태와 실행 환경을 분리</a></h3><p><strong>결과</strong> cookie 세션·401 retry·idempotent upload·standalone runtime을 실제 호출 경로로 연결. <strong>근거</strong> auth/token route·api-client·Next config·Keycloak service 코드.</p></div>
+            <div class="outcome"><h3><a href="#project-cxp-platform">CXP 플랫폼 · 인증 상태와 실행 환경을 분리</a></h3><p><strong>결과</strong> cookie 세션·401 retry·Idempotency-Key 기반 변경 요청·standalone runtime을 실제 호출 경로로 연결. <strong>근거</strong> auth/token route·api-client·Next config·Keycloak service 코드.</p></div>
           </div>
         </section>
 
