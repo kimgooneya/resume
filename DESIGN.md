@@ -337,7 +337,7 @@ LCD 플레이 영역의 지도, 탐험 수첩, 대화창만 `dark`, `deep`, `mid
 - **Archive masthead**: 브랜드, `사례`, `이력서`, `Explore` 링크. `default`, `hover`, `focus-visible` 상태를 underline과 전경색 변화로 표현한다.
 - **Hero statement**: kicker, Hahmlet 선언, 짧은 설명, primary outline CTA와 secondary text link. 첫 화면에서만 사용한다.
 - **Technical diagram**: inline SVG 선과 노드로 AI 흐름을 설명하며, 장식 배경 이미지가 아니다. 모바일에서는 같은 흐름을 짧은 선형 요약으로 보강한다. `rest`, `prefers-reduced-motion` 상태만 가진다.
-- **Case study**: 프로젝트 단위로 번호·프로젝트명·역할·범위·기간·제목·요약을 먼저 보여주고, native `dialog` 안에서 `MY ROLE`·`PROBLEM`·`CONTRIBUTIONS`·`DECISIONS`·`STACK`·`OUTCOME` 순서로 상세 정보를 제공하는 재사용 article. 상세 버튼은 focus를 복원하고, dialog 바깥 클릭과 Escape로 닫힌다.
+- **Project case**: 프로젝트 번호·프로젝트명·전체 기간·구현 수를 상위 article로 먼저 보여주고, 그 안에 구현 기능을 기간순 section으로 묶는다. 각 구현 기능은 역할·근거 범위·구현 범위·제목·요약을 접힌 상태에서 제공하며, native `dialog` 안에서 `MY ROLE`·`PROBLEM`·`CONTRIBUTIONS`·`DECISIONS`·`STACK`·`OUTCOME` 순서로 상세 정보를 제공한다. 상세 버튼은 focus를 복원하고, dialog 바깥 클릭과 Escape로 닫힌다.
 - **Capability list**: AI 실행 흐름, 데이터 신뢰성, 제품 운영 세 줄의 반복 가능한 역량 프리미티브. `default`, `hover`, `focus-visible`을 지원한다.
 - **Archive rail**: 데스크톱 오른쪽에만 보이는 세로 기록선. 모바일에서는 숨기고 동일한 기준일을 footer 텍스트로 제공한다.
 

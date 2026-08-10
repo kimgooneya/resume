@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { portfolioData } from "../preview/portfolio-data.js";
+import { groupCasesByProject } from "../preview/project-groups.js";
 
 const html = readFileSync(new URL("../preview/index.html", import.meta.url), "utf8");
 const css = readFileSync(new URL("../preview/portfolio.css", import.meta.url), "utf8");
@@ -63,6 +64,34 @@ describe("professional archive entry", () => {
     expect(script).toContain("textContent");
     expect(script).toContain("document.createElement(\"dialog\")");
     expect(script).toContain("aria-describedby");
+  });
+
+  test("groups implementation records under their owning projects", () => {
+    // Given: every implementation record keeps its public project name
+    const projects = groupCasesByProject(portfolioData.cases);
+
+    // When: the archive organizes the records by project
+    const authenticationPlatform = projects.find(({ title }) => title === "인증·실행 플랫폼");
+    const manufacturingQuality = projects.find(({ title }) => title === "제조 품질 시스템");
+
+    // Then: feature-level records stay intact inside one project hierarchy
+    expect(projects).toHaveLength(17);
+    expect(authenticationPlatform?.period).toBe("2021.12 — 2026.03");
+    expect(authenticationPlatform?.features.map(({ title }) => title)).toEqual([
+      "빌드 산출물·실행 환경 분리",
+      "인증 경계와 제품 화면 연결",
+      "로그인 흐름 책임 경계 복구",
+      "사용자 확인 이력 · 공통 모델",
+      "사용자 확인 이력 · 지식 업무",
+    ]);
+    expect(manufacturingQuality?.features.map(({ title }) => title)).toEqual([
+      "제조 데이터 의사결정 리포트",
+      "리포트 업무 규칙의 서버리스 분리",
+    ]);
+    expect(script).toContain("project.features.forEach");
+    expect(script).toContain("createCaseDialog(caseStudy, openButton, implementationNumber)");
+    expect(css).toContain(".project-case");
+    expect(css).toContain(".project-feature-list");
   });
 
   test("keeps the archive visual system token-driven and responsive", () => {
