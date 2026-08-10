@@ -3,6 +3,8 @@ const formatProjectPeriod = (features) => {
   return periods.length === 1 ? periods[0] : `${periods.at(-1)} — ${periods[0]}`;
 };
 
+const MISCELLANEOUS_PROJECT = "기타";
+
 export const groupCasesByProject = (cases) => {
   const groupedCases = new Map();
 
@@ -15,7 +17,11 @@ export const groupCasesByProject = (cases) => {
     groupedCases.set(caseStudy.project, [caseStudy]);
   });
 
-  return [...groupedCases.entries()].map(([title, features], index) => ({
+  const projectEntries = [...groupedCases.entries()].filter(([title]) => title !== MISCELLANEOUS_PROJECT);
+  const miscellaneous = groupedCases.get(MISCELLANEOUS_PROJECT);
+  if (miscellaneous) projectEntries.push([MISCELLANEOUS_PROJECT, miscellaneous]);
+
+  return projectEntries.map(([title, features], index) => ({
     number: String(index + 1).padStart(2, "0"),
     title,
     period: formatProjectPeriod(features),

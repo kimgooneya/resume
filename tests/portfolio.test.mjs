@@ -66,28 +66,36 @@ describe("professional archive entry", () => {
     expect(script).toContain("aria-describedby");
   });
 
-  test("groups implementation records under their owning projects", () => {
+  test("groups implementation records under client projects and keeps miscellaneous work last", () => {
     // Given: every implementation record keeps its public project name
     const projects = groupCasesByProject(portfolioData.cases);
 
     // When: the archive organizes the records by project
-    const authenticationPlatform = projects.find(({ title }) => title === "인증·실행 플랫폼");
-    const manufacturingQuality = projects.find(({ title }) => title === "제조 품질 시스템");
+    const nhNonghyup = projects.find(({ title }) => title === "NH농협");
+    const miscellaneous = projects.at(-1);
 
     // Then: feature-level records stay intact inside one project hierarchy
-    expect(projects).toHaveLength(17);
-    expect(authenticationPlatform?.period).toBe("2021.12 — 2026.03");
-    expect(authenticationPlatform?.features.map(({ title }) => title)).toEqual([
-      "빌드 산출물·실행 환경 분리",
-      "인증 경계와 제품 화면 연결",
-      "로그인 흐름 책임 경계 복구",
-      "사용자 확인 이력 · 공통 모델",
-      "사용자 확인 이력 · 지식 업무",
+    expect(projects).toHaveLength(13);
+    expect(projects.map(({ title }) => title)).toEqual([
+      "KT GSI 홈쇼핑",
+      "NH농협",
+      "두바이 GDRFA",
+      "교보생명",
+      "SPin · Azure 구독청구 시스템",
+      "KB헬스케어 · 기관명 확인 필요",
+      "주문 업로드 서비스",
+      "문서 지식 기반 AI",
+      "제조 품질 시스템",
+      "Identity 예제",
+      "금융권 AI PoC",
+      "Carbon Design UI",
+      "기타",
     ]);
-    expect(manufacturingQuality?.features.map(({ title }) => title)).toEqual([
-      "제조 데이터 의사결정 리포트",
-      "리포트 업무 규칙의 서버리스 분리",
+    expect(nhNonghyup?.features.map(({ number, title }) => [number, title])).toEqual([
+      ["02", "LLM 연동 운영 계약"],
+      ["08", "검증 실패의 다음 행동 안내"],
     ]);
+    expect(miscellaneous?.features.map(({ number }) => number)).toEqual(["03", "04", "05", "09", "10", "11", "21", "22"]);
     expect(script).toContain("project.features.forEach");
     expect(script).toContain("createCaseDialog(caseStudy, openButton, implementationNumber)");
     expect(css).toContain(".project-case");
