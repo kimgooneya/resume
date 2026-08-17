@@ -23,14 +23,14 @@ const createDetailBlock = (label, value, className = "") => {
 };
 
 const provenanceLabel = (caseStudy) =>
-  caseStudy.provenance === "code-observed" ? "CODE OBSERVED" : "USER CONFIRMED ONLY";
+  caseStudy.provenance === "code-observed" ? "코드에서 확인" : "사용자 확인만";
 
 const createCaseOverview = (caseStudy) => {
   const overview = create("dl", "case-overview");
   [
-    ["ROLE (USER-CONFIRMED)", caseStudy.role],
-    ["EVIDENCE SCOPE", provenanceLabel(caseStudy)],
-    ["SCOPE", caseStudy.scope],
+    ["담당 역할", caseStudy.role],
+    ["검증 범위", provenanceLabel(caseStudy)],
+    ["수행 범위", caseStudy.scope],
   ].forEach(([label, value]) => {
     const item = create("div", "case-overview-item");
     item.append(create("dt", "eyebrow", label));
@@ -43,21 +43,21 @@ const createCaseOverview = (caseStudy) => {
 const createCaseDetailGrid = (caseStudy) => {
   const detailGrid = create("div", "case-detail-grid");
   detailGrid.append(
-    createDetailBlock("MY ROLE (USER-CONFIRMED)", caseStudy.role),
-    createDetailBlock("EVIDENCE SCOPE", provenanceLabel(caseStudy)),
-    createDetailBlock("PROBLEM", caseStudy.problem),
+    createDetailBlock("담당 역할", caseStudy.role),
+    createDetailBlock("검증 범위", provenanceLabel(caseStudy)),
+    createDetailBlock("해결 과제", caseStudy.problem),
   );
   const contributions = create("div", "case-detail-block");
-  contributions.append(create("h4", "eyebrow", "CONTRIBUTIONS"));
+  contributions.append(create("h4", "eyebrow", "주요 기여"));
   appendList(contributions, caseStudy.contributions);
   const decisions = create("div", "case-detail-block");
-  decisions.append(create("h4", "eyebrow", "DECISIONS"));
+  decisions.append(create("h4", "eyebrow", "설계 및 판단"));
   appendList(decisions, caseStudy.decisions);
   const stack = create("div", "case-detail-block");
-  stack.append(create("h4", "eyebrow", "STACK"));
+  stack.append(create("h4", "eyebrow", "기술 스택"));
   appendList(stack, caseStudy.stack, "case-stack");
   const outcome = create("div", "case-detail-block");
-  outcome.append(create("h4", "eyebrow", "OUTCOME"));
+  outcome.append(create("h4", "eyebrow", "성과 및 결과"));
   outcome.append(create("p", "outcome-copy", caseStudy.outcome));
   outcome.append(create("p", "evidence-copy", caseStudy.evidence));
   detailGrid.append(contributions, decisions, stack, outcome);
@@ -76,7 +76,7 @@ const createCaseDialog = (caseStudy, trigger, implementationNumber) => {
   const header = create("header", "case-dialog-header");
   const headingGroup = create("div", "case-dialog-heading");
   headingGroup.append(
-    create("p", "eyebrow", `IMPLEMENTATION ${implementationNumber} · ${caseStudy.period}`),
+    create("p", "eyebrow", `구현 ${implementationNumber} · ${caseStudy.period}`),
     create("p", "case-dialog-project", caseStudy.project),
   );
   const title = create("h2", "case-dialog-title", caseStudy.title);
@@ -154,13 +154,13 @@ const renderProjects = () => {
     const header = create("header", "project-header");
     const index = create("div", "project-index");
     index.append(
-      create("p", "eyebrow", `PROJECT ${project.number}`),
+      create("p", "eyebrow", `프로젝트 ${project.number}`),
       create("p", "project-period mono", project.period),
     );
     const heading = create("div", "project-heading");
     heading.append(
       create("h3", "project-title", project.title),
-      create("p", "project-count mono", `${project.features.length} IMPLEMENTATIONS`),
+      create("p", "project-count mono", `구현 ${project.features.length}건`),
     );
     header.append(index, heading);
 
@@ -172,7 +172,7 @@ const renderProjects = () => {
 
       const featureMeta = create("div", "case-index");
       featureMeta.append(
-        create("p", "eyebrow", `IMPLEMENTATION ${implementationNumber}`),
+        create("p", "eyebrow", `구현 ${implementationNumber}`),
         create("p", "case-label", caseStudy.label),
         create("p", "case-period mono", caseStudy.period),
       );
@@ -187,7 +187,7 @@ const renderProjects = () => {
       openButton.setAttribute("aria-haspopup", "dialog");
       openButton.setAttribute("aria-label", `${caseStudy.project} ${caseStudy.title} 구현 상세 열기`);
       openButton.append(
-        create("span", "case-open-label", "역할·판단·결과 상세 보기"),
+        create("span", "case-open-label", "담당 역할·구현·성과 보기"),
         create("span", "case-open-mark", "↗"),
       );
       const dialog = createCaseDialog(caseStudy, openButton, implementationNumber);

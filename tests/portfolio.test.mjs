@@ -32,6 +32,25 @@ describe("professional archive entry", () => {
     expect(script).toContain("상세 사례 닫기");
   });
 
+  test("uses concise Korean resume copy across the public archive", () => {
+    expect(html).toContain("01 / 주요 프로젝트");
+    expect(html).toContain("02 / 핵심 역량");
+    expect(html).toContain("03 / 추가 경험");
+    expect(html).toContain("추가 프로젝트 및");
+    expect(html).toContain("개발 원칙");
+    expect(html).toContain("연락처");
+    expect(html).not.toContain("SELECTED PROJECTS");
+    expect(html).not.toContain("WIDER CONTEXT");
+    expect(html).not.toContain("LET'S CONNECT");
+    expect(script).toContain("담당 역할");
+    expect(script).toContain("검증 범위");
+    expect(script).toContain("주요 기여");
+    expect(script).toContain("성과 및 결과");
+    expect(script).toContain("구현 ${implementationNumber}");
+    expect(script).not.toContain("ROLE (USER-CONFIRMED)");
+    expect(script).not.toContain("IMPLEMENTATIONS");
+  });
+
   test("exposes structured case provenance", () => {
     expect(portfolioData.cases).toHaveLength(22);
     expect(new Set(portfolioData.cases.map(({ number }) => number))).toHaveLength(22);

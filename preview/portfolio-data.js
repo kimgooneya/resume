@@ -1,10 +1,10 @@
 export const portfolioData = {
   profile: {
     name: "김수현",
-    eyebrow: "B2B AI · DATA SERVICES",
-    title: "복잡한 AI\n흐름을 제품으로\n연결합니다",
+    eyebrow: "B2B AI · 데이터 서비스 개발자",
+    title: "AI·데이터 서비스를\n설계하고 구현합니다",
     summary:
-      "Text-to-SQL, 데이터 처리, 인증과 운영 안정화의 코드 경계를 관찰해 정리합니다. 사용자 확인 역할과 clone에서 확인한 동작·검증 근거를 분리해 설명합니다.",
+      "Text-to-SQL, 데이터 처리, 인증과 운영 안정화를 중심으로 백엔드와 AI 서비스의 실행 흐름을 설계·구현했습니다. 프로젝트별 역할과 구현 내용, 검증 근거를 구분해 정리했습니다.",
     asOf: "자료 기준일 2026.08",
   },
   capabilities: [
@@ -12,19 +12,19 @@ export const portfolioData = {
       index: "01",
       title: "AI 실행 흐름",
       detail: "Text-to-SQL DAG, LLM SDK 마이그레이션, 재시도 가능한 작업 단위",
-      proof: "질의 계획을 관찰 가능한 단계로 나눕니다.",
+      proof: "질의 계획을 관찰 가능한 실행 단계로 분리합니다.",
     },
     {
       index: "02",
       title: "데이터 신뢰성",
       detail: "입력 정규화, 시계열 변환, 스키마 검증과 오류 경계",
-      proof: "입력의 불확실성을 제품 안에서 설명합니다.",
+      proof: "입력 오류와 데이터 불확실성을 검증 가능한 규칙으로 정의합니다.",
     },
     {
       index: "03",
       title: "제품 운영",
       detail: "인증 쿠키·API 재시도, 런타임 설정, 배포 자동화, 복구 가능한 운영 흐름",
-      proof: "기능이 운영되는 마지막 구간까지 설계합니다.",
+      proof: "인증·배포·복구까지 포함해 운영 가능한 흐름을 구성합니다.",
     },
   ],
   cases: [
