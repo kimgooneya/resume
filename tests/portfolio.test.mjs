@@ -37,6 +37,7 @@ describe("professional archive entry", () => {
     expect(html).toContain("02 / 핵심 역량");
     expect(html).toContain("03 / 추가 경험");
     expect(html).toContain("추가 프로젝트 및");
+    expect(html).toContain("Claude Code를 활용한 엔터프라이즈 프로그램 배포");
     expect(html).toContain("개발 원칙");
     expect(html).toContain("연락처");
     expect(html).not.toContain("SELECTED PROJECTS");
@@ -49,6 +50,13 @@ describe("professional archive entry", () => {
     expect(script).toContain("구현 ${implementationNumber}");
     expect(script).not.toContain("ROLE (USER-CONFIRMED)");
     expect(script).not.toContain("IMPLEMENTATIONS");
+    expect(portfolioData.supporting).toEqual([
+      "Claude Code를 활용한 엔터프라이즈 프로그램 배포·산출물 작성",
+      "Microsoft Agent Framework 기반 Agentic Service 구축·LangChain 구조 비교",
+      "Azure OpenAI와 SDK v2 전환",
+      "에이전트 오케스트레이션과 온프레미스 실행 환경",
+      "금융·제조 도메인의 진단, 과금, 사전검증 PoC",
+    ]);
   });
 
   test("exposes structured case provenance", () => {

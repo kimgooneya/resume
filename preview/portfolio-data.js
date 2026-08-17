@@ -188,6 +188,8 @@ export const portfolioData = {
     provenance: caseStudy.evidence.startsWith("코드 감사:") ? "code-observed" : "user-confirmed-only",
   })),
   supporting: [
+    "Claude Code를 활용한 엔터프라이즈 프로그램 배포·산출물 작성",
+    "Microsoft Agent Framework 기반 Agentic Service 구축·LangChain 구조 비교",
     "Azure OpenAI와 SDK v2 전환",
     "에이전트 오케스트레이션과 온프레미스 실행 환경",
     "금융·제조 도메인의 진단, 과금, 사전검증 PoC",
