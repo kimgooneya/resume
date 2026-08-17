@@ -52,9 +52,8 @@ describe("professional archive entry", () => {
   });
 
   test("exposes structured case provenance", () => {
-    expect(portfolioData.cases).toHaveLength(17);
-    expect(new Set(portfolioData.cases.map(({ number }) => number))).toHaveLength(17);
-    expect(portfolioData.cases.some(({ number }) => ["14", "16", "19", "20", "23"].includes(number))).toBe(false);
+    expect(portfolioData.cases).toHaveLength(9);
+    expect(portfolioData.cases.map(({ number }) => number)).toEqual(["01", "02", "06", "08", "12", "13", "15", "17", "18"]);
     expect(
       portfolioData.cases.every(
         ({ number, role, problem, contributions, stack, evidence }) =>
@@ -64,10 +63,10 @@ describe("professional archive entry", () => {
     expect(
       portfolioData.cases.every(({ provenance }) => ["code-observed", "user-confirmed-only"].includes(provenance)),
     ).toBe(true);
-    expect(portfolioData.cases.filter(({ evidence }) => evidence.startsWith("코드 감사:")).length).toBeGreaterThanOrEqual(10);
-    expect(portfolioData.cases.filter(({ evidence }) => evidence.includes("이번 clone 감사 범위 외")).length).toBeGreaterThanOrEqual(5);
-    expect(portfolioData.cases.filter(({ provenance }) => provenance === "code-observed").length).toBeGreaterThanOrEqual(10);
-    expect(portfolioData.cases.filter(({ provenance }) => provenance === "user-confirmed-only").length).toBeGreaterThanOrEqual(5);
+    expect(portfolioData.cases.filter(({ evidence }) => evidence.startsWith("코드 감사:")).length).toBe(7);
+    expect(portfolioData.cases.filter(({ evidence }) => evidence.includes("이번 clone 감사 범위 외")).length).toBe(2);
+    expect(portfolioData.cases.filter(({ provenance }) => provenance === "code-observed").length).toBe(7);
+    expect(portfolioData.cases.filter(({ provenance }) => provenance === "user-confirmed-only").length).toBe(2);
     expect(
       portfolioData.cases
         .filter(({ provenance }) => provenance === "code-observed")
@@ -86,7 +85,7 @@ describe("professional archive entry", () => {
     expect(script).toContain("aria-describedby");
   });
 
-  test("groups implementation records under client projects and keeps miscellaneous work last", () => {
+  test("groups implementation records under the selected client projects", () => {
     // Given: every implementation record keeps its public project name
     const projects = groupCasesByProject(portfolioData.cases);
 
@@ -94,10 +93,9 @@ describe("professional archive entry", () => {
     const nhNonghyup = projects.find(({ title }) => title === "NH농협");
     const paperPop = projects.find(({ title }) => title === "페이퍼팝");
     const celltrion = projects.find(({ title }) => title === "셀트리온");
-    const miscellaneous = projects.at(-1);
 
     // Then: feature-level records stay intact inside one project hierarchy
-    expect(projects).toHaveLength(8);
+    expect(projects).toHaveLength(7);
     expect(projects.map(({ title }) => title)).toEqual([
       "KT GSI 홈쇼핑",
       "NH농협",
@@ -106,7 +104,6 @@ describe("professional archive entry", () => {
       "SPin · Azure 구독청구 시스템",
       "페이퍼팝",
       "셀트리온",
-      "기타",
     ]);
     expect(nhNonghyup?.features.map(({ number, title }) => [number, title])).toEqual([
       ["02", "LLM 연동 운영 계약"],
@@ -114,7 +111,6 @@ describe("professional archive entry", () => {
     ]);
     expect(paperPop?.features.map(({ number }) => number)).toEqual(["15"]);
     expect(celltrion?.features.map(({ number }) => number)).toEqual(["17", "18"]);
-    expect(miscellaneous?.features.map(({ number }) => number)).toEqual(["03", "04", "05", "09", "10", "11", "21", "22"]);
     expect(script).toContain("project.features.forEach");
     expect(script).toContain("createCaseDialog(caseStudy, openButton, implementationNumber)");
     expect(css).toContain(".project-case");
