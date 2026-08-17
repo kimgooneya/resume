@@ -52,8 +52,9 @@ describe("professional archive entry", () => {
   });
 
   test("exposes structured case provenance", () => {
-    expect(portfolioData.cases).toHaveLength(22);
-    expect(new Set(portfolioData.cases.map(({ number }) => number))).toHaveLength(22);
+    expect(portfolioData.cases).toHaveLength(17);
+    expect(new Set(portfolioData.cases.map(({ number }) => number))).toHaveLength(17);
+    expect(portfolioData.cases.some(({ number }) => ["14", "16", "19", "20", "23"].includes(number))).toBe(false);
     expect(
       portfolioData.cases.every(
         ({ number, role, problem, contributions, stack, evidence }) =>
@@ -91,29 +92,28 @@ describe("professional archive entry", () => {
 
     // When: the archive organizes the records by project
     const nhNonghyup = projects.find(({ title }) => title === "NH농협");
+    const paperPop = projects.find(({ title }) => title === "페이퍼팝");
+    const celltrion = projects.find(({ title }) => title === "셀트리온");
     const miscellaneous = projects.at(-1);
 
     // Then: feature-level records stay intact inside one project hierarchy
-    expect(projects).toHaveLength(13);
+    expect(projects).toHaveLength(8);
     expect(projects.map(({ title }) => title)).toEqual([
       "KT GSI 홈쇼핑",
       "NH농협",
       "두바이 GDRFA",
       "교보생명",
       "SPin · Azure 구독청구 시스템",
-      "KB헬스케어 · 기관명 확인 필요",
-      "주문 업로드 서비스",
-      "문서 지식 기반 AI",
-      "제조 품질 시스템",
-      "Identity 예제",
-      "금융권 AI PoC",
-      "Carbon Design UI",
+      "페이퍼팝",
+      "셀트리온",
       "기타",
     ]);
     expect(nhNonghyup?.features.map(({ number, title }) => [number, title])).toEqual([
       ["02", "LLM 연동 운영 계약"],
       ["08", "검증 실패의 다음 행동 안내"],
     ]);
+    expect(paperPop?.features.map(({ number }) => number)).toEqual(["15"]);
+    expect(celltrion?.features.map(({ number }) => number)).toEqual(["17", "18"]);
     expect(miscellaneous?.features.map(({ number }) => number)).toEqual(["03", "04", "05", "09", "10", "11", "21", "22"]);
     expect(script).toContain("project.features.forEach");
     expect(script).toContain("createCaseDialog(caseStudy, openButton, implementationNumber)");
