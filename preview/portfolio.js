@@ -22,15 +22,15 @@ const createDetailBlock = (label, value, className = "") => {
 };
 
 const provenanceLabel = (caseStudy) =>
-  caseStudy.provenance === "code-observed" ? "CODE OBSERVED" : "USER CONFIRMED ONLY";
+  caseStudy.provenance === "code-observed" ? "CODE REVIEWED" : "CAREER RECORD";
 
 const createCaseOverview = (caseStudy) => {
   const overview = create("dl", "case-overview");
   [
     ["PROJECT", caseStudy.project],
-    ["ROLE (USER-CONFIRMED)", caseStudy.role],
-    ["EVIDENCE SCOPE", provenanceLabel(caseStudy)],
-    ["SCOPE", caseStudy.scope],
+    ["ROLE", caseStudy.role],
+    ["EVIDENCE", provenanceLabel(caseStudy)],
+    ["TECHNICAL SCOPE", caseStudy.scope],
   ].forEach(([label, value]) => {
     const item = create("div", "case-overview-item");
     item.append(create("dt", "eyebrow", label));
@@ -43,12 +43,12 @@ const createCaseOverview = (caseStudy) => {
 const createCaseDetailGrid = (caseStudy) => {
   const detailGrid = create("div", "case-detail-grid");
   detailGrid.append(
-    createDetailBlock("MY ROLE (USER-CONFIRMED)", caseStudy.role),
-    createDetailBlock("EVIDENCE SCOPE", provenanceLabel(caseStudy)),
+    createDetailBlock("ROLE", caseStudy.role),
+    createDetailBlock("EVIDENCE", provenanceLabel(caseStudy)),
     createDetailBlock("PROBLEM", caseStudy.problem),
   );
   const contributions = create("div", "case-detail-block");
-  contributions.append(create("h4", "eyebrow", "CONTRIBUTIONS"));
+  contributions.append(create("h4", "eyebrow", "IMPLEMENTATION"));
   appendList(contributions, caseStudy.contributions);
   const decisions = create("div", "case-detail-block");
   decisions.append(create("h4", "eyebrow", "DECISIONS"));
@@ -168,7 +168,7 @@ const renderCases = () => {
     openButton.setAttribute("aria-haspopup", "dialog");
     openButton.setAttribute("aria-label", `${caseStudy.project} 상세 사례 열기`);
     openButton.append(
-      create("span", "case-open-label", "역할·판단·결과 상세 보기"),
+      create("span", "case-open-label", "프로젝트 상세 보기"),
       create("span", "case-open-mark", "↗"),
     );
     const dialog = createCaseDialog(caseStudy, openButton);

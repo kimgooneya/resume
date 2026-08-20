@@ -937,6 +937,15 @@ summary {
   margin-top: var(--archive-space-4);
 }
 
+.footer-intro {
+  max-width: 34rem;
+  margin: var(--archive-space-5) 0 0;
+  color: var(--archive-ink-muted);
+  line-height: 1.75;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+
 .footer-links {
   display: flex;
   min-width: 220px;

@@ -50,12 +50,12 @@ describe("professional archive entry", () => {
     expect(
       portfolioData.cases
         .filter(({ provenance }) => provenance === "code-observed")
-        .every(({ role, contributions }) => role.includes("사용자 확인") && contributions.every((item) => item.includes("코드 감사 관찰"))),
+        .every(({ role, contributions }) => Boolean(role) && contributions.every((item) => !item.includes("코드 감사 관찰"))),
     ).toBe(true);
     expect(
       portfolioData.cases
         .filter(({ provenance }) => provenance === "user-confirmed-only")
-        .every(({ role, evidence }) => role.includes("사용자 확인만") && evidence.includes("감사 범위 외")),
+        .every(({ role, evidence }) => Boolean(role) && evidence.includes("감사 범위 외")),
     ).toBe(true);
     expect(portfolioData.capabilities).toHaveLength(3);
     expect(portfolioData.capabilities.every(({ index, title, detail, proof }) => Boolean(index && title && detail && proof))).toBe(true);
@@ -63,6 +63,17 @@ describe("professional archive entry", () => {
     expect(script).toContain("textContent");
     expect(script).toContain("document.createElement(\"dialog\")");
     expect(script).toContain("aria-describedby");
+  });
+
+  test("uses direct, reader-facing portfolio copy", () => {
+    expect(html).toContain("LET'S WORK TOGETHER");
+    expect(html).toContain("함께 더 나은 제품을");
+    expect(html).toContain("제 경험이 팀에 도움이 될 수 있다면 편하게 연락 주세요.");
+    expect(html).not.toContain("다음 문제를");
+    expect(html).not.toContain("함께 구조화해요");
+    expect(portfolioData.profile.title).toBe("AI와 데이터 기술을\n실제 서비스로\n구현합니다");
+    expect(portfolioData.cases.every(({ title, summary }) => !title.includes("사용자 확인 이력") && !summary.includes("공개 clone 감사 제외"))).toBe(true);
+    expect(script).toContain('create("span", "case-open-label", "프로젝트 상세 보기")');
   });
 
   test("keeps the archive visual system token-driven and responsive", () => {
