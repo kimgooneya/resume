@@ -115,10 +115,10 @@
   .mobile-region-panel:not([hidden]) {
     display: block;
     position: fixed;
-    inset-block-start: calc(var(--masthead-min-height) + var(--space-8));
+    inset-block-start: var(--space-2);
     inset-inline: var(--space-2);
     z-index: 10;
-    max-block-size: calc(100dvh - var(--masthead-min-height) - var(--space-8) - var(--space-4));
+    max-block-size: calc(100dvh - var(--space-4));
     margin: 0;
     padding: var(--space-3);
     overflow-y: auto;
@@ -143,8 +143,15 @@
   .control-deck {
     min-block-size: var(--control-deck-mobile-min-height);
     grid-template-columns: var(--dpad-size) minmax(0, 1fr);
+    grid-template-areas:
+      "dpad actions"
+      "help help";
     gap: var(--space-3);
     padding: var(--space-2);
+  }
+
+  .dpad-group {
+    grid-area: dpad;
   }
 
   .dpad {
@@ -162,6 +169,7 @@
   .dpad-down { grid-area: 3 / 2; }
 
   .keyboard-help {
+    grid-area: help;
     align-content: center;
     align-items: center;
     min-width: 0;
@@ -172,6 +180,7 @@
   }
 
   .action-buttons {
+    grid-area: actions;
     min-width: 0;
     justify-content: center;
     gap: var(--space-3);
