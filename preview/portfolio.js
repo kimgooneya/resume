@@ -1,4 +1,5 @@
 import { portfolioData } from "./portfolio-data.js";
+import { groupCasesByProject } from "./project-groups.js";
 
 const create = (tag, className, text) => {
   const element = document.createElement(tag);
@@ -22,15 +23,14 @@ const createDetailBlock = (label, value, className = "") => {
 };
 
 const provenanceLabel = (caseStudy) =>
-  caseStudy.provenance === "code-observed" ? "CODE REVIEWED" : "CAREER RECORD";
+  caseStudy.provenance === "code-observed" ? "코드에서 확인" : "사용자 확인만";
 
 const createCaseOverview = (caseStudy) => {
   const overview = create("dl", "case-overview");
   [
-    ["PROJECT", caseStudy.project],
-    ["ROLE", caseStudy.role],
-    ["EVIDENCE", provenanceLabel(caseStudy)],
-    ["TECHNICAL SCOPE", caseStudy.scope],
+    ["담당 역할", caseStudy.role],
+    ["검증 범위", provenanceLabel(caseStudy)],
+    ["수행 범위", caseStudy.scope],
   ].forEach(([label, value]) => {
     const item = create("div", "case-overview-item");
     item.append(create("dt", "eyebrow", label));
@@ -43,28 +43,28 @@ const createCaseOverview = (caseStudy) => {
 const createCaseDetailGrid = (caseStudy) => {
   const detailGrid = create("div", "case-detail-grid");
   detailGrid.append(
-    createDetailBlock("ROLE", caseStudy.role),
-    createDetailBlock("EVIDENCE", provenanceLabel(caseStudy)),
-    createDetailBlock("PROBLEM", caseStudy.problem),
+    createDetailBlock("담당 역할", caseStudy.role),
+    createDetailBlock("검증 범위", provenanceLabel(caseStudy)),
+    createDetailBlock("해결 과제", caseStudy.problem),
   );
   const contributions = create("div", "case-detail-block");
-  contributions.append(create("h4", "eyebrow", "IMPLEMENTATION"));
+  contributions.append(create("h4", "eyebrow", "주요 기여"));
   appendList(contributions, caseStudy.contributions);
   const decisions = create("div", "case-detail-block");
-  decisions.append(create("h4", "eyebrow", "DECISIONS"));
+  decisions.append(create("h4", "eyebrow", "설계 및 판단"));
   appendList(decisions, caseStudy.decisions);
   const stack = create("div", "case-detail-block");
-  stack.append(create("h4", "eyebrow", "STACK"));
+  stack.append(create("h4", "eyebrow", "기술 스택"));
   appendList(stack, caseStudy.stack, "case-stack");
   const outcome = create("div", "case-detail-block");
-  outcome.append(create("h4", "eyebrow", "OUTCOME"));
+  outcome.append(create("h4", "eyebrow", "성과 및 결과"));
   outcome.append(create("p", "outcome-copy", caseStudy.outcome));
   outcome.append(create("p", "evidence-copy", caseStudy.evidence));
   detailGrid.append(contributions, decisions, stack, outcome);
   return detailGrid;
 };
 
-const createCaseDialog = (caseStudy, trigger) => {
+const createCaseDialog = (caseStudy, trigger, implementationNumber) => {
   const dialog = document.createElement("dialog");
   const dialogId = `case-dialog-${caseStudy.number}`;
   const titleId = `${dialogId}-title`;
@@ -76,7 +76,7 @@ const createCaseDialog = (caseStudy, trigger) => {
   const header = create("header", "case-dialog-header");
   const headingGroup = create("div", "case-dialog-heading");
   headingGroup.append(
-    create("p", "eyebrow", `CASE ${caseStudy.number} · ${caseStudy.period}`),
+    create("p", "eyebrow", `구현 ${implementationNumber} · ${caseStudy.period}`),
     create("p", "case-dialog-project", caseStudy.project),
   );
   const title = create("h2", "case-dialog-title", caseStudy.title);
@@ -144,42 +144,64 @@ const renderCapabilities = () => {
   });
 };
 
-const renderCases = () => {
+const renderProjects = () => {
   const target = document.querySelector("#case-study-list");
   if (!target) return;
-  portfolioData.cases.forEach((caseStudy) => {
-    const article = create("article", "case-study");
-    article.id = `case-${caseStudy.number}`;
+  groupCasesByProject(portfolioData.cases).forEach((project) => {
+    const article = create("article", "project-case");
+    article.id = `project-${project.number}`;
 
-    const index = create("div", "case-index");
+    const header = create("header", "project-header");
+    const index = create("div", "project-index");
     index.append(
-      create("p", "eyebrow", `CASE ${caseStudy.number}`),
-      create("p", "case-label", caseStudy.label),
-      create("p", "case-period mono", caseStudy.period),
+      create("p", "eyebrow", `프로젝트 ${project.number}`),
+      create("p", "project-period mono", project.period),
     );
-
-    const body = create("div", "case-body");
-    body.append(create("h3", "case-title", caseStudy.title));
-    body.append(create("p", "case-summary", caseStudy.summary));
-
-    body.append(createCaseOverview(caseStudy));
-    const openButton = create("button", "case-open");
-    openButton.type = "button";
-    openButton.setAttribute("aria-haspopup", "dialog");
-    openButton.setAttribute("aria-label", `${caseStudy.project} 상세 사례 열기`);
-    openButton.append(
-      create("span", "case-open-label", "프로젝트 상세 보기"),
-      create("span", "case-open-mark", "↗"),
+    const heading = create("div", "project-heading");
+    heading.append(
+      create("h3", "project-title", project.title),
+      create("p", "project-count mono", `구현 ${project.features.length}건`),
     );
-    const dialog = createCaseDialog(caseStudy, openButton);
-    openButton.setAttribute("aria-controls", dialog.id);
-    openButton.addEventListener("click", () => {
-      dialog.showModal();
-      dialog.querySelector(".case-dialog-close").focus();
+    header.append(index, heading);
+
+    const featureList = create("div", "project-feature-list");
+    project.features.forEach((caseStudy, featureIndex) => {
+      const implementationNumber = String(featureIndex + 1).padStart(2, "0");
+      const feature = create("section", "project-feature");
+      feature.id = `case-${caseStudy.number}`;
+
+      const featureMeta = create("div", "case-index");
+      featureMeta.append(
+        create("p", "eyebrow", `구현 ${implementationNumber}`),
+        create("p", "case-label", caseStudy.label),
+        create("p", "case-period mono", caseStudy.period),
+      );
+
+      const body = create("div", "case-body");
+      body.append(create("h4", "case-title", caseStudy.title));
+      body.append(create("p", "case-summary", caseStudy.summary));
+      body.append(createCaseOverview(caseStudy));
+
+      const openButton = create("button", "case-open");
+      openButton.type = "button";
+      openButton.setAttribute("aria-haspopup", "dialog");
+      openButton.setAttribute("aria-label", `${caseStudy.project} ${caseStudy.title} 구현 상세 열기`);
+      openButton.append(
+        create("span", "case-open-label", "담당 역할·구현·성과 보기"),
+        create("span", "case-open-mark", "↗"),
+      );
+      const dialog = createCaseDialog(caseStudy, openButton, implementationNumber);
+      openButton.setAttribute("aria-controls", dialog.id);
+      openButton.addEventListener("click", () => {
+        dialog.showModal();
+        dialog.querySelector(".case-dialog-close").focus();
+      });
+      body.append(openButton);
+      feature.append(featureMeta, body, dialog);
+      featureList.append(feature);
     });
-    body.append(openButton);
-    article.append(index, body);
-    article.append(dialog);
+
+    article.append(header, featureList);
     target.append(article);
   });
 };
@@ -206,6 +228,6 @@ const renderContact = () => {
 
 renderProfile();
 renderCapabilities();
-renderCases();
+renderProjects();
 renderSupporting();
 renderContact();
