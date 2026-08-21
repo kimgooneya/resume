@@ -456,6 +456,16 @@
       }
 
       @media screen and (max-width: 840px) {
+        :root {
+          --type-name: clamp(28px, 10vw, 36px);
+          --type-title: 14px;
+          --type-section: 13px;
+          --type-project: 16px;
+          --type-body: 15px;
+          --type-meta: 13px;
+          --type-footer: 12px;
+        }
+
         html,
         body {
           background: var(--paper);
@@ -490,6 +500,23 @@
           text-align: left;
         }
 
+        .contact-list span,
+        .contact-list a {
+          white-space: normal;
+          overflow-wrap: anywhere;
+        }
+
+        .contact-list a {
+          display: inline-flex;
+          min-height: 44px;
+          align-items: center;
+        }
+
+        .intro-copy {
+          max-width: none;
+          font-size: var(--type-body);
+        }
+
         .experience-row,
         .grouped-project {
           grid-template-columns: 1fr;
@@ -506,6 +533,31 @@
 
         .resume-footer {
           flex-wrap: wrap;
+        }
+
+        .evidence-item {
+          white-space: normal;
+          overflow-wrap: anywhere;
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        .resume-sheet {
+          padding: 28px 18px;
+        }
+
+        .masthead {
+          gap: var(--space-3);
+        }
+
+        .section-heading {
+          align-items: flex-start;
+        }
+
+        .page-context,
+        .resume-footer {
+          align-items: flex-start;
+          flex-direction: column;
         }
       }
 
